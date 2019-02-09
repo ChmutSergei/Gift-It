@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Properties>
+        <Property name="basePath">../logs/giftit</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="RollingFile" fileName="${basePath}/log4j-giftit.log"
+                     filePattern="${basePath}/giftit-%d{yyyy-MM-dd}.log">
+            <PatternLayout>
+                <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c %L - %msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout   pattern="[%-5level] %d{mm:ss.SSS} [%t] %c %L - %msg%n" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <appender-ref ref="RollingFile" />
+            <appender-ref ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>
