@@ -1,0 +1,155 @@
+package by.chmut.giftit.dao.impl;
+
+import by.chmut.giftit.dao.DaoException;
+import by.chmut.giftit.dao.OrderDao;
+import by.chmut.giftit.entity.Order;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class OrderDaoImpl implements OrderDao {
+
+    private static final String SELECT_ALL_ORDERS = "SELECT id, user_id, cart_id, details, status, " +
+            "init_date, issue_date FROM Orders";
+    private static final String SELECT_ORDER_BY_ID = "SELECT id, user_id, cart_id, details, status, " +
+            "init_date, issue_date FROM Orders WHERE id = ?";
+    private static final String DELETE_ORDER = "DELETE FROM Orders WHERE id=?";
+    private static final String CREATE_ORDER = "INSERT INTO Orders(user_id, cart_id, details, status, " +
+            "init_date, issue_date) VALUES(?,?,?,?,?,?)";
+    private static final String UPDATE_ORDER = "UPDATE Orders SET user_id=?, cart_id=?, details=?, status=?, " +
+            "init_date=?, issue_date=? WHERE id=?";
+
+    private Connection connection;
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
+    @Override
+    public List<Order> findAll() throws DaoException {
+        List<Order> orders = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_ALL_ORDERS);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Order order = makeFromResultSet(resultSet);
+                orders.add(order);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get all orders", exception);
+        } finally {
+            close(statement);
+            close(resultSet);
+        }
+        return orders;
+    }
+
+    @Override
+    public Order findEntity(Long id) throws DaoException {
+        Order order = new Order();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_ORDER_BY_ID);
+            statement.setLong(1, id);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                order = makeFromResultSet(resultSet);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get order by id", exception);
+        } finally {
+            close(statement);
+            close(resultSet);
+        }
+        return order;
+    }
+
+    private Order makeFromResultSet(ResultSet resultSet) throws SQLException {
+        Order order = new Order();
+        order.setOrderId(resultSet.getLong(1));
+        order.setUserId(resultSet.getLong(2));
+        order.setCardId(resultSet.getLong(3));
+        order.setDetails(resultSet.getString(4));
+        order.setStatus(resultSet.getString(5));
+        order.setInitDate(resultSet.getDate(6).toLocalDate());
+        order.setIssueDate(resultSet.getDate(7).toLocalDate());
+        return order;
+    }
+
+    @Override
+    public boolean delete(Long id) throws DaoException {
+        PreparedStatement statement = null;
+        int result;
+        try {
+            statement = connection.prepareStatement(DELETE_ORDER);
+            statement.setLong(1, id);
+            result = statement.executeUpdate();
+        } catch (SQLException exception) {
+            throw new DaoException("Error with delete order", exception);
+        } finally {
+            close(statement);
+        }
+        return result > 0;
+    }
+
+    @Override
+    public boolean delete(Order order) throws DaoException {
+        return delete(order.getOrderId());
+    }
+
+    @Override
+    public boolean create(Order order) throws DaoException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        int result;
+        try {
+            statement = connection.prepareStatement(CREATE_ORDER, Statement.RETURN_GENERATED_KEYS);
+            statement.setLong(1, order.getUserId());
+            statement.setLong(2, order.getCardId());
+            statement.setString(3, order.getDetails());
+            statement.setString(4, order.getStatus());
+            statement.setDate(5, Date.valueOf(order.getInitDate()));
+            statement.setDate(6, Date.valueOf(order.getIssueDate()));
+            result = statement.executeUpdate();
+            resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                order.setOrderId(resultSet.getLong(1));
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with creating order", exception);
+        } finally {
+            close(resultSet);
+            close(statement);
+        }
+        return result > 0;
+    }
+
+    @Override
+    public Order update(Order order) throws DaoException {
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(UPDATE_ORDER);
+            statement.setLong(7, order.getOrderId());
+            statement.setLong(1, order.getUserId());
+            statement.setLong(2, order.getCardId());
+            statement.setString(3, order.getDetails());
+            statement.setString(4, order.getStatus());
+            statement.setDate(5, Date.valueOf(order.getInitDate()));
+            statement.setDate(6, Date.valueOf(order.getIssueDate()));
+            statement.executeUpdate();
+        } catch (SQLException exception) {
+            throw new DaoException("Error with update order", exception);
+        } finally {
+            close(statement);
+        }
+        return order;
+    }
+}
