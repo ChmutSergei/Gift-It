@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import static by.chmut.giftit.constant.AttributeName.*;
-import static by.chmut.giftit.constant.PathPage.ERROR_PAGE;
+import static by.chmut.giftit.constant.PathPage.*;
 
 public class LoginCommand implements Command {
     
@@ -22,21 +22,26 @@ public class LoginCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req) {
         Router router = new Router();
-        router.setPagePath(req.getParameter(PREVIOUS_PAGE_PARAMETER_NAME));
+        router.setRedirectPath(HOME_PATH);
         String username = req.getParameter(USERNAME_PARAMETER_NAME);
         String password = req.getParameter(PASSWORD_PARAMETER_NAME);
+        User user = null;
         boolean userValid = false;
         try {
-            User user = service.find(username);
+            user = service.find(username);
             if (user != null) {
                 userValid = service.validateUser(user, password);
             }
-        } catch (ServiceException e) {
-            logger.error(e);
+        } catch (ServiceException exception) {
+            logger.error(exception);
+            req.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
+            router.setRedirectPath(ERROR_PATH);
         }
-        if (!userValid) {
+        if (userValid) {
+            req.getSession().setAttribute(USER_PARAMETER_NAME, user);
+        } else {
             req.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_LOGIN_FAILED_KEY);
-            router.setPagePath(ERROR_PAGE);
+            router.setRedirectPath(SIGNIN_PATH);
         }
         return router;
     }

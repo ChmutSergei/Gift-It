@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      version="2.0">
+<jsp:directive.page pageEncoding="UTF-8" isErrorPage="true" contentType="text/html; UTF-8"/>
+<head>
+    <![CDATA[
+    <meta charset="utf-8">
+    <meta nameNews="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  ]]>
+    <style>
+        #logo {
+            padding-top: 0;
+            padding-bottom: 0;
+            background-color: coral;
+            margin-bottom: 0;
+            width: auto;
+        }
+        #errors {
+            background-color:#e6f7d9;height: 800px;
+        }
+        #error-messages {
+            margin-top: 10px;
+        }
+        #message {
+            font-size: 16px;
+        }
+        #button-try {
+            margin-top: 100px;
+            padding-left: auto;
+            padding-right: auto;
+        }
+    </style>
+    <title>ERROR PAGE</title>
+</head>
+<body>
+<div id="logo" class="container text-center">
+    <img src="${pageContext.request.contextPath}/assests/img/logo_giftItmin.jpg"
+         class="img-logo" style="width:30%" alt="Image"/>
+</div>
+<div id="errors" class="jumbotron" >
+    <div id="error-messages" class="container col-xs-10 col-xs-offset-2">
+        <c:if test="${not empty pageContext.errorData}">
+        <div class="row">
+            <h3>Request from ${pageContext.errorData.requestURI} is failed</h3>
+        </div>
+        <div class="row">
+            <h3>Status code: ${pageContext.errorData.statusCode}</h3>
+        </div>
+        </c:if>
+        <c:if test="${not empty pageContext.exception}">
+        <div class="row">
+            <h3>Exception: ${pageContext.exception}</h3>
+        </div>
+        </c:if>
+        <c:if test="${not empty sessionScope.exception}">
+            <div id="message" class="alert alert-danger col-xs-6 center-block">
+                <strong>${sessionScope.exception}</strong>
+            </div>
+        </c:if>
+        <div id="button-try" class="container">
+            <a href="${pageContext.request.contextPath}/controller?command=home"
+               class="btn btn-primary" role="button">Try again</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

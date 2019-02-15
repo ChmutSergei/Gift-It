@@ -5,13 +5,15 @@ import by.chmut.giftit.controller.Router;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static by.chmut.giftit.constant.PathPage.ERROR_PAGE;
+import static by.chmut.giftit.constant.AttributeName.USER_PARAMETER_NAME;
+import static by.chmut.giftit.constant.PathPage.HOME_PATH;
 
-public class ErrorCommand implements Command {
+public class LogoutCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req) {
+        req.getSession().removeAttribute(USER_PARAMETER_NAME);
         Router router = new Router();
-        router.setPagePath(ERROR_PAGE);
+        router.setRedirectPath(HOME_PATH);
         return router;
     }
 }

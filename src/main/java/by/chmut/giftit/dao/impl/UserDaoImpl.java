@@ -54,15 +54,15 @@ public class UserDaoImpl implements UserDao {
     }
 
     public User findEntityByUsername(String username) throws DaoException {
-        User user = new User();
+        User user = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SELECT_USER_BY_USERNAME);
             statement.setString(1, username);
             resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                user = makeFromResultSet(resultSet);
+            if (resultSet.next()) {
+                return makeFromResultSet(resultSet);
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get user by username", exception);
@@ -75,15 +75,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findEntity(Long id) throws DaoException {
-        User user = new User();
+        User user = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SELECT_USER_BY_ID);
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                user = makeFromResultSet(resultSet);
+            if (resultSet.next()) {
+                return makeFromResultSet(resultSet);
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get user by id", exception);
@@ -164,6 +164,38 @@ public class UserDaoImpl implements UserDao {
         return result > 0;
     }
 
+    @Override
+    public User createUser(User user) throws DaoException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getFirstName());
+            statement.setString(4, user.getLastName());
+            statement.setString(5, user.getEmail());
+            statement.setString(6, user.getPhone());
+            statement.setString(7, user.getAddress());
+            statement.setBigDecimal(8, user.getAccount());
+            statement.setDate(9, Date.valueOf(user.getInitDate()));
+            statement.setDate(10, Date.valueOf(user.getBlockedUntil()));
+            statement.setString(11, user.getRole().toString());
+            statement.executeUpdate();
+            resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                user.setUserId(resultSet.getLong(1));
+            } else {
+                throw new DaoException("Error user not save in database");
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with creating user", exception);
+        } finally {
+            close(resultSet);
+            close(statement);
+        }
+        return user;
+    }
     @Override
     public User update(User user) throws DaoException {
         PreparedStatement statement = null;

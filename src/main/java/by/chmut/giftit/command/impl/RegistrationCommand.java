@@ -8,12 +8,14 @@ import by.chmut.giftit.service.UserService;
 import by.chmut.giftit.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 import static by.chmut.giftit.constant.AttributeName.*;
-import static by.chmut.giftit.constant.PathPage.ERROR_PAGE;
+import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
+import static by.chmut.giftit.constant.PathPage.HOME_PATH;
 
 public class RegistrationCommand implements Command {
 
@@ -23,46 +25,41 @@ public class RegistrationCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req) {
         Router router = new Router();
-        router.setPagePath(req.getParameter(PREVIOUS_PAGE_PARAMETER_NAME));
-        User user = createUserWithParameters(req);
-        boolean success = false;
+        router.setRedirectPath(HOME_PATH);
+        Map<String, String> userParameters = setParametersFromRequest(req);
+        User user = null;
+        try {
+            user = service.create(userParameters);
+        } catch (ServiceException exception) {
+            logger.error(exception);
+            req.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
+            router.setRedirectPath(ERROR_PATH);
+        }
         if (user != null) {
-            try {
-                success = service.create(user);
-            } catch (ServiceException e) {
-                logger.error(e);
-            }
+            req.getSession().setAttribute(USER_PARAMETER_NAME, user);
+            return router;
         }
-        if (!success) {
-            req.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_WITH_CREATE_USER_KEY);
-            router.setPagePath(ERROR_PAGE);
-        }
-        req.getSession().setAttribute(USER_PARAMETER_NAME, user);
         return router;
     }
 
-    private User createUserWithParameters(HttpServletRequest req) {
+    private Map<String, String> setParametersFromRequest(HttpServletRequest req) {
+        Map<String, String> parameters = new HashMap<>();
         String username = req.getParameter(USERNAME_PARAMETER_NAME);
         String password = req.getParameter(PASSWORD_PARAMETER_NAME);
+        String confirmPassword = req.getParameter(CONFIRM_PASSWORD_PARAMETER_NAME);
         String firstName = req.getParameter(FIRST_NAME_PARAMETER_NAME);
-        String lastName = req.getParameter(LAST__NAME_PARAMETER_NAME);
+        String lastName = req.getParameter(LAST_NAME_PARAMETER_NAME);
         String email = req.getParameter(EMAIL_PARAMETER_NAME);
         String phone = req.getParameter(PHONE_PARAMETER_NAME);
         String address = req.getParameter(ADDRESS_PARAMETER_NAME);
-        if (username == null || password == null || firstName == null || lastName == null || email == null ||
-                phone == null || address == null) {
-            return null;
-        }
-        String passHashed = BCrypt.hashpw(password, BCrypt.gensalt());
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passHashed);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        user.setPhone(phone);
-        user.setAddress(address);
-        user.setRole(User.Role.USER);
-        return user;
+        parameters.put(USERNAME_PARAMETER_NAME, username);
+        parameters.put(PASSWORD_PARAMETER_NAME, password);
+        parameters.put(CONFIRM_PASSWORD_PARAMETER_NAME, confirmPassword);
+        parameters.put(FIRST_NAME_PARAMETER_NAME, firstName);
+        parameters.put(LAST_NAME_PARAMETER_NAME, lastName);
+        parameters.put(EMAIL_PARAMETER_NAME, email);
+        parameters.put(PHONE_PARAMETER_NAME, phone);
+        parameters.put(ADDRESS_PARAMETER_NAME, address);
+        return parameters;
     }
 }

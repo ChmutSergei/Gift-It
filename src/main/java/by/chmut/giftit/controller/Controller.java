@@ -7,12 +7,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static by.chmut.giftit.constant.AttributeName.COMMAND_PARAMETER_NAME;
-import static by.chmut.giftit.constant.AttributeName.TITLE_ATTRIBUTE_NAME;
-import static by.chmut.giftit.constant.PathPage.HOME_PAGE;
-import static by.chmut.giftit.constant.PathPage.TEMPLATE_PAGE;
+import static by.chmut.giftit.constant.AttributeName.*;
+import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
 @WebServlet(urlPatterns = "/controller")
 public class Controller extends HttpServlet {
@@ -55,16 +54,32 @@ public class Controller extends HttpServlet {
         String commandParameter = request.getParameter(COMMAND_PARAMETER_NAME);
         CommandType commandType = CommandType.chooseType(commandParameter);
         Router router = commandType.getCommand().execute(request);
-        String pagePath = router.getPagePath();
-        request.getSession().setAttribute("pagePath", pagePath);
-        request.getSession().setAttribute(TITLE_ATTRIBUTE_NAME, commandType.name());
         switch (router.getDispatcher()) {
             case FORWARD:
-                request.getRequestDispatcher(TEMPLATE_PAGE).forward(request, response);
+                setAttributes(request, router, commandType);
+                request.getRequestDispatcher(router.getPage()).forward(request, response);
                 break;
             case REDIRECT:
-                response.sendRedirect(TEMPLATE_PAGE);
+                response.sendRedirect(request.getContextPath() + router.getRedirectPath());
                 break;
+        }
+    }
+
+    private void setAttributes(HttpServletRequest request, Router router, CommandType commandType) {
+        HttpSession session = request.getSession();
+        String title = (String) session.getAttribute(TITLE_ATTRIBUTE_NAME);
+        String commandName = commandType.name().toLowerCase();
+        if (title == null) {
+            title = CommandType.HOME.name().toLowerCase();
+        }
+        if (!title.equals(commandName)) {
+            session.setAttribute(PREVIOUS_PAGE_PARAMETER_NAME, title);
+            session.removeAttribute(MESSAGE_PARAMETER_NAME);
+        }
+        session.setAttribute(TITLE_ATTRIBUTE_NAME, commandName);
+        session.setAttribute(PAGE_PATH_PARAMETER_NAME, router.getPagePath());
+        if (ERROR_PATH.equals(session.getAttribute(PREVIOUS_PAGE_PARAMETER_NAME))) {
+            session.removeAttribute(EXCEPTION_PARAMETER_NAME);
         }
     }
 }
