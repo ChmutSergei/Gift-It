@@ -1,0 +1,201 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+          xmlns="http://www.w3.org/1999/xhtml" version="2.0">
+    <div class="container" style="background-color:#e6f7d9;padding-top: -20px;">
+        <fmt:setLocale value="${sessionScope.locale}"/>
+        <fmt:setBundle basename="i18n.messages" var="i18n"/>
+        <!--<c:if test="${not empty sessionScope.message}">-->
+
+        <!--</c:if>-->
+        <fieldset id="contact" class="container">
+            <h2><fmt:message bundle="${i18n}" key="contact.registration"/></h2>
+            <h6><fmt:message bundle="${i18n}" key="contact.info"/></h6>
+            <form id="form" class="form-horizontal" action="${pageContext.request.contextPath}/controller?command=registration"
+                  method="post">
+                <![CDATA[
+            <legend>
+            ]]>
+                <fmt:message bundle="${i18n}" key="contact.contact"/>
+                <![CDATA[
+            </legend>
+            ]]>
+                <div class="form-group has-feedback">
+                    <label class="control-label col-xs-3" for="lastName"><fmt:message bundle="${i18n}"
+                                                                                      key="contact.lastname"/></label>
+                    <div class="col-xs-6">
+                        <c:set var="inputlname"><fmt:message key="input.lname" bundle="${i18n}"/></c:set>
+                        <c:set var="messagelname"><fmt:message key="signup.valid.lname" bundle="${i18n}"/></c:set>
+                        <input type="text" class="form-control" id="lastName" placeholder="${inputlname}"
+                               pattern="[\wА-Яа-я]{4,20}" name="lastName" required=""
+                               title="${messagelname}"/>
+                    </div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label class="control-label col-xs-3" for="firstName"><fmt:message bundle="${i18n}"
+                                                                                       key="contact.name"/></label>
+                    <div class="col-xs-6">
+                        <c:set var="inputname"><fmt:message key="input.fname" bundle="${i18n}"/></c:set>
+                        <c:set var="messagename"><fmt:message key="signup.valid.name" bundle="${i18n}"/></c:set>
+                        <input type="text" class="form-control" id="firstName" placeholder="${inputname}"
+                               pattern="[\wА-Яа-я]{4,20}" name="firstName" required=""
+                               title="${messagename}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-3" for="inputEmail"><fmt:message bundle="${i18n}"
+                                                                                        key="contact.email"/></label>
+                    <div class="col-xs-6">
+                        <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email"
+                               required=""/>
+                    </div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label class="control-label col-xs-3" for="phoneNumber"><fmt:message bundle="${i18n}"
+                                                                                         key="contact.phone"/></label>
+                    <div class="col-xs-6">
+                        <c:set var="phone"><fmt:message key="input.phone" bundle="${i18n}"/></c:set>
+                        <c:set var="messagephone"><fmt:message key="signup.valid.phone" bundle="${i18n}"/></c:set>
+                        <input type="tel" class="form-control" id="phoneNumber" placeholder="${phone}" name="phone"
+                               pattern="^\+375 ?(44|29|25|17|33) ?(\d ?){7}$" title="${messagephone}" required=""/>
+                    </div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label class="control-label col-xs-3" for="address"><fmt:message bundle="${i18n}"
+                                                                                     key="contact.address"/></label>
+                    <div class="col-xs-6">
+                        <c:set var="address"><fmt:message key="input.address" bundle="${i18n}"/></c:set>
+                        <c:set var="messageaddress"><fmt:message key="signup.valid.address" bundle="${i18n}"/></c:set>
+                        <input type="text" class="form-control" id="address" placeholder="${address}" name="address"
+                               pattern="^.{10,80}$" title="${messageaddress}" required=""/>
+                    </div>
+                </div>
+
+                <fieldset id="userpass" class="container">
+                    <![CDATA[
+            <legend>
+            ]]>
+                    <fmt:message bundle="${i18n}" key="contact.createname"/>
+                    <![CDATA[
+             </legend>
+            ]]>
+                    <div class="form-group has-feedback">
+                        <label class="control-label col-xs-3" for="login"><fmt:message bundle="${i18n}"
+                                                                                       key="contact.username"/></label>
+                        <div class="col-xs-6">
+                            <c:set var="elogin"><fmt:message key="input.login" bundle="${i18n}"/></c:set>
+                            <c:set var="messagelogin"><fmt:message key="signup.valid.username" bundle="${i18n}"/></c:set>
+                            <input type="text" class="form-control" id="login" placeholder="${elogin}" name="username"
+                                   pattern="^[\w_]{4,20}$" title="${messagelogin}" required=""/>
+                        </div>
+                    </div>
+                    <c:set var="ermessage"><fmt:message key="error.userExist" bundle="${i18n}"/></c:set>
+                    <div id="message" class="alert alert-danger col-xs-6 center-block" style="display: none">
+                        <strong>${ermessage}</strong>
+                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<div class="col-xs-offset-3 col-xs-6">-->
+                            <!--<input id="check" type="button" class="btn btn-primary" value="Check Username"/>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="form-group has-feedback">
+                        <label class="control-label col-xs-3" for="inputPassword"><fmt:message bundle="${i18n}"
+                                                                                               key="contact.pass"/></label>
+                        <div class="col-xs-6">
+                            <c:set var="pass"><fmt:message key="input.pass" bundle="${i18n}"/></c:set>
+                            <c:set var="messagepass"><fmt:message key="signup.valid.password" bundle="${i18n}"/></c:set>
+                            <input type="password" class="form-control" id="inputPassword" placeholder="${pass}"
+                                   name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$" title="${messagepass}" required=""/>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="control-label col-xs-3" for="confirmPassword"><fmt:message bundle="${i18n}"
+                                                                                                 key="contact.conpass"/></label>
+                        <div class="col-xs-6">
+                            <c:set var="reppass"><fmt:message key="input.reppass" bundle="${i18n}"/></c:set>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="${reppass}"
+                                   pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$" title="${messagepass}" name="confirmPass" required=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-offset-3 col-xs-6">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="agree" required=""/> <fmt:message bundle="${i18n}"
+                                                                                                key="contact.agree"/> <a
+                                    href="#"> <fmt:message bundle="${i18n}" key="contact.agreelink"/></a>.
+                            </label>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="form-group">
+                        <div class="col-xs-offset-3 col-xs-6">
+                            <c:set var="submit"><fmt:message key="contact.regictr" bundle="${i18n}"/></c:set>
+                            <c:set var="reset"> <fmt:message key="contact.reset" bundle="${i18n}"/> </c:set>
+                            <input id="check" type="button" class="btn btn-primary" value="${submit}"/>
+                            <input id="check2" type="submit" class="btn btn-primary" style="display: none"/>
+                            <input type="reset" class="btn btn-default"
+                            value="${reset}"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </fieldset>
+
+    </div>
+    <c:set var="dontMatch"><fmt:message key="signup.confirm" bundle="${i18n}"/></c:set>
+    <c:set var="exist" value="${sessionScope.exist}"/>
+    <script>
+        $(function () {
+            $('form').keydown(function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+
+        var password = document.getElementById("inputPassword")
+            , confirmPassword = document.getElementById("confirmPassword");
+        var messageDontMatch = '${dontMatch}';
+        function validatePassword(){
+            if(password.value != confirmPassword.value) {
+                confirmPassword.setCustomValidity(messageDontMatch);
+            } else {
+                confirmPassword.setCustomValidity('');
+            }
+        }
+
+        password.onchange = validatePassword;
+        confirmPassword.onkeyup = validatePassword;
+
+        check.onclick = function () {
+            var username = $('#login')[0].value;
+            var contextUrl = '${pageContext.request.contextPath}';
+            // var form = $('#form')[0];
+            var submit = $('#check2')[0];
+            var command = 'CHECK_USERNAME';
+            $.ajax({
+                type: 'POST',
+                data: {command: command, username:username},
+                url: contextUrl + '/ajax'
+            }).done(function (data) {
+                if (data != 'true') {
+                    // form.submit();
+                    submit.click();
+                    return;
+                }
+                $('#message')[0].style.display="block";
+            }).fail(function (data) {
+                if (console &amp;&amp; console.log) {
+                    console.log("Error data:", data);
+                }
+            })
+        };
+
+        login.onclick = function () {
+            $('#message')[0].style.display="none";
+        }
+
+    </script>
+
+</jsp:root>

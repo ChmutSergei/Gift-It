@@ -1,0 +1,129 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+          version="2.0">
+    <div id="hello" class="jumbotron">
+        <div class="container text-center">
+            <img id="logo" src="${pageContext.request.contextPath}/assests/img/logo_giftItmin.jpg"
+                 class="img-logo" style="width:30%" alt="Image"/>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse" style="margin-bottom: 0;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"/>
+                    <span class="icon-bar"/>
+                    <span class="icon-bar"/>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav col-xs-5">
+                    <c:set var="navName">
+                        <fmt:message key="nav.home" bundle="${i18n}"/>
+                    </c:set>
+                    <c:choose>
+                        <c:when test="${sessionScope.title eq 'home'}">
+                            <li class="active"><a href="#">${navName}</a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/controller?command=home">${navName}</a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+                    <c:set var="condition" value='${"admin".equalsIgnoreCase(sessionScope.admin)}'/>
+                    <c:if test="${condition}">
+                        <c:set var="navName">
+                            <fmt:message key="nav.admin" bundle="${i18n}"/>
+                        </c:set>
+                        <c:choose>
+                            <c:when test="${sessionScope.title eq 'administration'}">
+                                <li class="active"><a href="#">${navName}</a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/controller?command=administration">${navName}</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+                </ul>
+                <c:url var="path" value="/controller?command=${sessionScope.title}"/>
+                <ul id="rightbar" class="nav navbar-nav navbar-right">
+                    <c:choose>
+                        <c:when test="${sessionScope.locale eq 'ru'}">
+                            <li class="active"><a href="#">
+                                <fmt:message key="nav.locale.ru" bundle="${i18n}"/>
+                            </a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li><a href="${path}&amp;locale=ru">
+                                <fmt:message key="nav.locale.ru" bundle="${i18n}"/>
+                            </a></li>
+                        </c:otherwise>
+                    </c:choose>
+                    <c:choose>
+                        <c:when test="${sessionScope.locale eq 'en'}">
+                            <li class="active"><a href="#">
+                                <fmt:message key="nav.locale.en" bundle="${i18n}"/>
+                            </a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li><a href="${path}&amp;locale=en">
+                                <fmt:message key="nav.locale.en" bundle="${i18n}"/>
+                            </a></li>
+                        </c:otherwise>
+                    </c:choose>
+                    <c:if test="${empty sessionScope.user}">
+                        <li>
+                            <a href="${pageContext.request.contextPath}/controller?command=signup">
+                                <fmt:message key="nav.signup" bundle="${i18n}"/>
+                            </a>
+                        </li>
+                    </c:if>
+                    <c:if test="${not empty sessionScope.user}">
+                        <c:set var="basket"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
+                        <li><a href="${pageContext.request.contextPath}/controller?command=reservation"
+                               data-toggle="tooltip" title="${basket}"><span class="glyphicon glyphicon-shopping-cart"/>
+                        </a>
+                        </li>
+                        <li><p id="userhi" class="text"><fmt:message key="nav.hello"
+                                                                    bundle="${i18n}"/>, ${sessionScope.user.firstName}!
+                        </p>
+                        </li>
+                    </c:if>
+                    <c:if test="${not empty sessionScope.user}">
+                        <li><a href="${pageContext.request.contextPath}/controller?command=logout"><span
+                                class="glyphicon glyphicon-user"/>
+                            <fmt:message key="nav.signout" bundle="${i18n}"/>
+                        </a>
+                        </li>
+                    </c:if>
+                    <c:if test="${empty sessionScope.user}">
+                        <li>
+                            <a href="${pageContext.request.contextPath}/controller?command=signin"><span
+                                    class="glyphicon glyphicon-log-in"/>
+                                <fmt:message key="nav.signin" bundle="${i18n}"/>
+                            </a>
+                        </li>
+                    </c:if>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <script>
+        $(document).ready(function () {
+            var menu = $('.navbar-inverse');
+            var origOffsetY = menu.offset().top;
+            function scroll() {
+                if ($(window).scrollTop() >= origOffsetY) {
+                    $(menu).addClass('navbar-fixed-top');
+                } else {
+                    $(menu).removeClass('navbar-fixed-top');
+                }
+            }
+            document.onscroll = scroll;
+        });
+    </script>
+</jsp:root>

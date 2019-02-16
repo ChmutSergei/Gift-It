@@ -1,0 +1,40 @@
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          version="2.0">
+
+    <footer class="newFooter">
+        <div class="container-fluid">
+            <div class="col-xs-2 col-xs-offset-3">
+                <h4 class="text-center">INFO</h4>
+                <ul>
+                    <li><span class="glyphicon-eye-open"/> Mihanivichi, Mimsk, 223070, Belarus</li>
+                    <li><span class="glyphicon-envelope"/> chmut@tut.by </li>
+                    <li><span class="glyphicon-phone"/> +375-29-624-27-** </li>
+                </ul>
+            </div>
+            <div class="col-xs-2">
+                <h4 class="text-center">ABOUT</h4>
+                <ul>
+                    <li>About Us</li>
+                    <li>Services</li>
+                    <li>Rooms</li>
+                    <li>Our Location</li>
+                </ul>
+            </div>
+            <div class="col-xs-2">
+                <h4 class="text-center">QUICK LINKS</h4>
+                <ul>
+                    <li>Facebook</li>
+                    <li>Instagram</li>
+                    <li>YouTube</li>
+                    <li>Pinterest</li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="container-fluid text-center">
+            <h1><strong>GIFT-IT</strong></h1>
+            <p>&#169; All rigth reserved. </p>
+        </div>
+    </footer>
+</jsp:root>

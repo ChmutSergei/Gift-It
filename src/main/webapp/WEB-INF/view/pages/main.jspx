@@ -1,0 +1,451 @@
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+          version="2.0">
+    <div class="container">
+        <div id="items" class="row">
+            <div class="col-sm-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">BLACK FRIDAY DEAL</div>
+                    <div class="panel-body"><img src="${sessionScope.foto}" class="img-responsive" style="width:100%" alt="Image"/></div>
+                    <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">BLACK FRIDAY DEAL</div>
+                    <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"/></div>
+                    <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-success">
+                    <div class="panel-heading">BLACK FRIDAY DEAL</div>
+                    <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"/></div>
+                    <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
+                </div>
+            </div>
+        </div>
+    </div><br/>
+    <!--<fmt:setLocale value="${sessionScope.locale}"/>-->
+    <!--<c:set var="loc" value="${sessionScope.locale}"/>-->
+    <!--<fmt:setBundle basename="messages" var="i18n"/>-->
+    <!--&lt;!&ndash;    Carousel&ndash;&gt;-->
+    <!--<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">-->
+        <!--&lt;!&ndash; Indicators &ndash;&gt;-->
+        <!--<ol class="carousel-indicators">-->
+            <!--<li data-target="#myCarousel" data-slide-to="0" class="active"></li>-->
+            <!--<li data-target="#myCarousel" data-slide-to="1"></li>-->
+        <!--</ol>-->
+
+        <!--&lt;!&ndash; Wrapper for slides &ndash;&gt;-->
+        <!--<div class="carousel-inner">-->
+            <!--<div class="item active">-->
+                <!--<img src="${pageContext.request.contextPath}/assests/img/main/1.jpg" alt="Main" style="width:100%;"/>-->
+                <!--<div class="carousel-caption">-->
+                    <!--<div id="feel">-->
+                        <!--Feel Like Home-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="item">-->
+                <!--<img src="${pageContext.request.contextPath}/assests/img/main/slide-2-1.jpg" alt="second"-->
+                     <!--style="width:100%;"/>-->
+                <!--<div class="carousel-caption">-->
+                    <!--<div id="back">-->
+                        <!--Back Early Save More-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash; Left and right controls &ndash;&gt;-->
+        <!--<a class="left carousel-control" href="#myCarousel" data-slide="prev">-->
+            <!--<span class="glyphicon glyphicon-chevron-left"></span>-->
+            <!--<span class="sr-only">Previous</span>-->
+        <!--</a>-->
+        <!--<a class="right carousel-control" href="#myCarousel" data-slide="next">-->
+            <!--<span class="glyphicon glyphicon-chevron-right"></span>-->
+            <!--<span class="sr-only">Next</span>-->
+        <!--</a>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash; Welcome &ndash;&gt;-->
+
+    <!--<div class="container-fluid text-center col-xs-6 col-xs-offset-3">-->
+        <!--<div class="row" style="margin-top: 150px">-->
+            <!--<div class="welcom">-->
+                <!--<h3 class="media-heading"-->
+                    <!--style="font-family: 'Herr Von Muellerhoff';font-size: 120px;color:#dedede; ">Welcome</h3>-->
+            <!--</div>-->
+            <!--<div class="welinfo" style="margin-top: -80px;">-->
+                <!--<h2 class="media-heading"-->
+                    <!--style="font-family: 'Times New Roman'"><fmt:message key="main.about" bundle="${i18n}"/>.</h2>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+            <!--<p style="text-align: center;">-->
+                <!--<span style="color: #6a6a6a; font-size: 20px; line-height: 28px;"><fmt:message key="main.about2" bundle="${i18n}"/><br/>-->
+                <!--</span>-->
+            <!--</p>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+            <!--<h4 class="cmsmasters_heading"><a href="#"-->
+                                              <!--style="font-family: 'Times New Roman';color: #c09c76"><fmt:message key="main.view" bundle="${i18n}"/></a>-->
+            <!--</h4>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="container-fluid" style="margin-top: 150px;">-->
+        <!--<div class="row col-xs-10 col-xs-offset-1">-->
+            <!--<div class="col-xs-4"><img src="${pageContext.request.contextPath}/assests/img/welcome/2-5.jpg" style="max-width:100%;-->
+            <!--height:auto;"/></div>-->
+            <!--<div class="col-xs-4"><img src="${pageContext.request.contextPath}/assests/img/welcome/3-6.jpg" style="max-width:100%;-->
+            <!--height:auto;"/></div>-->
+            <!--<div class="col-xs-4"><img src="${pageContext.request.contextPath}/assests/img/welcome/4-4.jpg" style="max-width:100%;-->
+            <!--height:auto;"/></div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash;&ndash;&gt;-->
+
+    <!--&lt;!&ndash;Rooms&ndash;&gt;-->
+    <!--<div class="container col-xs-12" style="background-color: white;margin-top: 50px;">-->
+        <!--<div class="row" style="margin-top: 40px">-->
+            <!--<div class="welcom">-->
+                <!--<h3 class="media-heading"-->
+                    <!--style="font-family: 'Herr Von Muellerhoff';font-size: 120px;color:#dedede; ">Luxury</h3>-->
+            <!--</div>-->
+            <!--<div class="welinfo" style="margin-top: -80px;">-->
+                <!--<h2 class="media-heading"-->
+                    <!--style="font-family: 'Times New Roman'">ROOMS</h2>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+
+            <!--&lt;!&ndash;Block for booking&ndash;&gt;-->
+            <!--&lt;!&ndash; Date input &ndash;&gt;-->
+
+        <!--<div class="row">-->
+            <!--<div id="bookingBar" class="container-fluid col-xs-3" style="margin-top: 100px">-->
+                <!--<div id="bookBar" class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="1730">-->
+                    <!--<div class="row" style="background-color: #9d9d9d;padding: 10px;">-->
+                        <!--<span class="headBar col-xs-12" style="font-size: large;padding: 5px;"><strong><fmt:message-->
+                                <!--key="navbar.head" bundle="${i18n}"/></strong></span>-->
+                        <!--<c:set var="namecheckin"><fmt:message key="navbar.checkin" bundle="${i18n}"/></c:set>-->
+                        <!--<c:set var="namecheckout"><fmt:message key="navbar.checkout" bundle="${i18n}"/></c:set>-->
+                        <!--<form action="${pageContext.request.contextPath}/frontController?commandName=search" name="booking"-->
+                              <!--method="post">-->
+                            <!--<div class="form-group">-->
+                                <!--<c:choose>-->
+                                    <!--<c:when test="${not empty sessionScope.checkIn}">-->
+                                        <!--<div class="input-group date" id="datetimepicker7">-->
+                                            <!--<input class="form-control col-xs-5" name="checkin" required=""-->
+                                                   <!--placeholder="${sessionScope.checkIn}" style="margin: 0px"/>-->
+                                            <!--<span class="input-group-addon">-->
+                                <!--<span class="glyphicon glyphicon-calendar"></span>-->
+                            <!--</span>-->
+                                        <!--</div>-->
+                                    <!--</c:when>-->
+                                    <!--<c:otherwise>-->
+                                        <!--<div class="input-group date" id="datetimepicker1">-->
+                                            <!--<input class="form-control col-xs-5" name="checkin" required=""-->
+                                                   <!--placeholder="${namecheckin}" style="margin: 0px"/>-->
+                                            <!--<span class="input-group-addon">-->
+                                <!--<span class="glyphicon glyphicon-calendar"></span>-->
+                            <!--</span>-->
+                                        <!--</div>-->
+                                    <!--</c:otherwise>-->
+                                <!--</c:choose>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<c:choose>-->
+                                    <!--<c:when test="${not empty sessionScope.checkOut}">-->
+                                        <!--<div class="input-group date" id="datetimepicker8">-->
+                                            <!--<input class="form-control col-xs-5" name="checkout" required=""-->
+                                                   <!--placeholder="${sessionScope.checkOut}" style="margin: 0px"/>-->
+                                            <!--<span class="input-group-addon">-->
+                                    <!--<span class="glyphicon glyphicon-calendar"></span>-->
+                                <!--</span>-->
+                                        <!--</div>-->
+                                    <!--</c:when>-->
+                                    <!--<c:otherwise>-->
+                                        <!--<div class="input-group date" id="datetimepicker2">-->
+                                            <!--<input class="form-control col-xs-5" name="checkout" required=""-->
+                                                   <!--placeholder="${namecheckout}" style="margin: 0px"/>-->
+                                            <!--<span class="input-group-addon">-->
+                                    <!--<span class="glyphicon glyphicon-calendar"></span>-->
+                                <!--</span>-->
+                                        <!--</div>-->
+                                    <!--</c:otherwise>-->
+                                <!--</c:choose>-->
+                            <!--</div>-->
+                            <!--<div class="form-group row">-->
+                                <!--<label class="text-left col-xs-4 col-xs-offset-1" for="sel1"><fmt:message-->
+                                        <!--key="navbar.adults" bundle="${i18n}"/></label>-->
+                                <!--<div class="col-xs-7">-->
+                                    <!--<select class="form-control" id="sel1" name="bedtype">-->
+                                        <!--<option>1</option>-->
+                                        <!--<option>2</option>-->
+                                        <!--<option>3</option>-->
+                                        <!--<option>4</option>-->
+                                    <!--</select></div>-->
+
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<c:set var="booking"><fmt:message key="navbar.booknow" bundle="${i18n}"/></c:set>-->
+                                <!--<div class="btnbook" style="margin: 10px !important;">-->
+                                    <!--<input type="submit" class="checkout col-xs-8 col-xs-offset-2" value="${booking}"/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</form>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--&lt;!&ndash;Print rooms&ndash;&gt;-->
+
+            <!--<div class="col-xs-9" style="margin-top: 70px">-->
+
+                <!--<c:forEach var="room" items="${sessionScope.rooms}" varStatus="status">-->
+                    <!--<div class="row" style="margin-top: 30px">-->
+                        <!--<div class="arrows-on-right-horizonta">-->
+                            <!--<div class="col col-xs-7">-->
+                                <!--<img src="${pageContext.request.contextPath}/assests/img/rooms/${status.index+1}.jpg"-->
+                                     <!--style="max-width:100%;-->
+                            <!--height:auto;"/>-->
+                            <!--</div>-->
+                            <!--<div class="col col-xs-5">-->
+                                <!--<h2 class="card-title"-->
+                                    <!--style="font-family: 'Times New Roman';text-transform: uppercase;">${room.type}</h2>-->
+                                <!--<h4>Количество спальных мест - ${room.bedType} </h4>-->
+                                <!--<p class="card-text" style="font-size: large">${room.description}</p>-->
+                                <!--<h4 class="card-text" style="color: #c09c76">-->
+                                    <!--Всего : ${room.price/100}-->
+                                <!--</h4>-->
+                                <!--<div class="row" style="height: 40px">-->
+                                    <!--<a href="${pageContext.request.contextPath}/frontController?commandName=search" style="color: #c09c76"><fmt:message key="main.more" bundle="${i18n}"/></a>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</c:forEach>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;more&ndash;&gt;-->
+    <!--<div class="row col-xs-6 col-xs-offset-3" style="background-color: white;margin-top: 50px;">-->
+        <!--<div class="row">-->
+            <!--<div class="row col-xs-4 col-xs-offset-4">-->
+                <!--<a style="color: #2b669a;font-size: large "-->
+                   <!--href="${pageContext.request.contextPath}/frontController?commandName=search"-->
+                   <!--class="btn-link"><fmt:message key="main.show" bundle="${i18n}"/></a>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash;Our service&ndash;&gt;-->
+
+    <!--<div class="row col-xs-6 col-xs-offset-3" style="background-color: white;margin-top: 50px;">-->
+        <!--<div class="row">-->
+            <!--<div class="welcom">-->
+                <!--<h3 class="media-heading"-->
+                    <!--style="font-family: 'Herr Von Muellerhoff';font-size: 120px;color:#dedede; ">Awesome</h3>-->
+            <!--</div>-->
+            <!--<div class="welinfo" style="margin-top: -80px;">-->
+                <!--<h2 class="media-heading"-->
+                    <!--style="font-family: 'Times New Roman'">SERVICES</h2>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="container-fluid" style="margin-top: 50px;">-->
+        <!--<div class="row col-xs-12" style="margin-top: 40px">-->
+            <!--<div class="thumbnail text-center col-xs-3" style="position: relative">-->
+                <!--<img src="${pageContext.request.contextPath}/assests/img/service/5-2.jpg" style="max-width:100%;-->
+            <!--height:auto;"/>-->
+                <!--<div class="caption" style="position: absolute;top: 45%;left: 0;width: 100%;">-->
+                    <!--<a href="#"-->
+                       <!--style="font-size: 30px;font-family:'Times New Roman';text-decoration:none;color: white"><fmt:message key="main.spa" bundle="${i18n}"/></a>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="thumbnail text-center col-xs-3" style="position: relative">-->
+                <!--<img src="${pageContext.request.contextPath}/assests/img/service/6-2.jpg" style="max-width:100%;-->
+            <!--height:auto;"/>-->
+                <!--<div class="caption" style="position: absolute;top: 45%;left: 0;width: 100%;">-->
+                    <!--<a href="#"-->
+                       <!--style="font-size: 30px;font-family:'Times New Roman';text-decoration:none;color: white"><fmt:message key="main.pool" bundle="${i18n}"/></a>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="thumbnail text-center col-xs-3" style="position: relative">-->
+                <!--<img src="${pageContext.request.contextPath}/assests/img/service/7-2.jpg" style="max-width:100%;-->
+            <!--height:auto;"/>-->
+                <!--<div class="caption" style="position: absolute;top: 45%;left: 0;width: 100%;">-->
+                    <!--<a href="#"-->
+                       <!--style="font-size: 30px;font-family:'Times New Roman';text-decoration:none;color: white"><fmt:message key="main.rest" bundle="${i18n}"/></a>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="thumbnail text-center col-xs-3" style="position: relative">-->
+                <!--<img src="${pageContext.request.contextPath}/assests/img/service/8-2.jpg" style="max-width:100%;-->
+            <!--height:auto;"/>-->
+                <!--<div class="caption" style="position: absolute;top: 45%;left: 0;width: 100%;">-->
+                    <!--<a href="#"-->
+                       <!--style="font-size: 30px;font-family:'Times New Roman';text-decoration:none;color: white"><fmt:message key="main.activ" bundle="${i18n}"/></a>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash;client  TESTIMONIALS&ndash;&gt;-->
+
+    <!--<div class="row col-xs-6 col-xs-offset-3" style="background-color: white;margin-top: 50px;">-->
+        <!--<div class="row">-->
+            <!--<div class="welcom">-->
+                <!--<h3 class="media-heading"-->
+                    <!--style="font-family: 'Herr Von Muellerhoff';font-size: 120px;color:#dedede; ">Client</h3>-->
+            <!--</div>-->
+            <!--<div class="welinfo" style="margin-top: -80px;">-->
+                <!--<h2 class="media-heading"-->
+                    <!--style="font-family: 'Times New Roman'"><fmt:message key="main.tem" bundle="${i18n}"/></h2>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash;&ndash;&gt;-->
+    <!--&lt;!&ndash;    Carousel  for TESTIMONIALS&ndash;&gt;-->
+    <!--<div class="container">-->
+        <!--<div id="myCarousel2" class="carousel slide" data-ride="carousel" data-interval="6000">-->
+            <!--&lt;!&ndash; Indicators &ndash;&gt;-->
+            <!--<ol class="carousel-indicators">-->
+                <!--<li data-target="#myCarousel2" data-slide-to="0" class="active"></li>-->
+                <!--<li data-target="#myCarousel2" data-slide-to="1"></li>-->
+                <!--<li data-target="#myCarousel2" data-slide-to="2"></li>-->
+            <!--</ol>-->
+
+            <!--&lt;!&ndash; Wrapper for slides &ndash;&gt;-->
+            <!--<div class="carousel-inner">-->
+                <!--<div class="item active">-->
+                    <!--<div class="row text-center">-->
+                        <!--<div class="row">-->
+                            <!--<div class="col-xs-1 col-xs-offset-5">-->
+                                <!--<img src="${pageContext.request.contextPath}/assests/img/client/1.jpg"-->
+                                     <!--class="img-circle" alt="Main" style="width:100%;"/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-xs-4 col-xs-offset-4">-->
+                            <!--<h3>-->
+                                <!--<em>"<fmt:message key="main.tem1" bundle="${i18n}"/>"</em>-->
+                            <!--</h3>-->
+                            <!--<h3 style="text-transform: uppercase">Mia Turner</h3>-->
+                            <!--<h3 style="color: #c09c76;">MODEL</h3>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+
+                <!--<div class="item">-->
+                    <!--<div class="row text-center">-->
+                        <!--<div class="row">-->
+                            <!--<div class="col-xs-1 col-xs-offset-5">-->
+                                <!--<img src="${pageContext.request.contextPath}/assests/img/client/2.jpg"-->
+                                     <!--class="img-circle" alt="Main" style="width:100%;"/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-xs-4 col-xs-offset-4">-->
+                            <!--<h3>-->
+                                <!--<em><fmt:message key="main.tem2" bundle="${i18n}"/></em>-->
+                            <!--</h3>-->
+                            <!--<h3 style="text-transform: uppercase">Laura Marano</h3>-->
+                            <!--<h3 style="color: #c09c76;">DESIGNER</h3>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="item">-->
+                    <!--<div class="row text-center">-->
+                        <!--<div class="row">-->
+                            <!--<div class="col-xs-1 col-xs-offset-5">-->
+                                <!--<img src="${pageContext.request.contextPath}/assests/img/client/3.jpg"-->
+                                     <!--class="img-circle" alt="Main" style="width:100%;"/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-xs-4 col-xs-offset-4">-->
+                            <!--<h3>-->
+                                <!--<em><fmt:message key="main.tem3" bundle="${i18n}"/></em>-->
+                            <!--</h3>-->
+                            <!--<h3 style="text-transform: uppercase">Mike Jameson</h3>-->
+                            <!--<h3 style="color: #c09c76;">DEVELOPER</h3>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash; Left and right controls &ndash;&gt;-->
+            <!--<a class="left carousel-control" href="#myCarousel2" data-slide="prev">-->
+                <!--<span class="glyphicon glyphicon-chevron-left"></span>-->
+                <!--<span class="sr-only">Previous</span>-->
+            <!--</a>-->
+            <!--<a class="right carousel-control" href="#myCarousel2" data-slide="next">-->
+                <!--<span class="glyphicon glyphicon-chevron-right"></span>-->
+                <!--<span class="sr-only">Next</span>-->
+            <!--</a>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+    <!--&lt;!&ndash; Награды )))&ndash;&gt;-->
+    <!--<div class="row col-xs-6 col-xs-offset-3" style="background-color: white;margin-top: 50px;">-->
+        <!--<div class="row">-->
+            <!--<div class="prize">-->
+                <!--<div class="col-xs-3" style="position: relative">-->
+                    <!--<img src="${pageContext.request.contextPath}/assests/img/prize/1.jpg" style="max-width:100%;-->
+            <!--height:auto;"/>-->
+                <!--</div>-->
+                <!--<div class="col-xs-3" style="position: relative">-->
+                    <!--<img src="${pageContext.request.contextPath}/assests/img/prize/2.jpg" style="max-width:100%;-->
+            <!--height:auto;"/>-->
+                <!--</div>-->
+                <!--<div class="col-xs-3" style="position: relative">-->
+                    <!--<img src="${pageContext.request.contextPath}/assests/img/prize/3.jpg" style="max-width:100%;-->
+            <!--height:auto;"/>-->
+                <!--</div>-->
+                <!--<div class="col-xs-3" style="position: relative">-->
+                    <!--<img src="${pageContext.request.contextPath}/assests/img/prize/4.jpg" style="max-width:100%;-->
+            <!--height:auto;"/>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+    <!--&lt;!&ndash;    for text appear&ndash;&gt;-->
+    <!--<script>-->
+
+        <!--$.fn.animate_Text = function () {-->
+            <!--var string = this.text();-->
+            <!--return this.each(function () {-->
+                <!--var $this = $(this);-->
+                <!--<![CDATA[-->
+                <!--$this.html(string.replace(/./g, '<span class="new">$&</span>'));-->
+                <!--]]>-->
+                <!--$this.find('span.new').each(function (i, el) {-->
+                    <!--setTimeout(function () {-->
+                        <!--$(el).addClass('div_opacity');-->
+                    <!--}, 50 * i);-->
+                <!--});-->
+            <!--});-->
+        <!--};-->
+        <!--$('#feel').show();-->
+        <!--$('#feel').animate_Text();-->
+        <!--setInterval(function () {-->
+            <!--$('#feel').show();-->
+            <!--$('#feel').animate_Text();-->
+        <!--}, 6000);-->
+        <!--setInterval(function () {-->
+            <!--$('#back').show();-->
+            <!--$('#back').animate_Text();-->
+        <!--}, 6000);-->
+
+    <!--</script>-->
+
+
+</jsp:root>

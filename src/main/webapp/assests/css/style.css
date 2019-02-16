@@ -1,0 +1,64 @@
+
+#hello {
+    margin-bottom: 0;
+    background-color: khaki;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+#main {
+    background-color:#e6f7d9;
+}
+#signin {
+    padding: 40px;
+    padding-top: 0;
+    outline: 2px solid darkgray;
+    float: none;
+}
+#userhi {
+    color: white;
+    margin-top: 15px;
+}
+#bntlog {
+    background-color: transparent;
+    margin: inherit;
+    padding: 16px;
+    color: #9d9d9d ;
+    outline: 0 !important;
+}
+#btmodin,#btmodcl {
+    background-color: #318f8e ;
+    outline: 0 !important;
+}
+
+body {
+    font-family: 'OpenSans-Regular' !important;
+}
+#message {
+    margin: 10px auto;
+    text-align: center;
+    float: none;
+}
+.form-control {
+    background-color: #f2f2f2;
+}
+.btn-default {
+    color: #333;
+    background-color: #f2f2f2;
+}
+footer {
+    background-color: #333;
+    font-family: "Times New Roman";
+    color: #c09c76;
+    padding: 25px;
+}
+/*  Font*/
+@font-face {font-family: "OpenSans-Regular";
+    src: url("../fonts/OpenSans-Regular.ttf")
+    format("truetype"); font-style: normal; font-weight: normal;
+}
+
+
+@font-face {font-family: "Herr Von Muellerhoff";
+    src: url("../fonts/Herr Von Muellerhoff.ttf")
+    format("truetype"); font-style: normal; font-weight: normal;
+}
