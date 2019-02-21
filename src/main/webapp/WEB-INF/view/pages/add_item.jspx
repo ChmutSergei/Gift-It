@@ -1,0 +1,178 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+          xmlns="http://www.w3.org/1999/xhtml" version="2.0">
+    <fmt:setLocale value="${sessionScope.locale}"/>
+    <fmt:setBundle basename="i18n.messages" var="i18n"/>
+    <!--<div class="panel panel-info">-->
+    <!--<div class="panel-heading"><fmt:message bundle="${i18n}" key="additem.type"/>-->
+    <!--<label class="checkbox-inline"><input type="checkbox" name="cup"/>-->
+    <!--<fmt:message bundle="${i18n}" key="additem.cup"/>-->
+    <!--</label>-->
+    <!--<label class="checkbox-inline"><input type="checkbox" name="shirt"/>-->
+    <!--<fmt:message bundle="${i18n}" key="additem.shirt"/>-->
+    <!--</label>-->
+    <!--<label class="checkbox-inline"><input type="checkbox" name="plate"/>-->
+    <!--<fmt:message bundle="${i18n}" key="additem.plate"/>-->
+    <!--</label>-->
+    <!--<label class="checkbox-inline"><input type="checkbox" name="pillow"/>-->
+    <!--<fmt:message bundle="${i18n}" key="additem.pillow"/>-->
+    <!--</label>-->
+    <!--<label class="checkbox-inline"><input type="checkbox" name="puzzle"/>-->
+    <!--<fmt:message bundle="${i18n}" key="additem.puzzle"/>-->
+    <!--</label>-->
+    <!--<label class="checkbox-inline"><input type="checkbox" name="mousepad"/>-->
+    <!--<fmt:message bundle="${i18n}" key="additem.mousepad"/>-->
+    <!--</label>-->
+    <!--<label class="checkbox-inline"><input type="checkbox" name="towel"/>-->
+    <!--<fmt:message bundle="${i18n}" key="additem.towel"/>-->
+    <!--</label>-->
+    <!--<span class="glyphicon glyphicon-align-center"/>-->
+    <!--<fmt:message bundle="${i18n}" key="additem.price"/>-->
+    <!--<label class="radio-inline"><input type="radio" name="price" checked=""/>-->
+    <!--&amp;lt 50-->
+    <!--</label>-->
+    <!--<label class="radio-inline"><input type="radio" name="price"/>-->
+    <!--&amp;lt 100-->
+    <!--</label>-->
+    <!--<label class="radio-inline"><input type="radio" name="price"/>-->
+    <!--&amp;lt 150-->
+    <!--</label>-->
+    <!--<label class="radio-inline"><input type="radio" name="price"/>-->
+    <!--All-->
+    <!--</label>-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="container" style="background-color:#e6f7d9;padding-top: -20px;">
+        <h2><fmt:message bundle="${i18n}" key="additem.message"/></h2>
+        <fieldset id="newItem" class="container">
+            <h3><fmt:message bundle="${i18n}" key="additem.file"/></h3>
+
+            <form id="upload-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <table>
+                            <tr>
+                                <th><label for="uFile"><fmt:message bundle="${i18n}" key="additem.upload"/></label></th>
+                                <td><input id="uFile" name="itemImage" type="file">
+                                    <jsp:text/>
+                                </input></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-offset-3 col-xs-6">
+                        <c:set var="upload">
+                            <fmt:message bundle="${i18n}" key="additem.btupload"/></c:set>
+                        <input id="upload" type="button" class="btn btn-primary col-xs-3" value="${upload}"/>
+                    </div>
+                </div>
+            </form>
+            <form id="form" class="form-horizontal"
+                  action="${pageContext.request.contextPath}/controller?command=add_item"
+                  method="post">
+                <![CDATA[
+            <legend>
+            ]]>
+                <fmt:message bundle="${i18n}" key="additem.type"/> :
+                <![CDATA[
+            </legend>
+            ]]>
+                <div class="form-group">
+                    <div class="col-xs-offset-3 col-xs-6">
+                        <label class="radio"><input type="radio" name="type" value="cup" checked=""/>
+                            <fmt:message bundle="${i18n}" key="additem.cup"/>
+                        </label>
+                        <label class="radio"><input type="radio" name="type" value="shirt"/>
+                            <fmt:message bundle="${i18n}" key="additem.shirt"/>
+                        </label>
+                        <label class="radio"><input type="radio" name="type" value="plate"/>
+                            <fmt:message bundle="${i18n}" key="additem.plate"/>
+                        </label>
+                        <label class="radio"><input type="radio" name="type" value="pillow"/>
+                            <fmt:message bundle="${i18n}" key="additem.pillow"/>
+                        </label>
+                        <label class="radio"><input type="radio" name="type" value="puzzle"/>
+                            <fmt:message bundle="${i18n}" key="additem.puzzle"/>
+                        </label>
+                        <label class="radio"><input type="radio" name="type" value="mousePad"/>
+                            <fmt:message bundle="${i18n}" key="additem.mousepad"/>
+                        </label>
+                        <label class="radio"><input type="radio" name="type" value="towel"/>
+                            <fmt:message bundle="${i18n}" key="additem.towel"/>
+                        </label>
+                    </div>
+                </div>
+
+                <![CDATA[
+            <legend>
+            ]]>
+                <fmt:message bundle="${i18n}" key="additem.info"/> :
+                <![CDATA[
+            </legend>
+            ]]>
+                <div class="form-group has-feedback">
+                    <label class="control-label col-xs-3" for="itemName"><fmt:message bundle="${i18n}"
+                                                                                      key="additem.name"/></label>
+                    <div class="col-xs-6">
+                        <input type="text" class="form-control" id="itemName"
+                               pattern=".{4,20}" name="itemName" required=""/>
+                    </div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label class="control-label col-xs-3" for="description"><fmt:message bundle="${i18n}"
+                                                                                         key="additem.description"/></label>
+                    <div class="col-xs-6">
+                        <input type="text" class="form-control" id="description"
+                               pattern=".{10,250}" name="description" required=""/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-offset-3 col-xs-6">
+                        <label class="radio"><input type="radio" name="active" value="active" checked=""/>
+                            <fmt:message bundle="${i18n}" key="additem.yes"/>
+                        </label>
+                        <label class="radio"><input type="radio" value="notactive" name="active"/>
+                            <fmt:message bundle="${i18n}" key="additem.no"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label class="control-label col-xs-3" for="price"><fmt:message bundle="${i18n}"
+                                                                                   key="additem.price"/></label>
+                    <div class="col-xs-6">
+                        <input type="text" class="form-control" id="price"
+                               pattern="(\d{1,4}.\d{1,2})|(\d{1,4})" name="price" required=""/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-offset-3 col-xs-6">
+                        <c:set var="submit"><fmt:message key="additem.submit" bundle="${i18n}"/></c:set>
+                        <c:set var="reset"> <fmt:message key="contact.reset" bundle="${i18n}"/> </c:set>
+                        <input type="submit" class="btn btn-primary" value="${submit}"/>
+                        <input type="reset" class="btn btn-default" value="${reset}"/>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
+
+    </div>
+
+    <script>
+        upload.onclick = function () {
+            var data = new FormData($('#upload-form')[0]);
+            var contextUrl = '${pageContext.request.contextPath}';
+            $.ajax({
+                type: 'POST',
+                data: data,
+                url: contextUrl + '/upload',
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        }
+    </script>
+
+</jsp:root>
