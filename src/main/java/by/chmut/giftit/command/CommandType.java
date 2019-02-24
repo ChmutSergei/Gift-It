@@ -10,6 +10,9 @@ public enum CommandType {
     SIGNUP(new SignUpCommand()),
     LOGIN(new LoginCommand()),
     LOGOUT(new LogoutCommand()),
+    ADMIN(new AdminCommand()),
+    ADD_ITEM(new AddItemCommand()),
+    ACCOUNT(new AccountCommand()),
     REGISTRATION(new RegistrationCommand());
 
     private Command command;

@@ -1,0 +1,165 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+          xmlns="http://www.w3.org/1999/xhtml" version="2.0">
+    <fmt:setLocale value="${sessionScope.locale}"/>
+    <fmt:setBundle basename="i18n.messages" var="i18n"/>
+    <!-- message-->
+    <c:if test="${not empty sessionScope.error}">
+        <c:set var="ermessage"><fmt:message key="${sessionScope.error}" bundle="${i18n}"/></c:set>
+        <div class="alert alert-warning col-xs-6 left-arrow">
+            <strong>${ermessage}</strong>
+        </div>
+    </c:if>
+
+    <!-- paid order -->
+    <c:if test="${not empty sessionScope.paidOrder}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-5 col-xs-offset-2 text-right" style="padding: 10px;">
+                    <p style="font-size: 15px"><fmt:message bundle="${i18n}" key="reserv.messinfo"/></p>
+                </div>
+                <div class="col-xs-1">
+                    <button class="btn btn-default" data-toggle="collapse" data-target="#demo"><fmt:message
+                            bundle="${i18n}" key="reserv.view"/></button>
+                </div>
+            </div>
+            <div id="demo" class="collapse">
+                <div class="row col-xs-8 col-xs-offset-2 ">
+                    <div class="row">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-1">№</th>
+                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.type"/></th>
+                                <th class="col-xs-1"><span class="glyphicon glyphicon-bed"></span></th>
+                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkin"/></th>
+                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkout"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="room" items="${paidRooms}" varStatus="status">
+                                <tr>
+                                    <td class="col-xs-1">${status.index+1}</td>
+                                    <td class="col-xs-2">${room.type}</td>
+                                    <td class="col-xs-1">${room.bedType}</td>
+                                    <td class="col-xs-2">${room.checkIn}</td>
+                                    <td class="col-xs-2">${room.checkOut}</td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
+
+    <c:if test="${not empty warning}">
+        <div class="container">
+            <div class="alert alert-warning col-xs-6 left-arrow">
+                <strong><fmt:message key="reserv.warning" bundle="${i18n}"/></strong>
+                <a href="${pageContext.request.contextPath}/frontController?commandName=payment"><fmt:message
+                        bundle="${i18n}" key="reserv.payorder"/></a>
+            </div>
+        </div>
+    </c:if>
+    <c:choose>
+        <c:when test="${not empty emptyMsg}">
+            <div class="container" style="height: 800px">
+                <div class="alert alert-warning col-xs-6 left-arrow">
+                    <strong><fmt:message key="${emptyMsg}" bundle="${i18n}"/></strong>
+                    <a href="${pageContext.request.contextPath}/frontController?commandName=search"><fmt:message
+                            bundle="${i18n}" key="reserv.search"/></a>
+                </div>
+            </div>
+        </c:when>
+
+        <c:otherwise>
+            <div class="container">
+                <div class="text-left">
+                    <h2><fmt:message bundle="${i18n}" key="reserv.reservation"/></h2>
+                    <p><fmt:message bundle="${i18n}" key="reserv.messedit"/></p>
+                </div>
+                <div class="row col-xs-10 col-xs-offset-1 ">
+                    <div class="row">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-1">№</th>
+                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.type"/></th>
+                                <th class="col-xs-1"><span class="glyphicon glyphicon-bed"></span></th>
+                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkin"/></th>
+                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkout"/></th>
+                                <th class="col-xs-1"><fmt:message bundle="${i18n}" key="reserv.price"/></th>
+                                <th class="col-xs-2"></th>
+                                <th class="col-xs-1"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="room" items="${tempRooms}" varStatus="status">
+                                <tr>
+                                    <td class="col-xs-1">${status.index+1}</td>
+                                    <td class="col-xs-2">${room.type}</td>
+                                    <td class="col-xs-1">${room.bedType}</td>
+                                    <td class="col-xs-2">${room.checkIn}</td>
+                                    <td class="col-xs-2">${room.checkOut}</td>
+                                    <td class="col-xs-1">${room.price/100}</td>
+                                    <td class="col-xs-2"><a href="#" class="btn bg-info"><fmt:message
+                                            bundle="${i18n}" key="reserv.about"/></a></td>
+                                    <td class="col-xs-1"><a id="${room.temporaryNumber}"
+                                                            href="${pageContext.request.contextPath}/frontController?commandName=reservation&amp;delete=room"
+                                                            class="delete"><fmt:message bundle="${i18n}"
+                                                                                        key="reserv.delete"/></a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th></th>
+                                <th colspan="3"><fmt:message bundle="${i18n}" key="reserv.payment"/></th>
+                                <th></th>
+                                <th>${sessionScope.totalSum/100}</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <div class="row col-xs-7 col-xs-offset-3">
+                        <span class="info"><fmt:message bundle="${i18n}" key="reserv.agree"/><a href="#"><fmt:message
+                                bundle="${i18n}" key="reserv.rule"/></a><fmt:message bundle="${i18n}"
+                                                                                     key="reserv.ready"/></span>
+                    <a class="btn bg-primary"
+                       href="${pageContext.request.contextPath}/frontController?commandName=payment"><fmt:message
+                            bundle="${i18n}" key="reserv.pay"/></a>
+                </div>
+            </div>
+        </c:otherwise>
+    </c:choose>
+
+    <!--</div>-->
+
+    <script>
+        $(document).ready(function () {
+            $('.delete').click(function () {
+                addRoomId($(this));
+            });
+        });
+
+        function addRoomId(element) {
+            var tempNumber = $(element).attr('id');
+            var contextUrl = '${pageContext.request.contextPath}';
+            $.ajax({
+                type: 'post',
+                url: contextUrl + '/controller',
+                data: {commandName: 'setUniqueNumber', tempNumber: tempNumber}
+            });
+        }
+    </script>
+</jsp:root>
