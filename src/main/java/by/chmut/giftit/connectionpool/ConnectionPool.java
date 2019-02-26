@@ -20,7 +20,7 @@ public class ConnectionPool {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private  static ConnectionPool instance;
+    private static ConnectionPool instance;
     private static ReentrantLock locking = new ReentrantLock();
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
     private BlockingQueue<ProxyConnection> availableConnections;
@@ -52,6 +52,7 @@ public class ConnectionPool {
         availableConnections = new LinkedBlockingDeque<>(poolSize);
         usedConnections = new ConcurrentSkipListSet<>();
         try {
+            Class.forName(configurator.getDriverName());
             for (int i = 0; i < poolSize; i++) {
                 ProxyConnection proxyConnection = createConnection(configurator);
                 availableConnections.add(proxyConnection);
@@ -65,7 +66,7 @@ public class ConnectionPool {
                     availableConnections.add(proxyConnection);
                 }
             }
-        } catch (SQLException exception) {
+        } catch (SQLException | ClassNotFoundException exception) {
             logger.error("Error when init connections", exception);
         }
     }

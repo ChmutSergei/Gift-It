@@ -7,6 +7,7 @@ import by.chmut.giftit.dao.UserDao;
 import by.chmut.giftit.entity.User;
 import by.chmut.giftit.service.ServiceException;
 import by.chmut.giftit.service.UserService;
+import by.chmut.giftit.validator.PasswordValidator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.http.Cookie;
@@ -35,9 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean validateUser(User user, String password) {
-        return Validator.validateUser(user, password);
+        return PasswordValidator.validateUser(user, password);
     }
 
+    //TODO
     @Override
     public User find(String username) throws ServiceException {
         User user;
@@ -80,7 +82,7 @@ public class UserServiceImpl implements UserService {
         return newUser;
     }
 
-    private User setParameter(Map<String,String> userParameters) {
+    private User setParameter(Map<String, String> userParameters) {
         User user = new User();
         String passHashed = BCrypt.hashpw(userParameters.get(PASSWORD_PARAMETER_NAME), BCrypt.gensalt());
         user.setUsername(userParameters.get(USERNAME_PARAMETER_NAME));
@@ -97,30 +99,30 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    //TODO
     private boolean isValidParamsWithPatterns(Map<String, String> userParameters) {
-        if (Pattern.matches(REGEX_USERNAME, userParameters.get(USERNAME_PARAMETER_NAME))) {
+        if (!Pattern.matches(REGEX_USERNAME, userParameters.get(USERNAME_PARAMETER_NAME))) {
             return false;
         }
-        if (Pattern.matches(REGEX_PASSWORD, userParameters.get(PASSWORD_PARAMETER_NAME))) {
+        if (!Pattern.matches(REGEX_PASSWORD, userParameters.get(PASSWORD_PARAMETER_NAME))) {
             return false;
         }
-        if (Pattern.matches(REGEX_NAME, userParameters.get(FIRST_NAME_PARAMETER_NAME))) {
+        if (!Pattern.matches(REGEX_NAME, userParameters.get(FIRST_NAME_PARAMETER_NAME))) {
             return false;
         }
-        if (Pattern.matches(REGEX_NAME, userParameters.get(LAST_NAME_PARAMETER_NAME))) {
+        if (!Pattern.matches(REGEX_NAME, userParameters.get(LAST_NAME_PARAMETER_NAME))) {
             return false;
         }
-        if (Pattern.matches(REGEX_EMAIL, userParameters.get(EMAIL_PARAMETER_NAME)) ||
+        if (!Pattern.matches(REGEX_EMAIL, userParameters.get(EMAIL_PARAMETER_NAME)) ||
                 userParameters.get(EMAIL_PARAMETER_NAME).length() > EMAIL_MAX_LENGTH) {
             return false;
         }
-        if (Pattern.matches(REGEX_PHONE, userParameters.get(PHONE_PARAMETER_NAME))) {
+        if (!Pattern.matches(REGEX_PHONE, userParameters.get(PHONE_PARAMETER_NAME))) {
             return false;
         }
-        if (Pattern.matches(REGEX_ADDRESS, userParameters.get(ADDRESS_PARAMETER_NAME))) {
+        if (!Pattern.matches(REGEX_ADDRESS, userParameters.get(ADDRESS_PARAMETER_NAME))) {
             return false;
         }
         return true;
     }
-
 }

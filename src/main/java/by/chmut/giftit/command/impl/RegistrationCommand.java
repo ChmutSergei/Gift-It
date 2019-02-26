@@ -15,7 +15,6 @@ import java.util.Map;
 
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
-import static by.chmut.giftit.constant.PathPage.HOME_PATH;
 
 public class RegistrationCommand implements Command {
 
@@ -25,7 +24,8 @@ public class RegistrationCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req) {
         Router router = new Router();
-        router.setRedirectPath(HOME_PATH);
+        String previousPage = (String) req.getSession().getAttribute(PREVIOUS_PAGE_PARAMETER_NAME);
+        router.setRedirectPath(previousPage);
         Map<String, String> userParameters = setParametersFromRequest(req);
         User user = null;
         try {

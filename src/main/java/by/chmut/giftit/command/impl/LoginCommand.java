@@ -15,14 +15,15 @@ import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.*;
 
 public class LoginCommand implements Command {
-    
+
     private static final Logger logger = LogManager.getLogger();
     private UserService service = new UserServiceImpl();
 
     @Override
     public Router execute(HttpServletRequest req) {
         Router router = new Router();
-        router.setRedirectPath(HOME_PATH);
+        String previousPage = (String) req.getSession().getAttribute(PREVIOUS_PAGE_PARAMETER_NAME);
+        router.setRedirectPath(previousPage);
         String username = req.getParameter(USERNAME_PARAMETER_NAME);
         String password = req.getParameter(PASSWORD_PARAMETER_NAME);
         User user = null;

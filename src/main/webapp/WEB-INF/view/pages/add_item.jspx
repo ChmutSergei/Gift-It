@@ -4,45 +4,6 @@
           xmlns="http://www.w3.org/1999/xhtml" version="2.0">
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="i18n.messages" var="i18n"/>
-    <!--<div class="panel panel-info">-->
-    <!--<div class="panel-heading"><fmt:message bundle="${i18n}" key="additem.type"/>-->
-    <!--<label class="checkbox-inline"><input type="checkbox" name="cup"/>-->
-    <!--<fmt:message bundle="${i18n}" key="additem.cup"/>-->
-    <!--</label>-->
-    <!--<label class="checkbox-inline"><input type="checkbox" name="shirt"/>-->
-    <!--<fmt:message bundle="${i18n}" key="additem.shirt"/>-->
-    <!--</label>-->
-    <!--<label class="checkbox-inline"><input type="checkbox" name="plate"/>-->
-    <!--<fmt:message bundle="${i18n}" key="additem.plate"/>-->
-    <!--</label>-->
-    <!--<label class="checkbox-inline"><input type="checkbox" name="pillow"/>-->
-    <!--<fmt:message bundle="${i18n}" key="additem.pillow"/>-->
-    <!--</label>-->
-    <!--<label class="checkbox-inline"><input type="checkbox" name="puzzle"/>-->
-    <!--<fmt:message bundle="${i18n}" key="additem.puzzle"/>-->
-    <!--</label>-->
-    <!--<label class="checkbox-inline"><input type="checkbox" name="mousepad"/>-->
-    <!--<fmt:message bundle="${i18n}" key="additem.mousepad"/>-->
-    <!--</label>-->
-    <!--<label class="checkbox-inline"><input type="checkbox" name="towel"/>-->
-    <!--<fmt:message bundle="${i18n}" key="additem.towel"/>-->
-    <!--</label>-->
-    <!--<span class="glyphicon glyphicon-align-center"/>-->
-    <!--<fmt:message bundle="${i18n}" key="additem.price"/>-->
-    <!--<label class="radio-inline"><input type="radio" name="price" checked=""/>-->
-    <!--&amp;lt 50-->
-    <!--</label>-->
-    <!--<label class="radio-inline"><input type="radio" name="price"/>-->
-    <!--&amp;lt 100-->
-    <!--</label>-->
-    <!--<label class="radio-inline"><input type="radio" name="price"/>-->
-    <!--&amp;lt 150-->
-    <!--</label>-->
-    <!--<label class="radio-inline"><input type="radio" name="price"/>-->
-    <!--All-->
-    <!--</label>-->
-    <!--</div>-->
-    <!--</div>-->
     <div class="container" style="background-color:#e6f7d9;padding-top: -20px;">
         <h2><fmt:message bundle="${i18n}" key="additem.message"/></h2>
         <fieldset id="newItem" class="container">

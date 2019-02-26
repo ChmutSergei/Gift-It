@@ -1,18 +1,19 @@
 package by.chmut.giftit.dao.impl;
 
-import by.chmut.giftit.criteria.Criteria;
 import by.chmut.giftit.dao.DaoException;
 import by.chmut.giftit.dao.ItemDao;
 import by.chmut.giftit.entity.Item;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDaoImpl implements ItemDao {
 
-    private static final String SELECT_ALL_ITEMS = "SELECT id, name, type, description, active, cost, image FROM Items";
     private static final String SELECT_ITEMS_TYPE = "SELECT id, name, type, description, active, cost FROM Items WHERE type = ?";
     private static final String SELECT_ITEMS_PRICE = "SELECT id, name, type, description, active, cost FROM Items WHERE price = ?";
     private static final String SELECT_ITEMS_TYPE_AND_PRICE = "SELECT id, name, type, description, active, cost FROM " +
@@ -21,76 +22,10 @@ public class ItemDaoImpl implements ItemDao {
     private static final String DELETE_ITEM = "DELETE FROM Items WHERE id=?";
     private static final String CREATE_ITEM = "INSERT INTO Items(name, type, description, active, cost, image) VALUES(?,?,?,?,?,?)";
     private static final String UPDATE_ITEM = "UPDATE Items SET name=?, type=?, description=?, active=?, cost=?, image=? WHERE id=?";
-
+    private static final String SELECT_ALL_ITEMS = "SELECT id, name, type, description, active, cost, image FROM Items " +
+            "ORDER BY id DESC LIMIT ? OFFSET ?";
 
     private Connection connection;
-
-    @Override
-    public List<Item> findByType(String type) throws DaoException {
-        List<Item> items = new ArrayList<>();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(SELECT_ITEMS_TYPE);
-            statement.setString(1, type);
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Item item = makeFromResultSet(resultSet, "", 0);
-                items.add(item);
-            }
-        } catch (IOException | SQLException exception) {
-            throw new DaoException("Error with find items by type", exception);
-        } finally {
-            close(resultSet);
-            close(statement);
-        }
-        return items;
-    }
-
-    @Override
-    public List<Item> findByPrice(String price) throws DaoException {
-        List<Item> items = new ArrayList<>();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(SELECT_ITEMS_PRICE);
-            statement.setString(1, price);
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Item item = makeFromResultSet(resultSet,"",0);
-                items.add(item);
-            }
-        } catch (IOException | SQLException exception) {
-            throw new DaoException("Error with find items by price", exception);
-        } finally {
-            close(resultSet);
-            close(statement);
-        }
-        return items;
-    }
-
-    @Override
-    public List<Item> findByTypeAndPrice(String type, String price) throws DaoException {
-        List<Item> items = new ArrayList<>();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(SELECT_ITEMS_TYPE_AND_PRICE);
-            statement.setString(1, type);
-            statement.setString(2, price);
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Item item = makeFromResultSet(resultSet,"",0);
-                items.add(item);
-            }
-        } catch (IOException | SQLException exception) {
-            throw new DaoException("Error with find items by type and price", exception);
-        } finally {
-            close(statement);
-            close(resultSet);
-        }
-        return items;
-    }
 
     public Connection getConnection() {
         return connection;
@@ -101,31 +36,31 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public List<Item> findAll(String filePath) throws DaoException {
+    public List<Item> findAll(String filePath, int limit, int offset) throws DaoException {
         List<Item> items = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SELECT_ALL_ITEMS);
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
             resultSet = statement.executeQuery();
-            int num = 1;
             while (resultSet.next()) {
-                Item item = makeFromResultSet(resultSet, filePath, num);
+                Item item = makeFromResultSet(resultSet, filePath);
                 items.add(item);
-                num++;
             }
         } catch (IOException | SQLException exception) {
             throw new DaoException("Error with get all items", exception);
         } finally {
-            close(statement);
             close(resultSet);
+            close(statement);
         }
         return items;
     }
 
     @Override
     public Item findEntity(Long id, String filePath) throws DaoException {
-        Item item = new Item();
+        Item item = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -133,18 +68,18 @@ public class ItemDaoImpl implements ItemDao {
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                item = makeFromResultSet(resultSet, filePath, 1);
+                item = makeFromResultSet(resultSet, filePath);
             }
         } catch (IOException | SQLException exception) {
             throw new DaoException("Error with get item by id", exception);
         } finally {
-            close(statement);
             close(resultSet);
+            close(statement);
         }
         return item;
     }
 
-    private Item makeFromResultSet(ResultSet resultSet, String filePath, int number) throws SQLException, IOException {
+    private Item makeFromResultSet(ResultSet resultSet, String filePath) throws SQLException, IOException {
         Item item = new Item();
         item.setItemId(resultSet.getLong(1));
         item.setItemName(resultSet.getString(2));
@@ -153,16 +88,17 @@ public class ItemDaoImpl implements ItemDao {
         item.setActive(resultSet.getBoolean(5));
         item.setCost(resultSet.getBigDecimal(6));
         byte[] imageBlob = resultSet.getBytes(7);
-        File image = new File(filePath + number + ".jpg");
-        FileOutputStream stream = new FileOutputStream(image);
-        stream.write(imageBlob);
-        stream.close();
+        File image = new File(filePath + item.getItemId() + ".jpg");
+        FileOutputStream fileOutputStream = new FileOutputStream(image);
+        fileOutputStream.write(imageBlob);
+        fileOutputStream.close();
         item.setImage(image);
         return item;
     }
 
     @Override
     public List<Item> findAll() throws DaoException {
+
         return null;
     }
 

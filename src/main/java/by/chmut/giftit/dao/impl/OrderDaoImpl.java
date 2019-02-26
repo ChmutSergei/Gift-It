@@ -45,8 +45,9 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException exception) {
             throw new DaoException("Error with get all orders", exception);
         } finally {
-            close(statement);
             close(resultSet);
+            close(statement);
+
         }
         return orders;
     }

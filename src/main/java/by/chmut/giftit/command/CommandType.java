@@ -22,7 +22,7 @@ public enum CommandType {
     }
 
     public Command getCommand() {
-       return command;
+        return command;
     }
 
     public static CommandType chooseType(String commandParameter) {

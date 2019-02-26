@@ -7,7 +7,7 @@ import java.io.IOException;
 
 @WebFilter (urlPatterns = "/controller")
 
-public class L10nFilter implements Filter {
+public class LocalizationFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) {
     }

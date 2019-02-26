@@ -17,12 +17,12 @@ import static by.chmut.giftit.constant.AttributeName.USER_PARAMETER_NAME;
 
 @WebFilter(urlPatterns = "/controller")
 
-public class ValidationFilter implements Filter {
+public class AuthorizationFilter implements Filter {
 
     private static final String HOME_PART_PATH = "/controller?command=home";
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
     }
 
     @Override

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static by.chmut.giftit.command.CommandType.HOME;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
@@ -19,10 +20,10 @@ public class Controller extends HttpServlet {
     /**
      * Method doGet ...
      *
-     * @param request of type HttpServletRequest
+     * @param request  of type HttpServletRequest
      * @param response of type HttpServletResponse
      * @throws ServletException when
-     * @throws IOException when
+     * @throws IOException      when
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,10 +33,10 @@ public class Controller extends HttpServlet {
     /**
      * Method doPost ...
      *
-     * @param request of type HttpServletRequest
+     * @param request  of type HttpServletRequest
      * @param response of type HttpServletResponse
      * @throws ServletException when
-     * @throws IOException when
+     * @throws IOException      when
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,10 +46,10 @@ public class Controller extends HttpServlet {
     /**
      * Method performRequest ...
      *
-     * @param request of type HttpServletRequest
+     * @param request  of type HttpServletRequest
      * @param response of type HttpServletResponse
      * @throws ServletException when
-     * @throws IOException when
+     * @throws IOException      when
      */
     private void performRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String commandParameter = request.getParameter(COMMAND_PARAMETER_NAME);
@@ -57,11 +58,13 @@ public class Controller extends HttpServlet {
         switch (router.getDispatcher()) {
             case FORWARD:
                 setAttributes(request, router, commandType);
-                request.getRequestDispatcher(router.getPage()).forward(request, response);
+                request.getRequestDispatcher(router.getTemplatePage()).forward(request, response);
                 break;
             case REDIRECT:
-                response.sendRedirect(request.getContextPath() + router.getRedirectPath());
+                response.sendRedirect(request.getContextPath() + router.getPagePath());
                 break;
+            default:
+                throw new ServletException("Impossible state - unsupported command in Controller");
         }
     }
 
@@ -70,7 +73,7 @@ public class Controller extends HttpServlet {
         String title = (String) session.getAttribute(TITLE_ATTRIBUTE_NAME);
         String commandName = commandType.name().toLowerCase();
         if (title == null) {
-            title = CommandType.HOME.name().toLowerCase();
+            title = HOME.name().toLowerCase();
         }
         if (!title.equals(commandName)) {
             session.setAttribute(PREVIOUS_PAGE_PARAMETER_NAME, title);
@@ -82,4 +85,5 @@ public class Controller extends HttpServlet {
             session.removeAttribute(EXCEPTION_PARAMETER_NAME);
         }
     }
+
 }

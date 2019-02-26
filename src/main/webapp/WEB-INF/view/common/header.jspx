@@ -89,7 +89,7 @@
                         </a>
                         </li>
                         <li><p id="userhi" class="text"><fmt:message key="nav.hello"
-                                                                    bundle="${i18n}"/>, ${sessionScope.user.firstName}!
+                                                                     bundle="${i18n}"/>, ${sessionScope.user.firstName}!
                         </p>
                         </li>
                     </c:if>

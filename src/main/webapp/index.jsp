@@ -2,9 +2,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-  <title>Gift-It</title>
+  <title>Parsing XML</title>
 </head>
-<jsp:forward page=""/>
+<jsp:forward page="/controller?command=home"/>
 <body>
 </form>
 </body>

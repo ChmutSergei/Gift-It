@@ -1,5 +1,6 @@
 package by.chmut.giftit.entity;
 
+import java.io.File;
 import java.math.BigDecimal;
 
 public class Item extends Entity {
@@ -8,7 +9,9 @@ public class Item extends Entity {
     private String itemName;
     private String type;
     private String description;
+    private boolean active;
     private BigDecimal cost;
+    private File image;
 
     public long getItemId() {
         return itemId;
@@ -42,12 +45,28 @@ public class Item extends Entity {
         this.description = description;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public BigDecimal getCost() {
         return cost;
     }
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
+    }
+
+    public File getImage() {
+        return image;
+    }
+
+    public void setImage(File image) {
+        this.image = image;
     }
 
     @Override
@@ -60,6 +79,7 @@ public class Item extends Entity {
         }
         Item item = (Item) object;
         if (itemId != item.itemId) return false;
+        if (active != item.active) return false;
         if (itemName == null) {
             if (item.itemName != null) {
                 return false;
@@ -88,6 +108,13 @@ public class Item extends Entity {
         } else if (!cost.equals(item.cost)) {
             return false;
         }
+        if (image == null) {
+            if (item.image != null) {
+                return false;
+            }
+        } else if (!image.equals(item.image)) {
+            return false;
+        }
         return true;
     }
 
@@ -95,10 +122,12 @@ public class Item extends Entity {
     public int hashCode() {
         int result = 31;
         result = (int) (itemId ^ (itemId >>> 32)) * result;
+        result = 31 * result + (!active ? 1 : 0)*31;
         result = 31 * result + (itemName != null ? itemName.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (cost != null ? cost.hashCode() : 0);
+        result = 31 * result + (image != null ? image.hashCode() : 0);
         return result;
     }
 
@@ -109,7 +138,9 @@ public class Item extends Entity {
                 ", itemName='" + itemName + '\'' +
                 ", type='" + type + '\'' +
                 ", description='" + description + '\'' +
+                ", active=" + active +
                 ", cost=" + cost +
+                ", image=" + image +
                 '}';
     }
 }

@@ -10,11 +10,12 @@ import java.util.List;
 
 public class CommentDaoImpl implements CommentDao {
 
-    private static final String SELECT_ALL_COMMENTS = "SELECT id, user_id, message, date FROM Comments";
-    private static final String SELECT_COMMENT_BY_ID = "SELECT id, user_id, message, date FROM Comments WHERE id = ?";
+    private static final String SELECT_ALL_COMMENTS = "SELECT id, user_id, item_id, message, status date FROM Comments";
+    private static final String SELECT_COMMENT_BY_ID = "SELECT id, user_id, item_id, message, status date FROM Comments WHERE id = ?";
     private static final String DELETE_COMMENT = "DELETE FROM Comments WHERE id=?";
-    private static final String CREATE_COMMENT = "INSERT INTO Comments(user_id, message, date) VALUES(?,?,?)";
-    private static final String UPDATE_COMMENT = "UPDATE Comments SET user_id=?, message=?, date=? WHERE id=?";
+    private static final String CREATE_COMMENT = "INSERT INTO Comments(user_id, item_id, message, date, status) VALUES(?,?,?,?,?)";
+    private static final String UPDATE_COMMENT = "UPDATE Comments SET user_id=?, item_id=?, message=?, date=?, status=? WHERE id=?";
+    private static final String COUNT_COMMENT = "SELECT COUNT(id) FROM Comments WHERE item_id = ?";
 
     private Connection connection;
 
@@ -72,8 +73,10 @@ public class CommentDaoImpl implements CommentDao {
         Comment comment = new Comment();
         comment.setCommentId(resultSet.getLong(1));
         comment.setUserId(resultSet.getLong(2));
-        comment.setMessage(resultSet.getString(3));
-        comment.setDate(resultSet.getDate(4).toLocalDate());
+        comment.setItemId(resultSet.getLong(3));
+        comment.setMessage(resultSet.getString(4));
+        comment.setDate(resultSet.getDate(5).toLocalDate());
+        comment.setStatus(Comment.Status.valueOf(resultSet.getString(6)));
         return comment;
     }
 
@@ -106,8 +109,10 @@ public class CommentDaoImpl implements CommentDao {
         try {
             statement = connection.prepareStatement(CREATE_COMMENT, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, comment.getUserId());
-            statement.setString(2, comment.getMessage());
-            statement.setDate(3, Date.valueOf(comment.getDate()));
+            statement.setLong(2, comment.getItemId());
+            statement.setString(3, comment.getMessage());
+            statement.setDate(4, Date.valueOf(comment.getDate()));
+            statement.setString(5, comment.getStatus().name());
             result = statement.executeUpdate();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -127,10 +132,12 @@ public class CommentDaoImpl implements CommentDao {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(UPDATE_COMMENT);
-            statement.setLong(4, comment.getCommentId());
+            statement.setLong(6, comment.getCommentId());
             statement.setLong(1, comment.getUserId());
-            statement.setString(2, comment.getMessage());
-            statement.setDate(3, Date.valueOf(comment.getDate()));
+            statement.setLong(2, comment.getItemId());
+            statement.setString(3, comment.getMessage());
+            statement.setDate(4, Date.valueOf(comment.getDate()));
+            statement.setString(5, comment.getStatus().name());
             statement.executeUpdate();
         } catch (SQLException exception) {
             throw new DaoException("Error with update comment", exception);
@@ -140,4 +147,24 @@ public class CommentDaoImpl implements CommentDao {
         return comment;
     }
 
+    @Override
+    public int countCommentForItem(long itemId) throws DaoException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        int result = 0;
+        try {
+            statement = connection.prepareStatement(COUNT_COMMENT);
+            statement.setLong(1, itemId);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                result = resultSet.getInt(1);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error when try count comment for Item", exception);
+        } finally {
+            close(resultSet);
+            close(statement);
+        }
+        return result;
+    }
 }

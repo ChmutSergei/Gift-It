@@ -9,6 +9,7 @@ import static by.chmut.giftit.constant.AttributeName.USER_PARAMETER_NAME;
 import static by.chmut.giftit.constant.PathPage.HOME_PATH;
 
 public class LogoutCommand implements Command {
+
     @Override
     public Router execute(HttpServletRequest req) {
         req.getSession().removeAttribute(USER_PARAMETER_NAME);

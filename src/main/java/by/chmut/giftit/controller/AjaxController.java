@@ -18,26 +18,39 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static by.chmut.giftit.constant.AttributeName.*;
+import static by.chmut.giftit.constant.AttributeName.COMMAND_PARAMETER_NAME;
+import static by.chmut.giftit.constant.AttributeName.USERNAME_PARAMETER_NAME;
 
 @WebServlet(urlPatterns = "/ajax")
-//TODO
+
 public class AjaxController extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger();
-    private UserService userService = new UserServiceImpl();
+    private static final Map<String, Bitmap> bitmapStorage;
 
-    private Map<String, Bitmap> bitmapStorage;
-    private Bitmap bitmapPrice;
-    private List<Bitmap> checkedBitmaps = new ArrayList<>();
+    private UserService userService = new UserServiceImpl();
+    private AjaxCommandManager commandManager = new AjaxCommandManager();
+
+    static {
+        BitmapDao bitmapDao = DaoFactory.getInstance().getBitmapDao();
+        TransactionManager manager = new TransactionManager();
+        List<Bitmap> bitmaps = Collections.emptyList();
+        try {
+            manager.beginTransaction(bitmapDao);
+            bitmaps = bitmapDao.findAll();
+        } catch (DaoException exception) {
+            logger.error("Error when try to set bitmaps from database", exception);
+        }
+        bitmapStorage = bitmaps.stream()
+                .collect(Collectors.toMap(Bitmap::getName, bitmap -> bitmap));
+        manager.endTransaction(bitmapDao);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,7 +63,8 @@ public class AjaxController extends HttpServlet {
             case SET_ITEM_ID:
                 break;
             case SEARCH_FILTER:
-                findItemsOnFilter(request, response);
+                int countItems = commandManager.countItemsOnFilter(request, bitmapStorage);
+                response.getWriter().write(new Gson().toJson(countItems));
                 break;
             case RESET_FILTER:
                 resetFilter(request, response);
@@ -73,92 +87,6 @@ public class AjaxController extends HttpServlet {
             logger.error(exception);
             throw new ServletException("Error when try to find user");
         }
-    }
-
-    private void findItemsOnFilter(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        Map<String, Bitmap> bitmapStorage = (Map<String, Bitmap>) request.getSession().getAttribute(BITMAPS_PARAMETER_NAME);
-        if (bitmapStorage == null) {
-            bitmapStorage = setBitmaps(request);
-        }
-        String criteriaPrice = request.getParameter(PRICE_PARAMETER_NAME);
-        if (criteriaPrice == null) {
-            bitmapPrice = bitmapStorage.get(ALL_PARAMETER_NAME);
-        } else {
-            bitmapPrice = bitmapStorage.get(criteriaPrice);
-            request.getSession().setAttribute(PRICE_CRITERIA_PARAMETER_NAME, criteriaPrice);
-        }
-        String criteriaType = request.getParameter(TYPE_PARAMETER_NAME);
-        if (criteriaType != null) {
-            Bitmap bitmap = bitmapStorage.get(criteriaType);
-            String actionType = request.getParameter(ACTION_TAG_TYPE_PARAMETER_NAME);
-            switch (actionType) {
-                case ENABLE_CHECKBOX:
-                    checkedBitmaps.add(bitmap);
-                    request.getSession().setAttribute(criteriaType, criteriaType);
-                    break;
-                case DISABLE_CHECKBOX:
-                    checkedBitmaps.remove(bitmap);
-                    request.getSession().removeAttribute(criteriaType);
-                    break;
-            }
-        }
-        List<Integer> itemsId = new ArrayList<>();
-        if (!checkedBitmaps.isEmpty()) {
-            itemsId = doFilter();
-        }
-        request.getSession().setAttribute(RESULT_OF_SEARCH_ITEMS_PARAMETER_NAME, itemsId);
-        response.getWriter().write(new Gson().toJson(itemsId.size()));
-    }
-
-    private List<Integer> doFilter() {
-        List<Integer> result = new ArrayList<>();
-        int[] resultFilter = checkedBitmaps.get(0).getData();
-        for (int i = 1; i < checkedBitmaps.size(); i++) {
-            resultFilter = bitwiseOrForTwoArray(resultFilter, checkedBitmaps.get(i).getData());
-        }
-        resultFilter = bitwiseAndForTwoArray(resultFilter, bitmapPrice.getData());
-        for (int i = 0; i < resultFilter.length; i++) {
-            if (resultFilter[i] > 0) {
-                result.add(i + 1);
-            }
-        }
-        return result;
-    }
-
-    private int[] bitwiseOrForTwoArray(int[] first, int[] second) {
-        int[] result = new int[first.length];
-        for (int i = 0; i < first.length; i++) {
-            result[i] = first[i] | second[i];
-        }
-        return result;
-    }
-
-    private int[] bitwiseAndForTwoArray(int[] first, int[] second) {
-        int[] result = new int[first.length];
-        for (int i = 0; i < first.length; i++) {
-            result[i] = first[i] & second[i];
-        }
-        return result;
-    }
-
-    private Map<String, Bitmap> setBitmaps(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Map<String, Bitmap> convertBitmaps = Collections.emptyMap();
-        try {
-            BitmapDao bitmapDao = DaoFactory.getInstance().getBitmapDao();
-            TransactionManager manager = new TransactionManager();
-            manager.beginTransaction(bitmapDao);
-            List<Bitmap> bitmaps = bitmapDao.findAll();
-            convertBitmaps = bitmaps.stream()
-                    .collect(Collectors.toMap(Bitmap::getName, bitmap -> bitmap));
-            session.setAttribute(BITMAPS_PARAMETER_NAME, convertBitmaps);
-            manager.endTransaction(bitmapDao);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-        session.setAttribute(PAGINATION_OFFSET_PARAMETER_NAME, DEFAULT_PAGINATION_OFFSET);
-        session.setAttribute(PAGINATION_LIMIT_PARAMETER_NAME, DEFAULT_PAGINATION_LIMIT);
-        return convertBitmaps;
     }
 
     private enum AjaxCommand {

@@ -1,7 +1,5 @@
 package by.chmut.giftit.service.impl;
 
-import by.chmut.giftit.criteria.Criteria;
-import by.chmut.giftit.criteria.SearchCriteria;
 import by.chmut.giftit.dao.*;
 import by.chmut.giftit.entity.Bitmap;
 import by.chmut.giftit.entity.Item;
@@ -12,7 +10,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static by.chmut.giftit.constant.AttributeName.*;
 
@@ -22,6 +19,7 @@ public class ItemServiceImpl implements ItemService {
 
     private ItemDao itemDao = factory.getItemDao();
     private BitmapDao bitmapDao = factory.getBitmapDao();
+    private CommentDao commentDao = factory.getCommentDao();
     private TransactionManager manager = new TransactionManager();
 
     @Override
@@ -40,6 +38,59 @@ public class ItemServiceImpl implements ItemService {
         } catch (DaoException e) {
             //rollback;
             throw new ServiceException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Item> findResultOfFilterItems(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException {
+        if (itemId.isEmpty()){
+            return Collections.emptyList();
+        }
+        itemId.sort((id1, id2) -> id2 - id1);
+        int threshold = offset + limit;
+        if (threshold > itemId.size()) {
+            threshold = itemId.size();
+        }
+        List<Item> result = new ArrayList<>();
+        try {
+            manager.beginTransaction(itemDao);
+            for (int i = offset; i < threshold; i++) {
+                result.add(itemDao.findEntity((long)itemId.get(i), pathForTempFiles));
+            }
+            manager.endTransaction(itemDao);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Item> findAll(String pathForTempFiles, int limit, int offset) throws ServiceException {
+        List<Item> result;
+        try {
+            manager.beginTransaction(itemDao);
+            result = itemDao.findAll(pathForTempFiles, limit, offset);
+            manager.endTransaction(itemDao);
+        } catch (DaoException e) {
+            //rollback;
+            throw new ServiceException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public Map<Long, Integer> findCommentCountForItem(List<Item> items) throws ServiceException {
+        Map<Long, Integer> result = new HashMap<>();
+        try {
+            manager.beginTransaction(commentDao);
+            for (Item item: items) {
+                int count = commentDao.countCommentForItem(item.getItemId());
+                result.put(item.getItemId(), count);
+            }
+            manager.endTransaction(commentDao);
+        } catch (DaoException exception) {
+            throw new ServiceException(exception);
         }
         return result;
     }
@@ -104,90 +155,90 @@ public class ItemServiceImpl implements ItemService {
         return false;
     }
 
-    @Override
-    public List<Item> find(List<Criteria> searchCriteria) throws ServiceException {
-        List<Criteria> criteriaList = removeNullable(searchCriteria);
-        if (criteriaList.isEmpty()) {
-            return Collections.emptyList();
-        }
-        int criteriaCount = criteriaList.size();
-        List<Item> result = null;
-        switch (criteriaCount) {
-            case 1:
-                if (criteriaList.get(0).getGroupSearchName().equals(SearchCriteria.Type.class.getSimpleName())) {
-                    try {
-                        result = findByType(criteriaList);
-                    } catch (DaoException exception) {
-                        throw new ServiceException(exception);
-                    }
-                } else {
-                    try {
-                        result = findByPrice(criteriaList);
-                    } catch (DaoException exception) {
-                        throw new ServiceException(exception);
-                    }
-                }
-                break;
-            case 2:
-                try {
-                    result = findByTypeAndPrice(criteriaList);
-                } catch (DaoException exception) {
-                    throw new ServiceException(exception);
-                }
-                break;
-            default:
-                throw new ServiceException("Not supported operation - when find item");
-        }
-        return result;
-    }
-
-    private List<Item> findByType(List<Criteria> criteriaList) throws DaoException {
-        List<Item> items = new ArrayList<>();
-        for (String type : criteriaList.get(0).getCriteria()) {
-            items.addAll(itemDao.findByType(type));
-        }
-        return items;
-    }
-
-    private List<Item> findByPrice(List<Criteria> criteriaList) throws DaoException {
-        List<String> criteriaPriceList = criteriaList.get(0).getCriteria();
-        String price = criteriaPriceList.get(criteriaList.size() - 1);
-        List<Item> items = new ArrayList<>(itemDao.findByPrice(price));
-        return items;
-    }
-
-    private List<Item> findByTypeAndPrice(List<Criteria> criteriaList) throws DaoException {
-        List<Item> items = new ArrayList<>();
-        Criteria criteriaType = getCriteriaOnName(criteriaList, SearchCriteria.Type.class.getSimpleName());
-        Criteria criteriaPrice = getCriteriaOnName(criteriaList, SearchCriteria.Price.class.getSimpleName());
-        List<String> criteriaPriceList = criteriaPrice.getCriteria();
-        String price = criteriaPriceList.get(criteriaList.size() - 1);
-        for (String type : criteriaType.getCriteria()) {
-            items.addAll(itemDao.findByTypeAndPrice(type, price));
-        }
-        return items;
-    }
-
-    private Criteria getCriteriaOnName(List<Criteria> criteriaList, String name) {
-        for (Criteria criteria : criteriaList) {
-            if (criteria.getGroupSearchName().equals(name)) {
-                return criteria;
-            }
-        }
-        return null;
-    }
-
-    private List<Criteria> removeNullable(List<Criteria> searchCriteria) {
-        List<Criteria> result = new ArrayList<>();
-        List<String> params = new ArrayList<>();
-        for (Criteria criteria : searchCriteria) {
-            params = criteria.getCriteria().stream().filter(Objects::nonNull).collect(Collectors.toList());
-            if (!params.isEmpty()) {
-                criteria.setCriteria(params);
-                result.add(criteria);
-            }
-        }
-        return result;
-    }
+//    @Override
+//    public List<Item> find(List<Criteria> searchCriteria) throws ServiceException {
+//        List<Criteria> criteriaList = removeNullable(searchCriteria);
+//        if (criteriaList.isEmpty()) {
+//            return Collections.emptyList();
+//        }
+//        int criteriaCount = criteriaList.size();
+//        List<Item> result = null;
+//        switch (criteriaCount) {
+//            case 1:
+//                if (criteriaList.get(0).getGroupSearchName().equals(SearchCriteria.Type.class.getSimpleName())) {
+//                    try {
+//                        result = findByType(criteriaList);
+//                    } catch (DaoException exception) {
+//                        throw new ServiceException(exception);
+//                    }
+//                } else {
+//                    try {
+//                        result = findByPrice(criteriaList);
+//                    } catch (DaoException exception) {
+//                        throw new ServiceException(exception);
+//                    }
+//                }
+//                break;
+//            case 2:
+//                try {
+//                    result = findByTypeAndPrice(criteriaList);
+//                } catch (DaoException exception) {
+//                    throw new ServiceException(exception);
+//                }
+//                break;
+//            default:
+//                throw new ServiceException("Not supported operation - when find item");
+//        }
+//        return result;
+//    }
+//
+//    private List<Item> findByType(List<Criteria> criteriaList) throws DaoException {
+//        List<Item> items = new ArrayList<>();
+//        for (String type : criteriaList.get(0).getCriteria()) {
+//            items.addAll(itemDao.findByType(type));
+//        }
+//        return items;
+//    }
+//
+//    private List<Item> findByPrice(List<Criteria> criteriaList) throws DaoException {
+//        List<String> criteriaPriceList = criteriaList.get(0).getCriteria();
+//        String price = criteriaPriceList.get(criteriaList.size() - 1);
+//        List<Item> items = new ArrayList<>(itemDao.findByPrice(price));
+//        return items;
+//    }
+//
+//    private List<Item> findByTypeAndPrice(List<Criteria> criteriaList) throws DaoException {
+//        List<Item> items = new ArrayList<>();
+//        Criteria criteriaType = getCriteriaOnName(criteriaList, SearchCriteria.Type.class.getSimpleName());
+//        Criteria criteriaPrice = getCriteriaOnName(criteriaList, SearchCriteria.Price.class.getSimpleName());
+//        List<String> criteriaPriceList = criteriaPrice.getCriteria();
+//        String price = criteriaPriceList.get(criteriaList.size() - 1);
+//        for (String type : criteriaType.getCriteria()) {
+//            items.addAll(itemDao.findByTypeAndPrice(type, price));
+//        }
+//        return items;
+//    }
+//
+//    private Criteria getCriteriaOnName(List<Criteria> criteriaList, String name) {
+//        for (Criteria criteria : criteriaList) {
+//            if (criteria.getGroupSearchName().equals(name)) {
+//                return criteria;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    private List<Criteria> removeNullable(List<Criteria> searchCriteria) {
+//        List<Criteria> result = new ArrayList<>();
+//        List<String> params = new ArrayList<>();
+//        for (Criteria criteria : searchCriteria) {
+//            params = criteria.getCriteria().stream().filter(Objects::nonNull).collect(Collectors.toList());
+//            if (!params.isEmpty()) {
+//                criteria.setCriteria(params);
+//                result.add(criteria);
+//            }
+//        }
+//        return result;
+//    }
 
 }

@@ -1,6 +1,7 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+          xmlns:ctg="customtags"
           xmlns="http://www.w3.org/1999/xhtml" version="2.0">
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="i18n.messages" var="i18n"/>
@@ -11,17 +12,17 @@
             <strong>${ermessage}</strong>
         </div>
     </c:if>
-
+    <h3><ctg:hello role="${ sessionScope.user.role }"/></h3>
     <!-- paid order -->
     <c:if test="${not empty sessionScope.paidOrder}">
         <div class="container">
             <div class="row">
                 <div class="col-xs-5 col-xs-offset-2 text-right" style="padding: 10px;">
-                    <p style="font-size: 15px"><fmt:message bundle="${i18n}" key="reserv.messinfo"/></p>
+                    <p style="font-size: 15px"><fmt:message bundle="${i18n}" key="additem.messagepaid"/></p>
                 </div>
                 <div class="col-xs-1">
                     <button class="btn btn-default" data-toggle="collapse" data-target="#demo"><fmt:message
-                            bundle="${i18n}" key="reserv.view"/></button>
+                            bundle="${i18n}" key="additem.view"/></button>
                 </div>
             </div>
             <div id="demo" class="collapse">
@@ -32,7 +33,7 @@
                             <tr>
                                 <th class="col-xs-1">№</th>
                                 <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.type"/></th>
-                                <th class="col-xs-1"><span class="glyphicon glyphicon-bed"></span></th>
+                                <th class="col-xs-1"><fmt:message bundle="${i18n}" key="reserv.type"/></th>
                                 <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkin"/></th>
                                 <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkout"/></th>
                             </tr>

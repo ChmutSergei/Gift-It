@@ -2,6 +2,8 @@ package by.chmut.giftit.dao;
 
 public class DaoException extends Exception {
 
+    private static final long serialVersionUID = -3760861607605184650L;
+
     public DaoException() {
     }
 

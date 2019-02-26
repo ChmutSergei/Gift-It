@@ -12,11 +12,13 @@ public class AttributeName {
     public static final String PLATE_PARAMETER_NAME = "plate";
     public static final String PILLOW_PARAMETER_NAME = "pillow";
     public static final String PUZZLE_PARAMETER_NAME = "puzzle";
-    public static final String MOUSE_PAD_PARAMETER_NAME = "mousePad";
+    public static final String MOUSE_PAD_PARAMETER_NAME = "mousepad";
     public static final String TOWEL_PARAMETER_NAME = "towel";
     public static final String LOW_PARAMETER_NAME = "low";
     public static final String MEDIUM_PARAMETER_NAME = "medium";
     public static final String HIGH_PARAMETER_NAME = "high";
+    public static final String ALL_PARAMETER_NAME = "all";
+    public static final String ACTION_TAG_TYPE_PARAMETER_NAME = "actionType";
     public static final String TYPE_PARAMETER_NAME = "type";
     public static final String ITEM_NAME_PARAMETER_NAME = "itemName";
     public static final String DESCRIPTION_PARAMETER_NAME = "description";
@@ -40,14 +42,21 @@ public class AttributeName {
     public static final String UPLOAD_FILE_ATTRIBUTE_NAME = "filePath";
     public static final String UPLOAD_FILENAME_ATTRIBUTE_NAME = "fileName";
     public static final String EXCEPTION_PARAMETER_NAME = "exception";
-    public static final String ENABLE_PARAMETER = "on";
+    public static final String BITMAPS_PARAMETER_NAME = "bitmaps";
+    public static final String RESULT_OF_SEARCH_ITEMS_PARAMETER_NAME = "resultSearch";
+    public static final String PAGINATION_OFFSET_PARAMETER_NAME = "offset";
+    public static final String PAGINATION_LIMIT_PARAMETER_NAME = "limit";
+    public static final String PRICE_CRITERIA_PARAMETER_NAME = "criteriaPrice";
+    public static final String ENABLE_CHECKBOX = "ON";
+    public static final String DISABLE_CHECKBOX = "OFF";
+    public static final String COUNT_COMMENTS_PARAMETER_NAME = "countComments";
 
 
-    public static final String ERROR_WITH_CREATE_USER_KEY = "error.createUser";
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
-    public static final String MESSAGE_USER_EXIST_KEY = "error.userExist";
 
     public static final BigDecimal LOW_BORDER_PRICE = new BigDecimal(50);
     public static final BigDecimal MEDIUM_BORDER_PRICE = new BigDecimal(100);
     public static final BigDecimal HIGH_BORDER_PRICE = new BigDecimal(150);
+    public static final int DEFAULT_PAGINATION_OFFSET = 0;
+    public static final int DEFAULT_PAGINATION_LIMIT = 20;
 }
