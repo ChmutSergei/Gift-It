@@ -13,6 +13,7 @@ public enum CommandType {
     ADMIN(new AdminCommand()),
     ADD_ITEM(new AddItemCommand()),
     ACCOUNT(new AccountCommand()),
+    PREVIEW_ITEM(new PreviewItemCommand()),
     REGISTRATION(new RegistrationCommand());
 
     private Command command;

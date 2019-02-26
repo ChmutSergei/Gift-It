@@ -187,6 +187,10 @@
                             <a href="#">Comments
                                 <span class="badge">${sessionScope.countComments.get(item.itemId)}</span></a><br/>
                             <h3>${item.cost}</h3>
+                            <c:set var="basket"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
+                            <a href="${pageContext.request.contextPath}/controller?command=preview_item&amp;item=${item.itemId}"
+                               data-toggle="tooltip" title="${basket}"><span class="glyphicon glyphicon-shopping-cart"/>
+                            </a>
                         </div>
                     </div>
                 </div>

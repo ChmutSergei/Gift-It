@@ -33,13 +33,11 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao = factory.getUserDao();
     private TransactionManager manager = new TransactionManager();
 
-
     @Override
     public boolean validateUser(User user, String password) {
         return PasswordValidator.validateUser(user, password);
     }
 
-    //TODO
     @Override
     public User find(String username) throws ServiceException {
         User user;
@@ -47,8 +45,9 @@ public class UserServiceImpl implements UserService {
             manager.beginTransaction(userDao);
             user = userDao.findEntityByUsername(username);
             manager.endTransaction(userDao);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
+        } catch (DaoException exception) {
+//            manager.rollback();
+            throw new ServiceException(exception);
         }
         return user;
     }
@@ -77,6 +76,7 @@ public class UserServiceImpl implements UserService {
             newUser = userDao.createUser(newUser);
             manager.endTransaction(userDao);
         } catch (DaoException exception) {
+//            manager.rollback();
             throw new ServiceException(exception);
         }
         return newUser;
@@ -99,7 +99,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    //TODO
     private boolean isValidParamsWithPatterns(Map<String, String> userParameters) {
         if (!Pattern.matches(REGEX_USERNAME, userParameters.get(USERNAME_PARAMETER_NAME))) {
             return false;

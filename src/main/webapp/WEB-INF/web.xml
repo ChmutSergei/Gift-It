@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-    <error-page>
-        <exception-type>java.lang.Exception</exception-type>
-        <location>/errors/error.jspx</location>
-    </error-page>
+    <!--<error-page>-->
+        <!--<exception-type>java.lang.Exception</exception-type>-->
+        <!--<location>/errors/error.jspx</location>-->
+    <!--</error-page>-->
     <jsp-config>
         <taglib>
-            <taglib-uri>customtags</taglib-uri>
+            <taglib-uri>http://chmut.by/gift-it/ns/tags</taglib-uri>
             <taglib-location>/WEB-INF/tld/custom.tld</taglib-location>
         </taglib>
     </jsp-config>

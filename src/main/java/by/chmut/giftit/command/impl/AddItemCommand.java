@@ -20,15 +20,15 @@ import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 public class AddItemCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
-    private ItemService service = new ItemServiceImpl();
+        private ItemService service = new ItemServiceImpl();
 
-    @Override
-    public Router execute(HttpServletRequest req) {
-        Router router = new Router();
-        if (req.getSession().getAttribute(EXCEPTION_PARAMETER_NAME) != null) {
-            router.setRedirectPath(ERROR_PATH);
-            return router;
-        }
+        @Override
+        public Router execute(HttpServletRequest req) {
+            Router router = new Router();
+            if (req.getSession().getAttribute(EXCEPTION_PARAMETER_NAME) != null) {
+                router.setRedirectPath(ERROR_PATH);
+                return router;
+            }
         router.setRedirectPath(ADMIN.name().toLowerCase());
         Map<String, Object> itemParameters = setParametersFromRequest(req);
         boolean result = false;

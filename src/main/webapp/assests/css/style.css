@@ -1,4 +1,6 @@
-
+.jumbotron p {
+    font-size: unset;
+}
 #hello {
     margin-bottom: 0;
     background-color: khaki;
@@ -8,7 +10,7 @@
 #main {
     background-color:#e6f7d9;
 }
-#signin {
+#signin, #preview,#choosePhoto {
     padding: 40px;
     padding-top: 0;
     outline: 2px solid darkgray;

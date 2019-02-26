@@ -23,8 +23,8 @@ public class ConnectionPool {
     private static ConnectionPool instance;
     private static ReentrantLock locking = new ReentrantLock();
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
-    private BlockingQueue<ProxyConnection> availableConnections;
-    private ConcurrentSkipListSet<ProxyConnection> usedConnections;
+    private BlockingQueue<Connection> availableConnections;
+    private ConcurrentSkipListSet<Connection> usedConnections;
     private final int poolSize;
 
     public static ConnectionPool getInstance() throws DaoException {
@@ -54,16 +54,16 @@ public class ConnectionPool {
         try {
             Class.forName(configurator.getDriverName());
             for (int i = 0; i < poolSize; i++) {
-                ProxyConnection proxyConnection = createConnection(configurator);
-                availableConnections.add(proxyConnection);
+                Connection connection = createConnection(configurator);
+                availableConnections.add(connection);
             }
             if (availableConnections.isEmpty()) {
                 throw new DaoException("Error with init connections");
             }
             if (availableConnections.size() < poolSize) {
                 for (int i = 0; i < poolSize - availableConnections.size(); i++) {
-                    ProxyConnection proxyConnection = createConnection(configurator);
-                    availableConnections.add(proxyConnection);
+                    Connection connection = createConnection(configurator);
+                    availableConnections.add(connection);
                 }
             }
         } catch (SQLException | ClassNotFoundException exception) {
@@ -71,14 +71,14 @@ public class ConnectionPool {
         }
     }
 
-    private ProxyConnection createConnection(DatabaseConfigurator configurator) throws SQLException {
+    private Connection createConnection(DatabaseConfigurator configurator) throws SQLException {
         Connection connection = DriverManager.getConnection(configurator.getUrl(),
                 configurator.getUser(), configurator.getPassword());
         return new ProxyConnection(connection);
     }
 
     public Connection takeConnection() {
-        ProxyConnection connection = null;
+        Connection connection = null;
         try {
             connection = availableConnections.take();
             usedConnections.add(connection);
@@ -91,10 +91,9 @@ public class ConnectionPool {
 
     public void releaseConnection(Connection connection) {
         if (connection instanceof ProxyConnection) {
-            ProxyConnection proxyConnection = (ProxyConnection) connection;
-            usedConnections.remove(proxyConnection);
+            usedConnections.remove(connection);
             try {
-                availableConnections.put(proxyConnection);
+                availableConnections.put(connection);
             } catch (InterruptedException exception) {
                 logger.error("Error when try to put connection", exception);
             }
@@ -104,7 +103,7 @@ public class ConnectionPool {
     public void closePool() {
         for (int i = 0; i < poolSize; i++) {
             try {
-                ProxyConnection connection = availableConnections.take();
+                ProxyConnection connection = (ProxyConnection)availableConnections.take();
                 connection.reallyClose();
             } catch (InterruptedException | SQLException exception) {
                 logger.error("Error when closing connection pool", exception);

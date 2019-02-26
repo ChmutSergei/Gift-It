@@ -44,12 +44,12 @@ public class AjaxController extends HttpServlet {
         try {
             manager.beginTransaction(bitmapDao);
             bitmaps = bitmapDao.findAll();
+            manager.endTransaction(bitmapDao);
         } catch (DaoException exception) {
             logger.error("Error when try to set bitmaps from database", exception);
         }
         bitmapStorage = bitmaps.stream()
                 .collect(Collectors.toMap(Bitmap::getName, bitmap -> bitmap));
-        manager.endTransaction(bitmapDao);
     }
 
     @Override

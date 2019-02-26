@@ -11,6 +11,7 @@ public class PathPage {
     public static final String SIGNUP_PAGE = "pages/sign_up.jspx";
     public static final String ADD_ITEM_PAGE = "pages/add_item.jspx";
     public static final String ACCOUNT_PAGE = "pages/account.jspx";
+    public static final String PREVIEW_ITEM_PAGE = "pages/item_preview.jspx";
     public static final String PREFIX = "/controller?command=";
 
     public static final String ERROR_PATH = "error";

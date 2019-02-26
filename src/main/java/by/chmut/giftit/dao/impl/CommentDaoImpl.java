@@ -10,8 +10,8 @@ import java.util.List;
 
 public class CommentDaoImpl implements CommentDao {
 
-    private static final String SELECT_ALL_COMMENTS = "SELECT id, user_id, item_id, message, status date FROM Comments";
-    private static final String SELECT_COMMENT_BY_ID = "SELECT id, user_id, item_id, message, status date FROM Comments WHERE id = ?";
+    private static final String SELECT_ALL_COMMENTS = "SELECT id, user_id, item_id, message, date, status FROM Comments";
+    private static final String SELECT_COMMENT_BY_ID = "SELECT id, user_id, item_id, message, date, status FROM Comments WHERE id = ?";
     private static final String DELETE_COMMENT = "DELETE FROM Comments WHERE id=?";
     private static final String CREATE_COMMENT = "INSERT INTO Comments(user_id, item_id, message, date, status) VALUES(?,?,?,?,?)";
     private static final String UPDATE_COMMENT = "UPDATE Comments SET user_id=?, item_id=?, message=?, date=?, status=? WHERE id=?";

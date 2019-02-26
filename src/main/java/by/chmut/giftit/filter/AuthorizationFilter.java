@@ -25,6 +25,10 @@ public class AuthorizationFilter implements Filter {
     public void init(FilterConfig filterConfig) {
     }
 
+    /**
+     * список страниц что нужно будет закрыть -
+     *
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;

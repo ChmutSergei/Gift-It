@@ -1,7 +1,7 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
-          xmlns:ctg="customtags"
+          xmlns:custom="http://chmut.by/gift-it/ns/tags"
           xmlns="http://www.w3.org/1999/xhtml" version="2.0">
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="i18n.messages" var="i18n"/>
@@ -12,7 +12,7 @@
             <strong>${ermessage}</strong>
         </div>
     </c:if>
-    <h3><ctg:hello role="${ sessionScope.user.role }"/></h3>
+    <h3><custom:hello role="${ sessionScope.user.role }"/></h3>
     <!-- paid order -->
     <c:if test="${not empty sessionScope.paidOrder}">
         <div class="container">

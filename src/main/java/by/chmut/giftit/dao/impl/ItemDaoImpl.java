@@ -162,7 +162,7 @@ public class ItemDaoImpl implements ItemDao {
         File image = item.getImage();
         try (FileInputStream fis = new FileInputStream(image)) {
             statement = connection.prepareStatement(UPDATE_ITEM);
-            statement.setLong(5, item.getItemId());
+            statement.setLong(7, item.getItemId());
             statement.setString(1, item.getItemName());
             statement.setString(2, item.getType());
             statement.setString(3, item.getDescription());

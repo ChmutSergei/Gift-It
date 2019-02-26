@@ -15,6 +15,7 @@ public class HttpSessionListenerImpl implements HttpSessionListener {
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
         HttpSession session = httpSessionEvent.getSession();
         session.setAttribute(PAGINATION_OFFSET_PARAMETER_NAME, DEFAULT_PAGINATION_OFFSET);
+        session.setAttribute(LOCALE_PARAMETER_NAME, DEFAULT_PARAMETER_LOCALE);
         session.setAttribute(PAGINATION_LIMIT_PARAMETER_NAME, DEFAULT_PAGINATION_LIMIT);
     }
 

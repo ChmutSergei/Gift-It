@@ -35,9 +35,9 @@ public class ItemServiceImpl implements ItemService {
                 bitmapDao.update(bitmap);
             }
             manager.endTransaction(itemDao);
-        } catch (DaoException e) {
-            //rollback;
-            throw new ServiceException(e);
+        } catch (DaoException exception) {
+//            manager.rollback();
+            throw new ServiceException(exception);
         }
         return result;
     }
@@ -59,8 +59,9 @@ public class ItemServiceImpl implements ItemService {
                 result.add(itemDao.findEntity((long)itemId.get(i), pathForTempFiles));
             }
             manager.endTransaction(itemDao);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
+        } catch (DaoException exception) {
+//            manager.rollback();
+            throw new ServiceException(exception);
         }
         return result;
     }
@@ -72,9 +73,9 @@ public class ItemServiceImpl implements ItemService {
             manager.beginTransaction(itemDao);
             result = itemDao.findAll(pathForTempFiles, limit, offset);
             manager.endTransaction(itemDao);
-        } catch (DaoException e) {
-            //rollback;
-            throw new ServiceException(e);
+        } catch (DaoException exception) {
+//            manager.rollback();
+            throw new ServiceException(exception);
         }
         return result;
     }
@@ -90,6 +91,7 @@ public class ItemServiceImpl implements ItemService {
             }
             manager.endTransaction(commentDao);
         } catch (DaoException exception) {
+//            manager.rollback();
             throw new ServiceException(exception);
         }
         return result;
@@ -154,91 +156,4 @@ public class ItemServiceImpl implements ItemService {
     public boolean delete(Serializable id) throws ServiceException {
         return false;
     }
-
-//    @Override
-//    public List<Item> find(List<Criteria> searchCriteria) throws ServiceException {
-//        List<Criteria> criteriaList = removeNullable(searchCriteria);
-//        if (criteriaList.isEmpty()) {
-//            return Collections.emptyList();
-//        }
-//        int criteriaCount = criteriaList.size();
-//        List<Item> result = null;
-//        switch (criteriaCount) {
-//            case 1:
-//                if (criteriaList.get(0).getGroupSearchName().equals(SearchCriteria.Type.class.getSimpleName())) {
-//                    try {
-//                        result = findByType(criteriaList);
-//                    } catch (DaoException exception) {
-//                        throw new ServiceException(exception);
-//                    }
-//                } else {
-//                    try {
-//                        result = findByPrice(criteriaList);
-//                    } catch (DaoException exception) {
-//                        throw new ServiceException(exception);
-//                    }
-//                }
-//                break;
-//            case 2:
-//                try {
-//                    result = findByTypeAndPrice(criteriaList);
-//                } catch (DaoException exception) {
-//                    throw new ServiceException(exception);
-//                }
-//                break;
-//            default:
-//                throw new ServiceException("Not supported operation - when find item");
-//        }
-//        return result;
-//    }
-//
-//    private List<Item> findByType(List<Criteria> criteriaList) throws DaoException {
-//        List<Item> items = new ArrayList<>();
-//        for (String type : criteriaList.get(0).getCriteria()) {
-//            items.addAll(itemDao.findByType(type));
-//        }
-//        return items;
-//    }
-//
-//    private List<Item> findByPrice(List<Criteria> criteriaList) throws DaoException {
-//        List<String> criteriaPriceList = criteriaList.get(0).getCriteria();
-//        String price = criteriaPriceList.get(criteriaList.size() - 1);
-//        List<Item> items = new ArrayList<>(itemDao.findByPrice(price));
-//        return items;
-//    }
-//
-//    private List<Item> findByTypeAndPrice(List<Criteria> criteriaList) throws DaoException {
-//        List<Item> items = new ArrayList<>();
-//        Criteria criteriaType = getCriteriaOnName(criteriaList, SearchCriteria.Type.class.getSimpleName());
-//        Criteria criteriaPrice = getCriteriaOnName(criteriaList, SearchCriteria.Price.class.getSimpleName());
-//        List<String> criteriaPriceList = criteriaPrice.getCriteria();
-//        String price = criteriaPriceList.get(criteriaList.size() - 1);
-//        for (String type : criteriaType.getCriteria()) {
-//            items.addAll(itemDao.findByTypeAndPrice(type, price));
-//        }
-//        return items;
-//    }
-//
-//    private Criteria getCriteriaOnName(List<Criteria> criteriaList, String name) {
-//        for (Criteria criteria : criteriaList) {
-//            if (criteria.getGroupSearchName().equals(name)) {
-//                return criteria;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    private List<Criteria> removeNullable(List<Criteria> searchCriteria) {
-//        List<Criteria> result = new ArrayList<>();
-//        List<String> params = new ArrayList<>();
-//        for (Criteria criteria : searchCriteria) {
-//            params = criteria.getCriteria().stream().filter(Objects::nonNull).collect(Collectors.toList());
-//            if (!params.isEmpty()) {
-//                criteria.setCriteria(params);
-//                result.add(criteria);
-//            }
-//        }
-//        return result;
-//    }
-
 }

@@ -5,8 +5,8 @@
         http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
         version="2.1">
     <tlib-version>1.0</tlib-version>
-    <short-name>ctg</short-name>
-    <uri>customtags</uri>
+    <short-name>custom</short-name>
+    <uri>http://chmut.by/gift-it/ns/tags</uri>
     <tag>
         <name>hello</name>
         <tag-class>by.chmut.giftit.tag.HelloTag</tag-class>
