@@ -54,8 +54,10 @@ public class AttributeName {
     public static final String DEFAULT_PARAMETER_LOCALE = "en";
     public static final String ITEM_PARAMETER_NAME = "item";
     public static final String COMMENTS_PARAMETER_NAME = "comments";
+    public static final String ITEM_ID_PARAMETER_NAME = "itemId";
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
+    public static final String MESSAGE_NOT_FOUND_ID_KEY= "error.notFoundId";
 
     public static final BigDecimal LOW_BORDER_PRICE = new BigDecimal(50);
     public static final BigDecimal MEDIUM_BORDER_PRICE = new BigDecimal(100);

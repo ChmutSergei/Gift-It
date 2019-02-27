@@ -37,5 +37,4 @@ public class Router {
     public DispatcherType getDispatcher() {
         return dispatcher;
     }
-
 }

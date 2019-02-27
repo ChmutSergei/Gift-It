@@ -8,9 +8,4 @@ import javax.servlet.http.HttpServletRequest;
 public interface Command {
 
     Router execute(HttpServletRequest req);
-
-    public static void main(String[] args) {
-        Comment.Status status = Comment.Status.valueOf("ACTIVE");
-        System.out.println(status);
-    }
 }

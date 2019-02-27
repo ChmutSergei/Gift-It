@@ -2,9 +2,12 @@ package by.chmut.giftit.service.impl;
 
 import by.chmut.giftit.dao.*;
 import by.chmut.giftit.entity.Bitmap;
+import by.chmut.giftit.entity.Comment;
 import by.chmut.giftit.entity.Item;
 import by.chmut.giftit.service.ItemService;
 import by.chmut.giftit.service.ServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.Serializable;
@@ -15,6 +18,7 @@ import static by.chmut.giftit.constant.AttributeName.*;
 
 public class ItemServiceImpl implements ItemService {
 
+    private static final Logger logger = LogManager.getLogger();
     private DaoFactory factory = DaoFactory.getInstance();
 
     private ItemDao itemDao = factory.getItemDao();
@@ -23,28 +27,31 @@ public class ItemServiceImpl implements ItemService {
     private TransactionManager manager = new TransactionManager();
 
     @Override
-    public boolean createItem(Map<String, Object> itemParameters) throws ServiceException {
+    public Item create(Map<String, Object> itemParameters) throws ServiceException {
         Item item = setParameters(itemParameters);
-        boolean result;
         try {
             manager.beginTransaction(itemDao, bitmapDao);
             List<Bitmap> bitmaps = bitmapDao.findAll();
             updateItemFilter(bitmaps, item);
-            result = itemDao.create(item);
+            item = itemDao.create(item);
             for (Bitmap bitmap : bitmaps) {
                 bitmapDao.update(bitmap);
             }
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {
-//            manager.rollback();
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
-        return result;
+        return item;
     }
 
     @Override
     public List<Item> findResultOfFilterItems(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException {
-        if (itemId.isEmpty()){
+        if (itemId.isEmpty()) {
             return Collections.emptyList();
         }
         itemId.sort((id1, id2) -> id2 - id1);
@@ -56,11 +63,15 @@ public class ItemServiceImpl implements ItemService {
         try {
             manager.beginTransaction(itemDao);
             for (int i = offset; i < threshold; i++) {
-                result.add(itemDao.findEntity((long)itemId.get(i), pathForTempFiles));
+                result.add(itemDao.findEntity((long) itemId.get(i), pathForTempFiles));
             }
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {
-//            manager.rollback();
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
         return result;
@@ -74,7 +85,11 @@ public class ItemServiceImpl implements ItemService {
             result = itemDao.findAll(pathForTempFiles, limit, offset);
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {
-//            manager.rollback();
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
         return result;
@@ -85,16 +100,25 @@ public class ItemServiceImpl implements ItemService {
         Map<Long, Integer> result = new HashMap<>();
         try {
             manager.beginTransaction(commentDao);
-            for (Item item: items) {
+            for (Item item : items) {
                 int count = commentDao.countCommentForItem(item.getItemId());
                 result.put(item.getItemId(), count);
             }
             manager.endTransaction(commentDao);
         } catch (DaoException exception) {
-//            manager.rollback();
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
         return result;
+    }
+
+    @Override
+    public Comment findCommentOnItem(long id) {
+        return null;
     }
 
     private void updateItemFilter(List<Bitmap> bitmaps, Item item) {
@@ -138,12 +162,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public boolean create(Item item) throws ServiceException {
-        return false;
-    }
-
-    @Override
-    public Item find(Long id) throws ServiceException {
+    public Item find(Long id, String pathForFile) throws ServiceException {
         return null;
     }
 

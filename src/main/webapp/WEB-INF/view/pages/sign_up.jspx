@@ -177,7 +177,6 @@
                 url: contextUrl + '/ajax'
             }).done(function (data) {
                 if (data != 'true') {
-                    // form.submit();
                     submit.click();
                     return;
                 }

@@ -4,6 +4,7 @@ import by.chmut.giftit.command.Command;
 import by.chmut.giftit.controller.Router;
 import by.chmut.giftit.entity.User;
 import by.chmut.giftit.service.ServiceException;
+import by.chmut.giftit.service.ServiceFactory;
 import by.chmut.giftit.service.UserService;
 import by.chmut.giftit.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +18,7 @@ import static by.chmut.giftit.constant.PathPage.*;
 public class LoginCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
-    private UserService service = new UserServiceImpl();
+    private UserService service = ServiceFactory.getInstance().getUserService();
 
     @Override
     public Router execute(HttpServletRequest req) {

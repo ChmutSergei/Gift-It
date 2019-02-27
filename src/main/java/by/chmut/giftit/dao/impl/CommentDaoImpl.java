@@ -102,10 +102,9 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public boolean create(Comment comment) throws DaoException {
+    public Comment create(Comment comment) throws DaoException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        int result;
         try {
             statement = connection.prepareStatement(CREATE_COMMENT, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, comment.getUserId());
@@ -113,7 +112,10 @@ public class CommentDaoImpl implements CommentDao {
             statement.setString(3, comment.getMessage());
             statement.setDate(4, Date.valueOf(comment.getDate()));
             statement.setString(5, comment.getStatus().name());
-            result = statement.executeUpdate();
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with creating comment");
+            }
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 comment.setCommentId(resultSet.getLong(1));
@@ -124,7 +126,7 @@ public class CommentDaoImpl implements CommentDao {
             close(resultSet);
             close(statement);
         }
-        return result > 0;
+        return comment;
     }
 
     @Override

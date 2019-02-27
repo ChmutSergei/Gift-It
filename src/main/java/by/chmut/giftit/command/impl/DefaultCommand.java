@@ -5,6 +5,7 @@ import by.chmut.giftit.controller.Router;
 import by.chmut.giftit.entity.Item;
 import by.chmut.giftit.service.ItemService;
 import by.chmut.giftit.service.ServiceException;
+import by.chmut.giftit.service.ServiceFactory;
 import by.chmut.giftit.service.impl.ItemServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +23,7 @@ import static by.chmut.giftit.constant.PathPage.HOME_PAGE;
 public class DefaultCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
-    private ItemService service = new ItemServiceImpl();
+    private ItemService service = ServiceFactory.getInstance().getItemService();
 
     @Override
     public Router execute(HttpServletRequest req) {

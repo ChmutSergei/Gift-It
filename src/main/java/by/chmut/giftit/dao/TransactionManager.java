@@ -1,7 +1,6 @@
 package by.chmut.giftit.dao;
 
 import by.chmut.giftit.connectionpool.ConnectionPool;
-import by.chmut.giftit.service.ServiceException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -39,17 +38,16 @@ public class TransactionManager {
             throw new DaoException("Error when try to finish transaction", exception);
         }
     }
-//TODO
+
     public void rollback() throws DaoException {
         try {
             if (connection != null) {
                 connection.rollback();
-            } else {
-                throw new DaoException("Rollback Error - connection missing");
             }
         } catch (SQLException exception) {
             throw new DaoException("Rollback Error", exception);
         }
+        throw new DaoException("Rollback Error - connection missing");
     }
 
 }

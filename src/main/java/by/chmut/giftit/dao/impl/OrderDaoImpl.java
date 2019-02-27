@@ -107,10 +107,9 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public boolean create(Order order) throws DaoException {
+    public Order create(Order order) throws DaoException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        int result;
         try {
             statement = connection.prepareStatement(CREATE_ORDER, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, order.getUserId());
@@ -119,7 +118,10 @@ public class OrderDaoImpl implements OrderDao {
             statement.setString(4, order.getStatus());
             statement.setDate(5, Date.valueOf(order.getInitDate()));
             statement.setDate(6, Date.valueOf(order.getIssueDate()));
-            result = statement.executeUpdate();
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with creating order");
+            }
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 order.setOrderId(resultSet.getLong(1));
@@ -130,7 +132,7 @@ public class OrderDaoImpl implements OrderDao {
             close(resultSet);
             close(statement);
         }
-        return result > 0;
+        return order;
     }
 
     @Override

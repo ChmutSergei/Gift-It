@@ -99,16 +99,18 @@ public class CartDaoImpl implements CartDao {
     }
 
     @Override
-    public boolean create(Cart cart) throws DaoException {
+    public Cart create(Cart cart) throws DaoException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        int result;
         try {
             statement = connection.prepareStatement(CREATE_CART, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, cart.getUserId());
             statement.setLong(2, cart.getItemId());
             statement.setBigDecimal(3, cart.getCount());
-            result = statement.executeUpdate();
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with creating cart");
+            }
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 cart.setCartId(resultSet.getLong(1));
@@ -119,7 +121,7 @@ public class CartDaoImpl implements CartDao {
             close(resultSet);
             close(statement);
         }
-        return result > 0;
+        return cart;
     }
 
     @Override

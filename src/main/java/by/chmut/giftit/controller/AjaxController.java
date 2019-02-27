@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static by.chmut.giftit.command.CommandType.PREVIEW_ITEM;
 import static by.chmut.giftit.constant.AttributeName.COMMAND_PARAMETER_NAME;
+import static by.chmut.giftit.constant.AttributeName.ITEM_ID_PARAMETER_NAME;
 import static by.chmut.giftit.constant.AttributeName.USERNAME_PARAMETER_NAME;
 
 @WebServlet(urlPatterns = "/ajax")
@@ -61,6 +63,7 @@ public class AjaxController extends HttpServlet {
                 checkUsernameOnExist(request, response);
                 break;
             case SET_ITEM_ID:
+                request.getSession().setAttribute(ITEM_ID_PARAMETER_NAME, request.getParameter(ITEM_ID_PARAMETER_NAME));
                 break;
             case SEARCH_FILTER:
                 int countItems = commandManager.countItemsOnFilter(request, bitmapStorage);
@@ -76,8 +79,8 @@ public class AjaxController extends HttpServlet {
 
     }
 
-    private void checkUsernameOnExist(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter(USERNAME_PARAMETER_NAME);
+    private void checkUsernameOnExist(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
+        String username = request.getParameter(USERNAME_PARAMETER_NAME);
         try {
             User user = userService.find(username);
             if (user != null) {

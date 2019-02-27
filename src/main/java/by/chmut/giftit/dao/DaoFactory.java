@@ -5,13 +5,13 @@ import by.chmut.giftit.dao.impl.*;
 public class DaoFactory {
 
     private static final DaoFactory INSTANCE = new DaoFactory();
-    private static final UserDao userDao = new UserDaoImpl();
-    private static final CartDao cartDao = new CartDaoImpl();
-    private static final ItemDao itemDao = new ItemDaoImpl();
-    private static final OrderDao orderDao = new OrderDaoImpl();
-    private static final QuestionDao questionDao = new QuestionDaoImpl();
-    private static final CommentDao commentDao = new CommentDaoImpl();
-    private static final BitmapDao bitmapDao = new BitmapDaoImpl();
+    private final UserDao userDao = new UserDaoImpl();
+    private final CartDao cartDao = new CartDaoImpl();
+    private final ItemDao itemDao = new ItemDaoImpl();
+    private final OrderDao orderDao = new OrderDaoImpl();
+    private final QuestionDao questionDao = new QuestionDaoImpl();
+    private final CommentDao commentDao = new CommentDaoImpl();
+    private final BitmapDao bitmapDao = new BitmapDaoImpl();
 
     private DaoFactory() {
     }

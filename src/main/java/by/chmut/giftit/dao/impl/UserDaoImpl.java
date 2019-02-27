@@ -133,10 +133,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean create(User user) throws DaoException {
+    public User create(User user) throws DaoException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        int result;
         try {
             statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, user.getUsername());
@@ -150,43 +149,13 @@ public class UserDaoImpl implements UserDao {
             statement.setDate(9, Date.valueOf(user.getInitDate()));
             statement.setDate(10, Date.valueOf(user.getBlockedUntil()));
             statement.setString(11, user.getRole().toString());
-            result = statement.executeUpdate();
-            resultSet = statement.getGeneratedKeys();
-            if (resultSet.next()) {
-                user.setUserId(resultSet.getLong(1));
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with creating user");
             }
-        } catch (SQLException exception) {
-            throw new DaoException("Error with creating user", exception);
-        } finally {
-            close(resultSet);
-            close(statement);
-        }
-        return result > 0;
-    }
-
-    @Override
-    public User createUser(User user) throws DaoException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, user.getUsername());
-            statement.setString(2, user.getPassword());
-            statement.setString(3, user.getFirstName());
-            statement.setString(4, user.getLastName());
-            statement.setString(5, user.getEmail());
-            statement.setString(6, user.getPhone());
-            statement.setString(7, user.getAddress());
-            statement.setBigDecimal(8, user.getAccount());
-            statement.setDate(9, Date.valueOf(user.getInitDate()));
-            statement.setDate(10, Date.valueOf(user.getBlockedUntil()));
-            statement.setString(11, user.getRole().toString());
-            statement.executeUpdate();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 user.setUserId(resultSet.getLong(1));
-            } else {
-                throw new DaoException("Error user not save in database");
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with creating user", exception);
@@ -196,6 +165,7 @@ public class UserDaoImpl implements UserDao {
         }
         return user;
     }
+
     @Override
     public User update(User user) throws DaoException {
         PreparedStatement statement = null;

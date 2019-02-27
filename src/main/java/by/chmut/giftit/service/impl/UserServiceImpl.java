@@ -8,6 +8,8 @@ import by.chmut.giftit.entity.User;
 import by.chmut.giftit.service.ServiceException;
 import by.chmut.giftit.service.UserService;
 import by.chmut.giftit.validator.PasswordValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.http.Cookie;
@@ -21,6 +23,7 @@ import static by.chmut.giftit.constant.AttributeName.*;
 
 public class UserServiceImpl implements UserService {
 
+    private static final Logger logger = LogManager.getLogger();
     private static final String REGEX_USERNAME = "^[\\w_]{4,20}$";
     private static final String REGEX_NAME = "^[\\wА-Яа-я]{4,20}$";
     private static final String REGEX_PASSWORD = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$";
@@ -46,7 +49,11 @@ public class UserServiceImpl implements UserService {
             user = userDao.findEntityByUsername(username);
             manager.endTransaction(userDao);
         } catch (DaoException exception) {
-//            manager.rollback();
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
         return user;
@@ -73,10 +80,14 @@ public class UserServiceImpl implements UserService {
         User newUser = setParameter(userParameters);
         try {
             manager.beginTransaction(userDao);
-            newUser = userDao.createUser(newUser);
+            newUser = userDao.create(newUser);
             manager.endTransaction(userDao);
         } catch (DaoException exception) {
-//            manager.rollback();
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
         return newUser;

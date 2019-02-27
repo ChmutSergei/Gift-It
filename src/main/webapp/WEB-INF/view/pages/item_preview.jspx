@@ -6,6 +6,12 @@
         <div id="preview" class="container">
             <fmt:setLocale value="${sessionScope.locale}"/>
             <fmt:setBundle basename="i18n.messages" var="i18n"/>
+            <c:if test="${not empty sessionScope.message}">
+                <c:set var="ermessage"><fmt:message key="${sessionScope.message}" bundle="${i18n}"/></c:set>
+                <div id="message" class="alert alert-danger center-block">
+                    <strong>${ermessage}</strong>
+                </div>
+            </c:if>
             <div class="row">
                 <div class="col-sm-6">
                     <img src="${pageContext.request.contextPath}/${sessionScope.item.itemId}.jpg" class="img-responsive"
@@ -46,13 +52,6 @@
                         <br/>
                     </div>
                 </form>
-
-                <!--<c:if test="${not empty sessionScope.message}">-->
-                <!--<c:set var="ermessage"><fmt:message key="${sessionScope.message}" bundle="${i18n}"/></c:set>-->
-                <!--<div id="message" class="alert alert-danger center-block">-->
-                <!--<strong>${ermessage}</strong>-->
-                <!--</div>-->
-                <!--</c:if>-->
             </div>
             <div class="row col-sm-10 col-sm-offset-1">
                 <p>

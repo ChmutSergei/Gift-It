@@ -6,6 +6,5 @@
 </head>
 <jsp:forward page="/controller?command=home"/>
 <body>
-</form>
 </body>
 </html>

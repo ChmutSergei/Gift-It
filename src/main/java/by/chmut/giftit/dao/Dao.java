@@ -22,7 +22,7 @@ public interface Dao<K, T extends Entity> {
 
     boolean delete(T entity) throws DaoException;
 
-    boolean create(T entity) throws DaoException;
+    T create(T entity) throws DaoException;
 
     T update(T entity) throws DaoException;
 

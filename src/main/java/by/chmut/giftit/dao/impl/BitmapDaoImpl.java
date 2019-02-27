@@ -108,7 +108,7 @@ public class BitmapDaoImpl implements BitmapDao {
     }
 
     @Override
-    public boolean create(Bitmap entity) throws DaoException {
+    public Bitmap create(Bitmap entity) throws DaoException {
         throw new DaoException("Not supported operation exception!");
     }
 

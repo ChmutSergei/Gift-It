@@ -177,20 +177,23 @@
     <div class="container">
         <div id="items" class="row">
             <c:forEach var="item" items="${sessionScope.result}">
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="panel panel-primary">
                         <div class="panel-heading">${item.itemName}</div>
-                        <div class="panel-body"><img src="${pageContext.request.contextPath}/${item.itemId}.jpg" class="img-responsive" style="width:100%"
+                        <div class="panel-body"><img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
+                                                     class="img-responsive" style="width:100%"
                                                      alt="Image"/></div>
                         <div class="panel-footer">
                             <p>${item.description}</p>
-                            <a href="#">Comments
-                                <span class="badge">${sessionScope.countComments.get(item.itemId)}</span></a><br/>
-                            <h3>${item.cost}</h3>
+                            <h3><fmt:setLocale value="ru-RU"/>
+                            <fmt:formatNumber value="${item.cost}" type="currency"/><br/>
+                            <fmt:setLocale value="${sessionScope.locale}"/></h3>
                             <c:set var="basket"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
-                            <a href="${pageContext.request.contextPath}/controller?command=preview_item&amp;item=${item.itemId}"
-                               data-toggle="tooltip" title="${basket}"><span class="glyphicon glyphicon-shopping-cart"/>
-                            </a>
+                            <a href="#">Comments
+                                <span class="badge">${sessionScope.countComments.get(item.itemId)}</span></a>
+                            <a id="idForSend" onclick="sendItemId($(this))" data-toggle="tooltip"
+                               name="${item.itemId}" title="${basket}"><span class="glyphicon glyphicon-shopping-cart"
+                                                       style="font-size: 30px;"/></a>
                         </div>
                     </div>
                 </div>
@@ -241,6 +244,24 @@
                 url: contextUrl + '/ajax'
             }).done(function (data) {
                 $('#search').text(textButton + ' ' + data);
+            }).fail(function (data) {
+                if (console &amp;&amp; console.log) {
+                    console.log("Error data:", data);
+                }
+            })
+        }
+
+        function sendItemId(element) {
+            var itemId = $(element).attr('name');
+            var contextUrl = '${pageContext.request.contextPath}';
+            var ref = $('#preview')[0];
+            var command = 'SET_ITEM_ID';
+            $.ajax({
+                type: 'POST',
+                data: {command: command, itemId: itemId},
+                url: contextUrl + '/ajax'
+            }).done(function (data) {
+                location.href = contextUrl + '/controller?command=preview_item'
             }).fail(function (data) {
                 if (console &amp;&amp; console.log) {
                     console.log("Error data:", data);

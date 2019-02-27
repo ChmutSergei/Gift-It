@@ -105,10 +105,9 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
     @Override
-    public boolean create(Question question) throws DaoException {
+    public Question create(Question question) throws DaoException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        int result;
         try {
             statement = connection.prepareStatement(CREATE_QUESTION, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, question.getUserId());
@@ -116,7 +115,10 @@ public class QuestionDaoImpl implements QuestionDao {
             statement.setString(3, question.getResponse());
             statement.setDate(4, Date.valueOf(question.getRequestDate()));
             statement.setDate(5, Date.valueOf(question.getResponseDate()));
-            result = statement.executeUpdate();
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with creating question");
+            }
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 question.setQuestionId(resultSet.getLong(1));
@@ -127,7 +129,7 @@ public class QuestionDaoImpl implements QuestionDao {
             close(resultSet);
             close(statement);
         }
-        return result > 0;
+        return question;
     }
 
     @Override

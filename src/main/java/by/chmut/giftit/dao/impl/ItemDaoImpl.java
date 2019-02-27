@@ -14,10 +14,6 @@ import java.util.List;
 
 public class ItemDaoImpl implements ItemDao {
 
-    private static final String SELECT_ITEMS_TYPE = "SELECT id, name, type, description, active, cost FROM Items WHERE type = ?";
-    private static final String SELECT_ITEMS_PRICE = "SELECT id, name, type, description, active, cost FROM Items WHERE price = ?";
-    private static final String SELECT_ITEMS_TYPE_AND_PRICE = "SELECT id, name, type, description, active, cost FROM " +
-            "Items WHERE type = ? AND price = ?";
     private static final String SELECT_ITEM_BY_ID = "SELECT id, name, type, description, active, cost, image FROM Items WHERE id = ?";
     private static final String DELETE_ITEM = "DELETE FROM Items WHERE id=?";
     private static final String CREATE_ITEM = "INSERT INTO Items(name, type, description, active, cost, image) VALUES(?,?,?,?,?,?)";
@@ -129,10 +125,9 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public boolean create(Item item) throws DaoException {
+    public Item create(Item item) throws DaoException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        int result;
         File image = item.getImage();
         try (FileInputStream fis = new FileInputStream(image)) {
             statement = connection.prepareStatement(CREATE_ITEM, Statement.RETURN_GENERATED_KEYS);
@@ -142,7 +137,10 @@ public class ItemDaoImpl implements ItemDao {
             statement.setBoolean(4, item.isActive());
             statement.setBigDecimal(5, item.getCost());
             statement.setBinaryStream(6, fis, (int) image.length());
-            result = statement.executeUpdate();
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with creating item");
+            }
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 item.setItemId(resultSet.getLong(1));
@@ -153,7 +151,7 @@ public class ItemDaoImpl implements ItemDao {
             close(resultSet);
             close(statement);
         }
-        return result > 0;
+        return item;
     }
 
     @Override

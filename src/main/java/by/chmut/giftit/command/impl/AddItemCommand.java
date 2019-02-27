@@ -4,6 +4,7 @@ import by.chmut.giftit.command.Command;
 import by.chmut.giftit.controller.Router;
 import by.chmut.giftit.service.ItemService;
 import by.chmut.giftit.service.ServiceException;
+import by.chmut.giftit.service.ServiceFactory;
 import by.chmut.giftit.service.impl.ItemServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,34 +14,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static by.chmut.giftit.command.CommandType.ADMIN;
-import static by.chmut.giftit.command.CommandType.ERROR;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
 public class AddItemCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
-        private ItemService service = new ItemServiceImpl();
+    private ItemService service = ServiceFactory.getInstance().getItemService();
 
-        @Override
-        public Router execute(HttpServletRequest req) {
-            Router router = new Router();
-            if (req.getSession().getAttribute(EXCEPTION_PARAMETER_NAME) != null) {
-                router.setRedirectPath(ERROR_PATH);
-                return router;
-            }
+    @Override
+    public Router execute(HttpServletRequest req) {
+        Router router = new Router();
+        if (req.getSession().getAttribute(EXCEPTION_PARAMETER_NAME) != null) {
+            router.setRedirectPath(ERROR_PATH);
+            return router;
+        }
         router.setRedirectPath(ADMIN.name().toLowerCase());
         Map<String, Object> itemParameters = setParametersFromRequest(req);
-        boolean result = false;
         try {
-            result = service.createItem(itemParameters);
+            service.create(itemParameters);
         } catch (ServiceException exception) {
             logger.error("Error when create new item");
             req.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
             router.setRedirectPath(ERROR_PATH);
-        }
-        if (!result) {
-            router.setRedirectPath(ERROR.name().toLowerCase());
         }
         return router;
     }
