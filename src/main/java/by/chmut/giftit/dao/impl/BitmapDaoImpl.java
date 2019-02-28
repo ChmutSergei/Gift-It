@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static by.chmut.giftit.constant.AttributeName.ALL_PARAMETER_NAME;
 
@@ -93,23 +94,23 @@ public class BitmapDaoImpl implements BitmapDao {
     }
 
     @Override
-    public Bitmap findEntity(Integer id) throws DaoException {
-        throw new DaoException("Not supported operation exception!");
+    public Optional<Bitmap> findEntity(Integer id) throws DaoException {
+        throw new DaoException("Unsupported operation exception!");
     }
 
     @Override
     public boolean delete(Integer id) throws DaoException {
-        throw new DaoException("Not supported operation exception!");
+        throw new DaoException("Unsupported operation exception!");
     }
 
     @Override
     public boolean delete(Bitmap entity) throws DaoException {
-        throw new DaoException("Not supported operation exception!");
+        throw new DaoException("Unsupported operation exception!");
     }
 
     @Override
     public Bitmap create(Bitmap entity) throws DaoException {
-        throw new DaoException("Not supported operation exception!");
+        throw new DaoException("Unsupported operation exception!");
     }
 
 }

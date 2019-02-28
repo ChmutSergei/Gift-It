@@ -5,7 +5,6 @@ import by.chmut.giftit.controller.Router;
 import by.chmut.giftit.service.ItemService;
 import by.chmut.giftit.service.ServiceException;
 import by.chmut.giftit.service.ServiceFactory;
-import by.chmut.giftit.service.impl.ItemServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-import static by.chmut.giftit.command.CommandType.ADMIN;
+import static by.chmut.giftit.command.CommandType.CREATE_ITEM;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
@@ -29,7 +28,7 @@ public class AddItemCommand implements Command {
             router.setRedirectPath(ERROR_PATH);
             return router;
         }
-        router.setRedirectPath(ADMIN.name().toLowerCase());
+        router.setRedirectPath(CREATE_ITEM.name().toLowerCase());
         Map<String, Object> itemParameters = setParametersFromRequest(req);
         try {
             service.create(itemParameters);

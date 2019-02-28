@@ -24,20 +24,16 @@
                         <br/>
                         <h3>
                             <fmt:setLocale value="ru-RU"/>
-                            <fmt:formatNumber value="${sessionScope.item.cost}" type="currency"/><br/>
+                            <fmt:formatNumber value="${sessionScope.item.price}" type="currency"/><br/>
                             <fmt:setLocale value="${sessionScope.locale}"/>
                         </h3><br/>
+                        <h4>${sessionScope.item.description}</h4>
                         <p><fmt:message bundle="${i18n}" key="item.preview.printmessage"/></p><br/>
                         <div id="choosePhoto" class="container col-xs-10 col-xs-offset-1">
-                            <label for="uFile"><fmt:message bundle="${i18n}" key="additem.upload"/></label>
-                            <input id="uFile" name="itemImage" type="file"/><br/>
-                            <div class="col-xs-1 col-xs-offset-1">
-                                <c:set var="forButton"><fmt:message bundle="${i18n}" key="item.preview.button"/></c:set>
-                                <a href="#" onclick="$('#uFile').click()" title="${forButton}">
-                                    <img src="${pageContext.request.contextPath}/assests/img/add-images.png" class="img-responsive"
-                                         alt=""/></a>
-                            </div>
-                            <br/><br/><br/><br/>
+                            <label for="uFile"><fmt:message bundle="${i18n}" key="additem.upload"/></label> <!--TODO не реализовано-->
+                            <input id="uFile" name="itemImage" type="file"/>
+                            <br/>
+                            <br/>
                         </div>
                         <br/>
                         <div id="input_div" class="col-sm-5">
@@ -53,6 +49,7 @@
                     </div>
                 </form>
             </div>
+            <br/>
             <div class="row col-sm-10 col-sm-offset-1">
                 <p>
                     Цена указана за кружку с печатью вашей картинки на заказ.
@@ -81,17 +78,17 @@
             </div>
         </div>
         <br/>
-        <div class="container col-xs-8 col-xs-offset-2">
-            <h2>Комментарии</h2>
+        <div id="comments" class="container col-xs-8 col-xs-offset-2">
+            <h2><fmt:message key="item.preview.comments" bundle="${i18n}"/></h2>
             <c:forEach var="comment" items="${sessionScope.comments}">
                 <div class="media">
                     <div class="media-left">
                         <img src="${pageContext.request.contextPath}/assests/img/img_avatar1.png" class="media-object"
-                             style="width:20%" alt="Image"/>
+                             style="width:50px" alt="Image"/>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">${sessionScope.user.username}
-                            <small><i>Posted on ${comment.date}</i></small>
+                        <h4 class="media-heading">${(sessionScope.users.get(comment.userId).username)}
+                            <small><i><fmt:message key="item.preview.posted"  bundle="${i18n}"/> ${comment.date}</i></small>
                         </h4>
                         <p>${comment.message}</p>
                     </div>

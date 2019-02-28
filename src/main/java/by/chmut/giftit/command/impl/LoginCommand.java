@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Optional;
+
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.*;
 
@@ -27,12 +29,12 @@ public class LoginCommand implements Command {
         router.setRedirectPath(previousPage);
         String username = req.getParameter(USERNAME_PARAMETER_NAME);
         String password = req.getParameter(PASSWORD_PARAMETER_NAME);
-        User user = null;
+        Optional<User> user = Optional.empty();
         boolean userValid = false;
         try {
             user = service.find(username);
-            if (user != null) {
-                userValid = service.validateUser(user, password);
+            if (user.isPresent()) {
+                userValid = service.validateUser(user.get(), password);
             }
         } catch (ServiceException exception) {
             logger.error(exception);
@@ -40,7 +42,7 @@ public class LoginCommand implements Command {
             router.setRedirectPath(ERROR_PATH);
         }
         if (userValid) {
-            req.getSession().setAttribute(USER_PARAMETER_NAME, user);
+            req.getSession().setAttribute(USER_PARAMETER_NAME, user.get());
         } else {
             req.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_LOGIN_FAILED_KEY);
             router.setRedirectPath(SIGNIN_PATH);

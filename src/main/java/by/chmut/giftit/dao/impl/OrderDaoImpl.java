@@ -7,6 +7,7 @@ import by.chmut.giftit.entity.Order;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class OrderDaoImpl implements OrderDao {
 
@@ -21,11 +22,9 @@ public class OrderDaoImpl implements OrderDao {
             "init_date=?, issue_date=? WHERE id=?";
 
     private Connection connection;
-
     public Connection getConnection() {
         return connection;
     }
-
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
@@ -53,8 +52,8 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order findEntity(Long id) throws DaoException {
-        Order order = new Order();
+    public Optional<Order> findEntity(Long id) throws DaoException {
+        Optional<Order> order = Optional.empty();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -62,7 +61,7 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                order = makeFromResultSet(resultSet);
+                order = Optional.of(makeFromResultSet(resultSet));
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get order by id", exception);
@@ -147,7 +146,10 @@ public class OrderDaoImpl implements OrderDao {
             statement.setString(4, order.getStatus());
             statement.setDate(5, Date.valueOf(order.getInitDate()));
             statement.setDate(6, Date.valueOf(order.getIssueDate()));
-            statement.executeUpdate();
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with update order");
+            }
         } catch (SQLException exception) {
             throw new DaoException("Error with update order", exception);
         } finally {

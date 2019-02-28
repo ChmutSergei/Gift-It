@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static by.chmut.giftit.constant.PathPage.ADD_ITEM_PAGE;
 
-public class AdminCommand implements Command {
+public class CreateItemCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest req) {

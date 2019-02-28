@@ -7,6 +7,7 @@ import by.chmut.giftit.entity.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
 
@@ -53,8 +54,8 @@ public class UserDaoImpl implements UserDao {
         return users;
     }
 
-    public User findEntityByUsername(String username) throws DaoException {
-        User user = null;
+    public Optional<User> findByUsername(String username) throws DaoException {
+        Optional<User> user = Optional.empty();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -62,7 +63,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, username);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return makeFromResultSet(resultSet);
+                user = Optional.of(makeFromResultSet(resultSet));
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get user by username", exception);
@@ -74,8 +75,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findEntity(Long id) throws DaoException {
-        User user = null;
+    public Optional<User> findEntity(Long id) throws DaoException {
+        Optional<User> user = Optional.empty();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -83,7 +84,7 @@ public class UserDaoImpl implements UserDao {
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return makeFromResultSet(resultSet);
+                user = Optional.of(makeFromResultSet(resultSet));
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get user by id", exception);
@@ -183,7 +184,10 @@ public class UserDaoImpl implements UserDao {
             statement.setDate(9, Date.valueOf(user.getInitDate()));
             statement.setDate(10, Date.valueOf(user.getBlockedUntil()));
             statement.setString(11, user.getRole().toString());
-            statement.executeUpdate();
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with update user");
+            }
         } catch (SQLException exception) {
             throw new DaoException("Error with update User", exception);
         } finally {

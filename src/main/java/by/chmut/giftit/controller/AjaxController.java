@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static by.chmut.giftit.command.CommandType.PREVIEW_ITEM;
@@ -64,6 +65,7 @@ public class AjaxController extends HttpServlet {
                 break;
             case SET_ITEM_ID:
                 request.getSession().setAttribute(ITEM_ID_PARAMETER_NAME, request.getParameter(ITEM_ID_PARAMETER_NAME));
+                response.getWriter().write(new Gson().toJson(true));
                 break;
             case SEARCH_FILTER:
                 int countItems = commandManager.countItemsOnFilter(request, bitmapStorage);
@@ -82,8 +84,8 @@ public class AjaxController extends HttpServlet {
     private void checkUsernameOnExist(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
         String username = request.getParameter(USERNAME_PARAMETER_NAME);
         try {
-            User user = userService.find(username);
-            if (user != null) {
+            Optional<User> user = userService.find(username);
+            if (user.isPresent()) {
                 resp.getWriter().write(new Gson().toJson(true));
             }
         } catch (ServiceException exception) {

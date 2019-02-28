@@ -6,7 +6,6 @@ import by.chmut.giftit.entity.Item;
 import by.chmut.giftit.service.ItemService;
 import by.chmut.giftit.service.ServiceException;
 import by.chmut.giftit.service.ServiceFactory;
-import by.chmut.giftit.service.impl.ItemServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +35,7 @@ public class DefaultCommand implements Command {
         List<Item> results = Collections.emptyList();
         if (itemIdList != null) {
             try {
-                results = service.findResultOfFilterItems(itemIdList, limit, offset, pathForTempFiles);
+                results = service.findItemsOnId(itemIdList, limit, offset, pathForTempFiles);
             } catch (ServiceException exception) {
                 logger.error("Error when find Item on filter", exception);
                 router.setPagePath(ERROR_PAGE);
@@ -51,7 +50,7 @@ public class DefaultCommand implements Command {
         }
         if (!results.isEmpty()) {
             try {
-                Map<Long, Integer> countCommenstMap = service.findCommentCountForItem(results);
+                Map<Long, Integer> countCommenstMap = service.findCountCommentsForItem(results);
                 req.getSession().setAttribute(COUNT_COMMENTS_PARAMETER_NAME, countCommenstMap);
             } catch (ServiceException exception) {
                 logger.error("Error when count comments for Item", exception);

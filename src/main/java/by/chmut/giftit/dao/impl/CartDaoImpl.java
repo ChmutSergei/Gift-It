@@ -7,6 +7,7 @@ import by.chmut.giftit.entity.Cart;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CartDaoImpl implements CartDao {
 
@@ -48,8 +49,8 @@ public class CartDaoImpl implements CartDao {
     }
 
     @Override
-    public Cart findEntity(Long id) throws DaoException {
-        Cart cart = new Cart();
+    public Optional<Cart> findEntity(Long id) throws DaoException {
+        Optional<Cart> cart = Optional.empty();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -57,7 +58,7 @@ public class CartDaoImpl implements CartDao {
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                cart = makeFromResultSet(resultSet);
+                cart = Optional.of(makeFromResultSet(resultSet));
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get cart by id", exception);
@@ -133,7 +134,10 @@ public class CartDaoImpl implements CartDao {
             statement.setLong(1, cart.getUserId());
             statement.setLong(2, cart.getItemId());
             statement.setBigDecimal(3, cart.getCount());
-            statement.executeUpdate();
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with update cart");
+            }
         } catch (SQLException exception) {
             throw new DaoException("Error with update cart", exception);
         } finally {

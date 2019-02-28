@@ -7,11 +7,14 @@ import by.chmut.giftit.entity.Comment;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CommentDaoImpl implements CommentDao {
 
     private static final String SELECT_ALL_COMMENTS = "SELECT id, user_id, item_id, message, date, status FROM Comments";
     private static final String SELECT_COMMENT_BY_ID = "SELECT id, user_id, item_id, message, date, status FROM Comments WHERE id = ?";
+    private static final String SELECT_COMMENTS_BY_ITEM_ID = "SELECT id, user_id, item_id, message, date, status " +
+            "FROM Comments WHERE item_id = ?";
     private static final String DELETE_COMMENT = "DELETE FROM Comments WHERE id=?";
     private static final String CREATE_COMMENT = "INSERT INTO Comments(user_id, item_id, message, date, status) VALUES(?,?,?,?,?)";
     private static final String UPDATE_COMMENT = "UPDATE Comments SET user_id=?, item_id=?, message=?, date=?, status=? WHERE id=?";
@@ -49,8 +52,8 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public Comment findEntity(Long id) throws DaoException {
-        Comment comment = new Comment();
+    public Optional<Comment> findEntity(Long id) throws DaoException {
+        Optional<Comment> comment = Optional.empty();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -58,7 +61,7 @@ public class CommentDaoImpl implements CommentDao {
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                comment = makeFromResultSet(resultSet);
+                comment = Optional.of(makeFromResultSet(resultSet));
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get comment by id", exception);
@@ -67,6 +70,28 @@ public class CommentDaoImpl implements CommentDao {
             close(resultSet);
         }
         return comment;
+    }
+
+    @Override
+    public List<Comment> findByItemId(long id) throws DaoException {
+        List<Comment> comments = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_COMMENTS_BY_ITEM_ID);
+            statement.setLong(1, id);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Comment comment = makeFromResultSet(resultSet);
+                comments.add(comment);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get all comments by item id", exception);
+        } finally {
+            close(statement);
+            close(resultSet);
+        }
+        return comments;
     }
 
     private Comment makeFromResultSet(ResultSet resultSet) throws SQLException {
@@ -140,7 +165,10 @@ public class CommentDaoImpl implements CommentDao {
             statement.setString(3, comment.getMessage());
             statement.setDate(4, Date.valueOf(comment.getDate()));
             statement.setString(5, comment.getStatus().name());
-            statement.executeUpdate();
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with update comment");
+            }
         } catch (SQLException exception) {
             throw new DaoException("Error with update comment", exception);
         } finally {

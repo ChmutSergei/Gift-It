@@ -10,7 +10,7 @@ public class Item extends Entity {
     private String type;
     private String description;
     private boolean active;
-    private BigDecimal cost;
+    private BigDecimal price;
     private File image;
 
     public long getItemId() {
@@ -53,12 +53,12 @@ public class Item extends Entity {
         this.active = active;
     }
 
-    public BigDecimal getCost() {
-        return cost;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public File getImage() {
@@ -101,11 +101,11 @@ public class Item extends Entity {
         } else if (!description.equals(item.description)) {
             return false;
         }
-        if (cost == null) {
-            if (item.cost != null) {
+        if (price == null) {
+            if (item.price != null) {
                 return false;
             }
-        } else if (!cost.equals(item.cost)) {
+        } else if (!price.equals(item.price)) {
             return false;
         }
         if (image == null) {
@@ -126,7 +126,7 @@ public class Item extends Entity {
         result = 31 * result + (itemName != null ? itemName.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (cost != null ? cost.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);
         return result;
     }
@@ -139,7 +139,7 @@ public class Item extends Entity {
                 ", type='" + type + '\'' +
                 ", description='" + description + '\'' +
                 ", active=" + active +
-                ", cost=" + cost +
+                ", price=" + price +
                 ", image=" + image +
                 '}';
     }

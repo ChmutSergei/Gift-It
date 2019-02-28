@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 
 public interface Dao<K, T extends Entity> {
 
@@ -16,7 +17,7 @@ public interface Dao<K, T extends Entity> {
 
     List<T> findAll() throws DaoException;
 
-    T findEntity(K id) throws DaoException;
+    Optional<T> findEntity(K id) throws DaoException;
 
     boolean delete(K id) throws DaoException;
 

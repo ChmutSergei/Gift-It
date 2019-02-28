@@ -181,19 +181,19 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">${item.itemName}</div>
                         <div class="panel-body"><img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
-                                                     class="img-responsive" style="width:100%"
-                                                     alt="Image"/></div>
+                                                     name="${item.itemId}" class="img-responsive" style="width:100%"
+                                                     alt="Image" onclick="sendItemId($(this))"/></div>
                         <div class="panel-footer">
                             <p>${item.description}</p>
                             <h3><fmt:setLocale value="ru-RU"/>
-                            <fmt:formatNumber value="${item.cost}" type="currency"/><br/>
-                            <fmt:setLocale value="${sessionScope.locale}"/></h3>
-                            <c:set var="basket"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
-                            <a href="#">Comments
+                                <fmt:formatNumber value="${item.price}" type="currency"/><br/>
+                                <fmt:setLocale value="${sessionScope.locale}"/></h3>
+                            <c:set var="cart"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
+                            <a id="comment" class="forSend" name="${item.itemId}" onclick="sendItemId($(this))">Comments
                                 <span class="badge">${sessionScope.countComments.get(item.itemId)}</span></a>
-                            <a id="idForSend" onclick="sendItemId($(this))" data-toggle="tooltip"
-                               name="${item.itemId}" title="${basket}"><span class="glyphicon glyphicon-shopping-cart"
-                                                       style="font-size: 30px;"/></a>
+                            <a class="forSend" onclick="sendItemId($(this))" data-toggle="tooltip"
+                               name="${item.itemId}" title="${cart}"><span class="glyphicon glyphicon-shopping-cart"
+                                                                           style="font-size: 30px;"/></a>
                         </div>
                     </div>
                 </div>
@@ -253,6 +253,10 @@
 
         function sendItemId(element) {
             var itemId = $(element).attr('name');
+            var cursor = "";
+            if ($(element).attr('id') == 'comment') {
+                cursor = "#comments";
+            }
             var contextUrl = '${pageContext.request.contextPath}';
             var ref = $('#preview')[0];
             var command = 'SET_ITEM_ID';
@@ -261,7 +265,9 @@
                 data: {command: command, itemId: itemId},
                 url: contextUrl + '/ajax'
             }).done(function (data) {
-                location.href = contextUrl + '/controller?command=preview_item'
+                if (data == 'true') {
+                    location.href = contextUrl + '/controller?command=preview_item' + cursor;
+                }
             }).fail(function (data) {
                 if (console &amp;&amp; console.log) {
                     console.log("Error data:", data);

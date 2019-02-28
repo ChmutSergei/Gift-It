@@ -6,10 +6,11 @@ import by.chmut.giftit.entity.Item;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface ItemService {
 
-    Item find(Long id, String pathForFile) throws ServiceException;
+    Optional<Item> find(Long id, String pathForFile) throws ServiceException;
 
     Item update(Item item) throws ServiceException;
 
@@ -17,11 +18,11 @@ public interface ItemService {
 
     Item create(Map<String, Object> itemParameters) throws ServiceException;
 
-    List<Item> findResultOfFilterItems(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException;
+    List<Item> findItemsOnId(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException;
 
     List<Item> findAll(String pathForTempFiles, int limit, int offset) throws ServiceException;
 
-    Map<Long,Integer> findCommentCountForItem(List<Item> items) throws ServiceException;
+    Map<Long,Integer> findCountCommentsForItem(List<Item> items) throws ServiceException;
 
-    Comment findCommentOnItem(long id);
+    List<Comment> findCommentOnItem(long id) throws ServiceException;
 }

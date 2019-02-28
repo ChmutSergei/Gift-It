@@ -83,9 +83,9 @@
                         </li>
                     </c:if>
                     <c:if test="${not empty sessionScope.user}">
-                        <c:set var="basket"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
+                        <c:set var="cart"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
                         <li><a href="${pageContext.request.contextPath}/controller?command=reservation"
-                               data-toggle="tooltip" title="${basket}"><span class="glyphicon glyphicon-shopping-cart"/>
+                               data-toggle="tooltip" title="${cart}"><span class="glyphicon glyphicon-shopping-cart"/>
                         </a>
                         </li>
                         <li><p id="userhi" class="text"><fmt:message key="nav.hello"

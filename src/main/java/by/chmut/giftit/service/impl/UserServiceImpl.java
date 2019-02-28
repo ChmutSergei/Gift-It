@@ -16,7 +16,7 @@ import javax.servlet.http.Cookie;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static by.chmut.giftit.constant.AttributeName.*;
@@ -32,8 +32,7 @@ public class UserServiceImpl implements UserService {
     private static final String REGEX_ADDRESS = "^.{10,80}$";
     private static final int EMAIL_MAX_LENGTH = 30;
 
-    private DaoFactory factory = DaoFactory.getInstance();
-    private UserDao userDao = factory.getUserDao();
+    private UserDao userDao = DaoFactory.getInstance().getUserDao();
     private TransactionManager manager = new TransactionManager();
 
     @Override
@@ -42,11 +41,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User find(String username) throws ServiceException {
-        User user;
+    public Optional<User> find(long userId) throws ServiceException {
+        Optional<User> user;
         try {
             manager.beginTransaction(userDao);
-            user = userDao.findEntityByUsername(username);
+            user = userDao.findEntity(userId);
             manager.endTransaction(userDao);
         } catch (DaoException exception) {
             try {
@@ -60,13 +59,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User find(Cookie cookie) throws ServiceException {
-        return null;
+    public Optional<User> find(String username) throws ServiceException {
+        Optional<User> user;
+        try {
+            manager.beginTransaction(userDao);
+            user = userDao.findByUsername(username);
+            manager.endTransaction(userDao);
+        } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            throw new ServiceException(exception);
+        }
+        return user;
+    }
+
+    @Override
+    public Optional<User> find(Cookie cookie) throws ServiceException {
+        return Optional.empty();
     }
 
     @Override
     public User create(Map<String, String> userParameters) throws ServiceException {
-        for (Entry entry : userParameters.entrySet()) {
+        for (Map.Entry entry : userParameters.entrySet()) {
             if (entry.getValue() == null) {
                 throw new ServiceException("Error when add user - incorrect data");
             }

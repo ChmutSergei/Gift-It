@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
@@ -28,16 +29,16 @@ public class RegistrationCommand implements Command {
         String previousPage = (String) req.getSession().getAttribute(PREVIOUS_PAGE_PARAMETER_NAME);
         router.setRedirectPath(previousPage);
         Map<String, String> userParameters = setParametersFromRequest(req);
-        User user = null;
+        Optional<User> user = Optional.empty();
         try {
-            user = service.create(userParameters);
+            user = Optional.ofNullable(service.create(userParameters));
         } catch (ServiceException exception) {
             logger.error(exception);
             req.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
             router.setRedirectPath(ERROR_PATH);
         }
-        if (user != null) {
-            req.getSession().setAttribute(USER_PARAMETER_NAME, user);
+        if (user.isPresent()) {
+            req.getSession().setAttribute(USER_PARAMETER_NAME, user.get());
             return router;
         }
         return router;

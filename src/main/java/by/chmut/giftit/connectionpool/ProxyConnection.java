@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public class ProxyConnection implements Connection, Comparable<Connection> {
+public class ProxyConnection implements Connection, Comparable<ProxyConnection> {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -298,7 +298,7 @@ public class ProxyConnection implements Connection, Comparable<Connection> {
     }
 
     @Override
-    public int compareTo(Connection connection) {
-        return this.connection.hashCode()-connection.hashCode();
+    public int compareTo(ProxyConnection connection) {
+        return this.hashCode()-connection.hashCode();
     }
 }

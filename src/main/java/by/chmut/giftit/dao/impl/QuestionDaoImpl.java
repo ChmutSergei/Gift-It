@@ -7,6 +7,7 @@ import by.chmut.giftit.entity.Question;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class QuestionDaoImpl implements QuestionDao {
 
@@ -21,11 +22,9 @@ public class QuestionDaoImpl implements QuestionDao {
             "request_date=?, response_date=? WHERE id=?";
 
     private Connection connection;
-
     public Connection getConnection() {
         return connection;
     }
-
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
@@ -52,8 +51,8 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
     @Override
-    public Question findEntity(Long id) throws DaoException {
-        Question question = new Question();
+    public Optional<Question> findEntity(Long id) throws DaoException {
+        Optional<Question> question = Optional.empty();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -61,7 +60,7 @@ public class QuestionDaoImpl implements QuestionDao {
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                question = makeFromResultSet(resultSet);
+                question = Optional.of(makeFromResultSet(resultSet));
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get question by id", exception);
@@ -143,7 +142,10 @@ public class QuestionDaoImpl implements QuestionDao {
             statement.setString(3, question.getResponse());
             statement.setDate(4, Date.valueOf(question.getRequestDate()));
             statement.setDate(5, Date.valueOf(question.getResponseDate()));
-            statement.executeUpdate();
+            int result = statement.executeUpdate();
+            if (result != 1) {
+                throw new DaoException("Error with update question");
+            }
         } catch (SQLException exception) {
             throw new DaoException("Error with update question", exception);
         } finally {

@@ -19,51 +19,28 @@ import static by.chmut.giftit.constant.AttributeName.*;
 public class ItemServiceImpl implements ItemService {
 
     private static final Logger logger = LogManager.getLogger();
-    private DaoFactory factory = DaoFactory.getInstance();
 
-    private ItemDao itemDao = factory.getItemDao();
-    private BitmapDao bitmapDao = factory.getBitmapDao();
-    private CommentDao commentDao = factory.getCommentDao();
+    private ItemDao itemDao = DaoFactory.getInstance().getItemDao();
+    private BitmapDao bitmapDao = DaoFactory.getInstance().getBitmapDao();
+    private CommentDao commentDao = DaoFactory.getInstance().getCommentDao();
     private TransactionManager manager = new TransactionManager();
 
     @Override
-    public Item create(Map<String, Object> itemParameters) throws ServiceException {
-        Item item = setParameters(itemParameters);
-        try {
-            manager.beginTransaction(itemDao, bitmapDao);
-            List<Bitmap> bitmaps = bitmapDao.findAll();
-            updateItemFilter(bitmaps, item);
-            item = itemDao.create(item);
-            for (Bitmap bitmap : bitmaps) {
-                bitmapDao.update(bitmap);
-            }
-            manager.endTransaction(itemDao);
-        } catch (DaoException exception) {
-            try {
-                manager.rollback();
-            } catch (DaoException rollbackException) {
-                logger.error(rollbackException);
-            }
-            throw new ServiceException(exception);
-        }
-        return item;
-    }
-
-    @Override
-    public List<Item> findResultOfFilterItems(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException {
+    public List<Item> findItemsOnId(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException {
         if (itemId.isEmpty()) {
             return Collections.emptyList();
         }
         itemId.sort((id1, id2) -> id2 - id1);
-        int threshold = offset + limit;
-        if (threshold > itemId.size()) {
-            threshold = itemId.size();
+        int maxItemId = offset + limit;
+        if (maxItemId > itemId.size()) {
+            maxItemId = itemId.size();
         }
         List<Item> result = new ArrayList<>();
         try {
             manager.beginTransaction(itemDao);
-            for (int i = offset; i < threshold; i++) {
-                result.add(itemDao.findEntity((long) itemId.get(i), pathForTempFiles));
+            for (int i = offset; i < maxItemId; i++) {
+                Optional<Item> item = itemDao.find((long) itemId.get(i), pathForTempFiles);
+                item.ifPresent(result::add);
             }
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {
@@ -96,15 +73,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Map<Long, Integer> findCommentCountForItem(List<Item> items) throws ServiceException {
-        Map<Long, Integer> result = new HashMap<>();
+    public Optional<Item> find(Long id, String pathForFile) throws ServiceException {
+        Optional<Item> item;
         try {
-            manager.beginTransaction(commentDao);
-            for (Item item : items) {
-                int count = commentDao.countCommentForItem(item.getItemId());
-                result.put(item.getItemId(), count);
-            }
-            manager.endTransaction(commentDao);
+            manager.beginTransaction(itemDao);
+            item = itemDao.find(id, pathForFile);
+            manager.endTransaction(itemDao);
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -113,16 +87,48 @@ public class ItemServiceImpl implements ItemService {
             }
             throw new ServiceException(exception);
         }
-        return result;
+        return item;
     }
 
     @Override
-    public Comment findCommentOnItem(long id) {
-        return null;
+    public Item create(Map<String, Object> itemParameters) throws ServiceException {
+        Item item = setParameters(itemParameters);
+        try {
+            manager.beginTransaction(itemDao, bitmapDao);
+            List<Bitmap> bitmaps = bitmapDao.findAll();
+            if (item.getPrice() == null) {
+                updateItemFilter(bitmaps, item);
+            }
+            item = itemDao.create(item);
+            for (Bitmap bitmap : bitmaps) {
+                bitmapDao.update(bitmap);
+            }
+            manager.endTransaction(itemDao);
+        } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            throw new ServiceException(exception);
+        }
+        return item;
+    }
+
+    private Item setParameters(Map<String, Object> itemParameters) {
+        Item item = new Item();
+        item.setItemName((String) itemParameters.get(ITEM_NAME_PARAMETER_NAME));
+        item.setType(((String[]) itemParameters.get(TYPE_PARAMETER_NAME))[0]);
+        item.setDescription((String) itemParameters.get(DESCRIPTION_PARAMETER_NAME));
+        String[] active = (String[]) itemParameters.get(ACTIVE_PARAMETER_NAME);
+        item.setActive(ACTIVE_PARAMETER_NAME.equals(active[0]));
+        item.setPrice(new BigDecimal((String) itemParameters.get(PRICE_PARAMETER_NAME)));
+        item.setImage(new File((String) itemParameters.get(ITEM_IMAGE_PARAMETER_NAME)));
+        return item;
     }
 
     private void updateItemFilter(List<Bitmap> bitmaps, Item item) {
-        String parameterPrice = selectOnValue(item.getCost());
+        String parameterPrice = selectOnValue(item.getPrice());
         for (Bitmap bitmap : bitmaps) {
             int[] data = bitmap.getData();
             int[] newData = new int[data.length + 1];
@@ -146,24 +152,46 @@ public class ItemServiceImpl implements ItemService {
                 }
             }
         }
-        return null;
-    }
-
-    private Item setParameters(Map<String, Object> itemParameters) {
-        Item item = new Item();
-        item.setItemName((String) itemParameters.get(ITEM_NAME_PARAMETER_NAME));
-        item.setType(((String[]) itemParameters.get(TYPE_PARAMETER_NAME))[0]);
-        item.setDescription((String) itemParameters.get(DESCRIPTION_PARAMETER_NAME));
-        String[] active = (String[]) itemParameters.get(ACTIVE_PARAMETER_NAME);
-        item.setActive(ACTIVE_PARAMETER_NAME.equals(active[0]));
-        item.setCost(new BigDecimal((String) itemParameters.get(PRICE_PARAMETER_NAME)));
-        item.setImage(new File((String) itemParameters.get(ITEM_IMAGE_PARAMETER_NAME)));
-        return item;
+        return null; // never
     }
 
     @Override
-    public Item find(Long id, String pathForFile) throws ServiceException {
-        return null;
+    public Map<Long, Integer> findCountCommentsForItem(List<Item> items) throws ServiceException {
+        Map<Long, Integer> result = new HashMap<>();
+        try {
+            manager.beginTransaction(commentDao);
+            for (Item item : items) {
+                int count = commentDao.countCommentForItem(item.getItemId());
+                result.put(item.getItemId(), count);
+            }
+            manager.endTransaction(commentDao);
+        } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            throw new ServiceException(exception);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Comment> findCommentOnItem(long id) throws ServiceException {
+        List<Comment> comment;
+        try {
+            manager.beginTransaction(itemDao);
+            comment = commentDao.findByItemId(id);
+            manager.endTransaction(itemDao);
+        } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            throw new ServiceException(exception);
+        }
+        return comment;
     }
 
     @Override

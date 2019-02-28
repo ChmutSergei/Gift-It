@@ -10,7 +10,7 @@ public enum CommandType {
     SIGNUP(new SignUpCommand()),
     LOGIN(new LoginCommand()),
     LOGOUT(new LogoutCommand()),
-    ADMIN(new AdminCommand()),
+    CREATE_ITEM(new CreateItemCommand()),
     ADD_ITEM(new AddItemCommand()),
     ACCOUNT(new AccountCommand()),
     PREVIEW_ITEM(new PreviewItemCommand()),
