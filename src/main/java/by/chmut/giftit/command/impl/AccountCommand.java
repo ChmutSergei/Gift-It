@@ -9,7 +9,7 @@ import static by.chmut.giftit.constant.PathPage.ACCOUNT_PAGE;
 
 public class AccountCommand implements Command {
     @Override
-    public Router execute(HttpServletRequest req) {
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setPagePath(ACCOUNT_PAGE);
         return router;

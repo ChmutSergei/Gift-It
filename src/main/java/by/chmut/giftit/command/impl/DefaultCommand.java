@@ -25,13 +25,13 @@ public class DefaultCommand implements Command {
     private ItemService service = ServiceFactory.getInstance().getItemService();
 
     @Override
-    public Router execute(HttpServletRequest req) {
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setPagePath(HOME_PAGE);
-        List<Integer> itemIdList = (List<Integer>) req.getSession().getAttribute(RESULT_OF_SEARCH_ITEMS_PARAMETER_NAME);
-        int limit = (int) req.getSession().getAttribute(PAGINATION_LIMIT_PARAMETER_NAME);
-        int offset = (int) req.getSession().getAttribute(PAGINATION_OFFSET_PARAMETER_NAME);
-        String pathForTempFiles = req.getServletContext().getRealPath("");
+        List<Integer> itemIdList = (List<Integer>) request.getSession().getAttribute(RESULT_OF_SEARCH_ITEMS_PARAMETER_NAME);
+        int limit = (int) request.getSession().getAttribute(PAGINATION_LIMIT_PARAMETER_NAME);
+        int offset = (int) request.getSession().getAttribute(PAGINATION_OFFSET_PARAMETER_NAME);
+        String pathForTempFiles = request.getServletContext().getRealPath("");
         List<Item> results = Collections.emptyList();
         if (itemIdList != null) {
             try {
@@ -51,12 +51,12 @@ public class DefaultCommand implements Command {
         if (!results.isEmpty()) {
             try {
                 Map<Long, Integer> countCommenstMap = service.findCountCommentsForItem(results);
-                req.getSession().setAttribute(COUNT_COMMENTS_PARAMETER_NAME, countCommenstMap);
+                request.getSession().setAttribute(COUNT_COMMENTS_PARAMETER_NAME, countCommenstMap);
             } catch (ServiceException exception) {
                 logger.error("Error when count comments for Item", exception);
             }
         }
-        req.getSession().setAttribute(RESULT_ATTRIBUTE_NAME, results);
+        request.getSession().setAttribute(RESULT_ATTRIBUTE_NAME, results);
         return router;
     }
 

@@ -3,98 +3,110 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns="http://www.w3.org/1999/xhtml" version="2.0">
     <div class="container">
-        <div id="preview" class="container">
-            <fmt:setLocale value="${sessionScope.locale}"/>
-            <fmt:setBundle basename="i18n.messages" var="i18n"/>
-            <c:if test="${not empty sessionScope.message}">
+        <fmt:setLocale value="${sessionScope.locale}"/>
+        <fmt:setBundle basename="i18n.messages" var="i18n"/>
+        <c:choose>
+            <c:when test="${not empty sessionScope.message}">
                 <c:set var="ermessage"><fmt:message key="${sessionScope.message}" bundle="${i18n}"/></c:set>
                 <div id="message" class="alert alert-danger center-block">
                     <strong>${ermessage}</strong>
                 </div>
-            </c:if>
-            <div class="row">
-                <div class="col-sm-6">
-                    <img src="${pageContext.request.contextPath}/${sessionScope.item.itemId}.jpg" class="img-responsive"
-                         style="width:80%;padding-top:20px;"
-                         alt="Image"/>
-                </div>
-                <form action="main.jspx" method="post">
-                    <div class="col-sm-6">
-                        <h2>${sessionScope.item.itemName}</h2>
-                        <br/>
-                        <h3>
-                            <fmt:setLocale value="ru-RU"/>
-                            <fmt:formatNumber value="${sessionScope.item.price}" type="currency"/><br/>
-                            <fmt:setLocale value="${sessionScope.locale}"/>
-                        </h3><br/>
-                        <h4>${sessionScope.item.description}</h4>
-                        <p><fmt:message bundle="${i18n}" key="item.preview.printmessage"/></p><br/>
-                        <div id="choosePhoto" class="container col-xs-10 col-xs-offset-1">
-                            <label for="uFile"><fmt:message bundle="${i18n}" key="additem.upload"/></label> <!--TODO не реализовано-->
-                            <input id="uFile" name="itemImage" type="file"/>
-                            <br/>
-                            <br/>
+            </c:when>
+            <c:otherwise>
+                <div id="preview" class="container">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <img src="${pageContext.request.contextPath}/${sessionScope.item.itemId}.jpg"
+                                 class="img-responsive"
+                                 style="width:80%;padding-top:20px;"
+                                 alt="Image"/>
                         </div>
-                        <br/>
-                        <div id="input_div" class="col-sm-5">
-                            <input type="button" value="-" id="moins" />
-                            <input type="text" size="2" name="countItem" value="1" id="count"/>
-                            <input type="button" value="+" id="plus" />
-                        </div>
-                        <div id="addCart" class="col-sm-7">
-                            <c:set var="submit"><fmt:message key="item.preview.submit" bundle="${i18n}"/></c:set>
-                            <input type="submit" class="btn btn-primary col-xs-12" value="${submit}"/>
-                        </div>
-                        <br/>
+                        <form action="main.jspx" method="post">
+                            <div class="col-sm-6">
+                                <h2>${sessionScope.item.itemName}</h2>
+                                <br/>
+                                <h3>
+                                    <fmt:setLocale value="ru-RU"/>
+                                    <fmt:formatNumber value="${sessionScope.item.price}" type="currency"/><br/>
+                                    <fmt:setLocale value="${sessionScope.locale}"/>
+                                </h3><br/>
+                                <h4>${sessionScope.item.description}</h4>
+                                <p><fmt:message bundle="${i18n}" key="item.preview.printmessage"/></p><br/>
+                                <div id="choosePhoto" class="container col-xs-10 col-xs-offset-1">
+                                    <label for="uFile"><fmt:message bundle="${i18n}"
+                                                                    key="additem.upload"/></label> <!--TODO не реализовано-->
+                                    <input id="uFile" name="itemImage" type="file"/>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <br/>
+                                <div id="input_div" class="col-sm-5">
+                                    <input type="button" value="-" id="moins"/>
+                                    <input type="text" size="2" name="countItem" value="1" id="count"/>
+                                    <input type="button" value="+" id="plus"/>
+                                </div>
+                                <div id="addCart" class="col-sm-7">
+                                    <c:set var="submit"><fmt:message key="item.preview.submit"
+                                                                     bundle="${i18n}"/></c:set>
+                                    <input onclick="sendItem()" type="button" class="btn btn-primary col-xs-12"
+                                           value="${submit}"/>
+                                </div>
+                                <br/>
+                            </div>
+                        </form>
                     </div>
-                </form>
-            </div>
-            <br/>
-            <div class="row col-sm-10 col-sm-offset-1">
-                <p>
-                    Цена указана за кружку с печатью вашей картинки на заказ.
-                    Дизайн кружки на заказ. Надписи. Дизайнерские картинки.
-                    Разработка дизайнерских макетов по пожеланиям клиента.
-                    Цена дизайна зависит от сложности. От 1 руб и выше. Посчитает дизайнер, когда вышлите ваши пожелания.
-                </p><br/>
-                <p>
-                    Без предоплаты розничные заказы. Заказ можно сделать через сайт или почтовый ящик.
-                    Фото можно прикрепить на сайте или выслать нам на почтовый ящик
-                </p><br/>
-                <p>
-                    Выполнение заказа от 1ч до 24ч - зависит от ваших пожеланий
-                    У нас печать на кружки высшего сорта - ультробелые. Можно мыть
-                    Срочность без доплаты. Кружка 330 мл. Материал - керамика.
-                </p><br/>
-                <p>
-                    Кружки с фотопечатью - это веселый, интересный и запоминающийся подарок.
-                    Чашку с фото можно подарить любому человеку, особенно если вы придумали оригинальный принт на кружку для человека,
-                    которому предназначен сувенир.
-                    Беля кружка с фотографией также отличный презент сотрудникам на работе, детям в школе и детском саду.
-                </p><br/>
-                <p>
-                    Если вы сами будете делать макет. Параметры максимально запечатки кружки: высота 9 см, ширина 20 см, разрешение 300 дпи.
-                    Максимальная запечатка не обязательна. </p>
-            </div>
-        </div>
-        <br/>
-        <div id="comments" class="container col-xs-8 col-xs-offset-2">
-            <h2><fmt:message key="item.preview.comments" bundle="${i18n}"/></h2>
-            <c:forEach var="comment" items="${sessionScope.comments}">
-                <div class="media">
-                    <div class="media-left">
-                        <img src="${pageContext.request.contextPath}/assests/img/img_avatar1.png" class="media-object"
-                             style="width:50px" alt="Image"/>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">${(sessionScope.users.get(comment.userId).username)}
-                            <small><i><fmt:message key="item.preview.posted"  bundle="${i18n}"/> ${comment.date}</i></small>
-                        </h4>
-                        <p>${comment.message}</p>
+                    <br/>
+                    <div class="row col-sm-10 col-sm-offset-1">
+                        <p>
+                            Цена указана за кружку с печатью вашей картинки на заказ.
+                            Дизайн кружки на заказ. Надписи. Дизайнерские картинки.
+                            Разработка дизайнерских макетов по пожеланиям клиента.
+                            Цена дизайна зависит от сложности. От 1 руб и выше. Посчитает дизайнер, когда вышлите ваши пожелания.
+                        </p><br/>
+                        <p>
+                            Без предоплаты розничные заказы. Заказ можно сделать через сайт или почтовый ящик.
+                            Фото можно прикрепить на сайте или выслать нам на почтовый ящик
+                        </p><br/>
+                        <p>
+                            Выполнение заказа от 1ч до 24ч - зависит от ваших пожеланий
+                            У нас печать на кружки высшего сорта - ультробелые. Можно мыть
+                            Срочность без доплаты. Кружка 330 мл. Материал - керамика.
+                        </p><br/>
+                        <p>
+                            Кружки с фотопечатью - это веселый, интересный и запоминающийся подарок.
+                            Чашку с фото можно подарить любому человеку, особенно если вы придумали оригинальный принт на кружку для человека,
+                            которому предназначен сувенир.
+                            Беля кружка с фотографией также отличный презент сотрудникам на работе, детям в школе и детском саду.
+                        </p><br/>
+                        <p>
+                            Если вы сами будете делать макет. Параметры максимально запечатки кружки: высота 9 см, ширина 20 см, разрешение 300 дпи.
+                            Максимальная запечатка не обязательна. </p>
                     </div>
                 </div>
-            </c:forEach>
-        </div>
+                <br/>
+                <div id="comments" class="container col-xs-8 col-xs-offset-2">
+                    <h2><fmt:message key="item.preview.comments" bundle="${i18n}"/></h2>
+                    <c:forEach var="comment" items="${sessionScope.comments}">
+                        <div class="media">
+                            <div class="media-left">
+                                <img src="${pageContext.request.contextPath}/assests/img/img_avatar1.png"
+                                     class="media-object"
+                                     style="width:50px" alt="Image"/>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">${(sessionScope.users.get(comment.userId).username)}
+                                    <small><i><fmt:message key="item.preview.posted" bundle="${i18n}"/> ${comment.date}
+                                    </i>
+                                    </small>
+                                </h4>
+                                <p>${comment.message}</p>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 
 
@@ -113,6 +125,24 @@
                 countEl.value = count;
             });
         });
+
+        function sendItem() {
+            var count = document.getElementById("count").value;
+            var command = 'ADD_TO_CART';
+            $.ajax({
+                type: 'POST',
+                data: {command: command, count: count},
+                url: contextUrl + '/ajax'
+            }).done(function (data) {
+                // if (data == 'true') {
+                location.href = contextUrl + '/controller?command=cart';
+                // }
+            }).fail(function (data) {
+                if (console &amp;&amp; console.log) {
+                    console.log("Error data:", data);
+                }
+            })
+        }
     </script>
 
 </jsp:root>

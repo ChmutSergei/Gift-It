@@ -12,10 +12,12 @@ import java.util.Optional;
 public class CartDaoImpl implements CartDao {
 
     private static final String SELECT_ALL_CARTS = "SELECT id, user_id, item_id, count FROM Carts";
+    private static final String SELECT_ALL_CARTS_ON_USER_ID = "SELECT id, user_id, item_id, count FROM Carts WHERE user_id = ?";
     private static final String SELECT_CART_BY_ID = "SELECT id, user_id, item_id, count FROM Carts WHERE id = ?";
-    private static final String DELETE_CART = "DELETE FROM Carts WHERE id=?";
+    private static final String DELETE_CART = "DELETE FROM Carts WHERE id = ?";
+    private static final String DELETE_ALL_CART_BY_USER_ID = "DELETE FROM Carts WHERE user_id = ?";
     private static final String CREATE_CART = "INSERT INTO Carts(user_id, item_id, count) VALUES(?,?,?)";
-    private static final String UPDATE_CART = "UPDATE Carts SET user_id=?, item_id=?, count=? WHERE id=?";
+    private static final String UPDATE_CART = "UPDATE Carts SET user_id=?, item_id=?, count=? WHERE id = ?";
 
     private Connection connection;
 
@@ -100,6 +102,22 @@ public class CartDaoImpl implements CartDao {
     }
 
     @Override
+    public boolean deleteAll(long userId) throws DaoException {
+        PreparedStatement statement = null;
+        int result;
+        try {
+            statement = connection.prepareStatement(DELETE_ALL_CART_BY_USER_ID);
+            statement.setLong(1, userId);
+            result = statement.executeUpdate();
+        } catch (SQLException exception) {
+            throw new DaoException("Error with delete all cart on userId", exception);
+        } finally {
+            close(statement);
+        }
+        return result > 0;
+    }
+
+    @Override
     public Cart create(Cart cart) throws DaoException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -144,5 +162,27 @@ public class CartDaoImpl implements CartDao {
             close(statement);
         }
         return cart;
+    }
+
+    @Override
+    public List<Cart> findAll(long userId) throws DaoException {
+        List<Cart> carts = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_ALL_CARTS_ON_USER_ID);
+            statement.setLong(1, userId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Cart cart = makeFromResultSet(resultSet);
+                carts.add(cart);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get all carts on userId", exception);
+        } finally {
+            close(statement);
+            close(resultSet);
+        }
+        return carts;
     }
 }

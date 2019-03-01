@@ -24,21 +24,21 @@ public class RegistrationCommand implements Command {
     private UserService service = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public Router execute(HttpServletRequest req) {
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
-        String previousPage = (String) req.getSession().getAttribute(PREVIOUS_PAGE_PARAMETER_NAME);
+        String previousPage = (String) request.getSession().getAttribute(PREVIOUS_PAGE_PARAMETER_NAME);
         router.setRedirectPath(previousPage);
-        Map<String, String> userParameters = setParametersFromRequest(req);
+        Map<String, String> userParameters = setParametersFromRequest(request);
         Optional<User> user = Optional.empty();
         try {
             user = Optional.ofNullable(service.create(userParameters));
         } catch (ServiceException exception) {
             logger.error(exception);
-            req.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
+            request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
             router.setRedirectPath(ERROR_PATH);
         }
         if (user.isPresent()) {
-            req.getSession().setAttribute(USER_PARAMETER_NAME, user.get());
+            request.getSession().setAttribute(USER_PARAMETER_NAME, user.get());
             return router;
         }
         return router;

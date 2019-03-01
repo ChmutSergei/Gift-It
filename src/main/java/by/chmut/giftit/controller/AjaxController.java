@@ -5,6 +5,8 @@ import by.chmut.giftit.dao.DaoException;
 import by.chmut.giftit.dao.DaoFactory;
 import by.chmut.giftit.dao.TransactionManager;
 import by.chmut.giftit.entity.Bitmap;
+import by.chmut.giftit.entity.Cart;
+import by.chmut.giftit.entity.Item;
 import by.chmut.giftit.entity.User;
 import by.chmut.giftit.service.ServiceException;
 import by.chmut.giftit.service.UserService;
@@ -18,17 +20,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static by.chmut.giftit.command.CommandType.PREVIEW_ITEM;
-import static by.chmut.giftit.constant.AttributeName.COMMAND_PARAMETER_NAME;
-import static by.chmut.giftit.constant.AttributeName.ITEM_ID_PARAMETER_NAME;
-import static by.chmut.giftit.constant.AttributeName.USERNAME_PARAMETER_NAME;
+import static by.chmut.giftit.constant.AttributeName.*;
 
 @WebServlet(urlPatterns = "/ajax")
 
@@ -74,7 +72,38 @@ public class AjaxController extends HttpServlet {
             case RESET_FILTER:
                 resetFilter(request, response);
                 break;
+            case ADD_TO_CART:
+                addToCart(request);
+                break;
+            case DELETE_FROM_CART:
+                deleteFromCart(request);
+                break;
         }
+    }
+
+    private void deleteFromCart(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        int cartId = Integer.parseInt(request.getParameter(CART_ID_PARAMETER_NAME));
+        session.setAttribute(CART_ID_PARAMETER_NAME, cartId);
+        session.setAttribute(CART_COMMAND_FLAG_PARAMETER_NAME, DELETE_CART_COMMAND);
+    }
+
+    private void addToCart(HttpServletRequest request) {
+        String stringCount = request.getParameter(COUNT_ITEM_PARAMETER_NAME);
+        int intCount = (stringCount != null) ? Integer.parseInt(stringCount) : 1;
+        BigDecimal count;
+        if (intCount < 1) {
+            count = BigDecimal.ONE;
+        } else if (intCount > MAX_COUNT_FOR_ITEM_TO_CART){
+            count = new BigDecimal(MAX_COUNT_FOR_ITEM_TO_CART);
+        } else {
+            count = new BigDecimal(intCount);
+        }
+        HttpSession session = request.getSession();
+        Item item = (Item) session.getAttribute(ITEM_PARAMETER_NAME);
+        session.setAttribute(ITEM_TO_ADD_PARAMETER_NAME, item);
+        session.setAttribute(COUNT_ITEM_PARAMETER_NAME, count);
+        session.setAttribute(CART_COMMAND_FLAG_PARAMETER_NAME, ADD_CART_COMMAND);
     }
 
     private void resetFilter(HttpServletRequest request, HttpServletResponse response) {
@@ -95,6 +124,6 @@ public class AjaxController extends HttpServlet {
     }
 
     private enum AjaxCommand {
-        CHECK_USERNAME, SET_ITEM_ID, SEARCH_FILTER, RESET_FILTER
+        CHECK_USERNAME, SET_ITEM_ID, SEARCH_FILTER, RESET_FILTER, ADD_TO_CART, DELETE_FROM_CART
     }
 }

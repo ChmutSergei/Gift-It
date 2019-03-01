@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static by.chmut.giftit.command.CommandType.PREVIEW_ITEM;
 import static by.chmut.giftit.command.CommandType.SIGNIN;
 import static by.chmut.giftit.command.CommandType.SIGNUP;
 import static by.chmut.giftit.constant.AttributeName.COMMAND_PARAMETER_NAME;
@@ -20,6 +21,7 @@ import static by.chmut.giftit.constant.AttributeName.USER_PARAMETER_NAME;
 public class AuthorizationFilter implements Filter {
 
     private static final String HOME_PART_PATH = "/controller?command=home";
+    private static final String SIGN_UP_PART_PATH = "/controller?command=signup";
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -27,7 +29,9 @@ public class AuthorizationFilter implements Filter {
 
     /**
      * список страниц что нужно будет закрыть -
-     *
+     * Account
+     * Cart
+     * EmptyCart
      */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -42,6 +46,10 @@ public class AuthorizationFilter implements Filter {
             res.sendRedirect(contextPath + HOME_PART_PATH);
             return;
         }
+//        if (PREVIEW_ITEM.equals(type) && (user == null)) {
+//            res.sendRedirect(contextPath + SIGN_UP_PART_PATH);
+//            return;
+//        }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

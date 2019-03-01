@@ -84,7 +84,7 @@
                     </c:if>
                     <c:if test="${not empty sessionScope.user}">
                         <c:set var="cart"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
-                        <li><a href="${pageContext.request.contextPath}/controller?command=reservation"
+                        <li><a href="${pageContext.request.contextPath}/controller?command=cart"
                                data-toggle="tooltip" title="${cart}"><span class="glyphicon glyphicon-shopping-cart"/>
                         </a>
                         </li>

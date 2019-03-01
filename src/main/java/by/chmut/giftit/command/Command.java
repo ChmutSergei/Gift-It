@@ -7,5 +7,5 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface Command {
 
-    Router execute(HttpServletRequest req);
+    Router execute(HttpServletRequest request);
 }

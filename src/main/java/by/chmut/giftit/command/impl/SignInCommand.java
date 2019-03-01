@@ -10,7 +10,7 @@ import static by.chmut.giftit.constant.PathPage.SIGNIN_PAGE;
 public class SignInCommand implements Command {
 
     @Override
-    public Router execute(HttpServletRequest req) {
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setPagePath(SIGNIN_PAGE);
         return router;

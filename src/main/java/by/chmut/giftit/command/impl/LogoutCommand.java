@@ -11,8 +11,8 @@ import static by.chmut.giftit.constant.PathPage.HOME_PATH;
 public class LogoutCommand implements Command {
 
     @Override
-    public Router execute(HttpServletRequest req) {
-        req.getSession().removeAttribute(USER_PARAMETER_NAME);
+    public Router execute(HttpServletRequest request) {
+        request.getSession().removeAttribute(USER_PARAMETER_NAME);
         Router router = new Router();
         router.setRedirectPath(HOME_PATH);
         return router;

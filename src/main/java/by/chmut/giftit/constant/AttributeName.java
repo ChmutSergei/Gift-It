@@ -56,13 +56,25 @@ public class AttributeName {
     public static final String COMMENTS_PARAMETER_NAME = "comments";
     public static final String ITEM_ID_PARAMETER_NAME = "itemId";
     public static final String USERS_PARAMETER_NAME = "users";
+    public static final String COUNT_ITEM_PARAMETER_NAME = "count";
+    public static final String TOTAL_PARAMETER_NAME = "total";
+    public static final String ITEM_TO_ADD_PARAMETER_NAME = "itemToAdd";
+    public static final String ITEMS_FOR_CART_PARAMETER_NAME = "items";
+    public static final String CART_COMMAND_FLAG_PARAMETER_NAME = "cartCommand";
+    public static final String CART_PARAMETER_NAME = "cart";
+    public static final String CART_ID_PARAMETER_NAME = "cartId";
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
     public static final String MESSAGE_NOT_FOUND_ID_KEY= "error.notFoundId";
+    public static final String MESSAGE_CART_EMPTY_KEY= "cart.emptyCart";
+
+    public static final String ADD_CART_COMMAND= "ADD_ITEM";
+    public static final String DELETE_CART_COMMAND= "DELETE_ITEM";
 
     public static final BigDecimal LOW_BORDER_PRICE = new BigDecimal(50);
     public static final BigDecimal MEDIUM_BORDER_PRICE = new BigDecimal(100);
     public static final BigDecimal HIGH_BORDER_PRICE = new BigDecimal(150);
     public static final int DEFAULT_PAGINATION_OFFSET = 0;
     public static final int DEFAULT_PAGINATION_LIMIT = 20;
+    public static final int MAX_COUNT_FOR_ITEM_TO_CART = 300;
 }

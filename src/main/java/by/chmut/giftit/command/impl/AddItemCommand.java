@@ -22,19 +22,19 @@ public class AddItemCommand implements Command {
     private ItemService service = ServiceFactory.getInstance().getItemService();
 
     @Override
-    public Router execute(HttpServletRequest req) {
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
-        if (req.getSession().getAttribute(EXCEPTION_PARAMETER_NAME) != null) {
+        if (request.getSession().getAttribute(EXCEPTION_PARAMETER_NAME) != null) {
             router.setRedirectPath(ERROR_PATH);
             return router;
         }
         router.setRedirectPath(CREATE_ITEM.name().toLowerCase());
-        Map<String, Object> itemParameters = setParametersFromRequest(req);
+        Map<String, Object> itemParameters = setParametersFromRequest(request);
         try {
             service.create(itemParameters);
         } catch (ServiceException exception) {
             logger.error("Error when create new item");
-            req.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
+            request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
             router.setRedirectPath(ERROR_PATH);
         }
         return router;

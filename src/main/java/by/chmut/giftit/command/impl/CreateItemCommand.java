@@ -10,7 +10,7 @@ import static by.chmut.giftit.constant.PathPage.ADD_ITEM_PAGE;
 public class CreateItemCommand implements Command {
 
     @Override
-    public Router execute(HttpServletRequest req) {
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setPagePath(ADD_ITEM_PAGE);
         return router;

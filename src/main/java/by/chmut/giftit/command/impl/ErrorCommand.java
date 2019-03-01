@@ -9,7 +9,7 @@ import static by.chmut.giftit.constant.PathPage.ERROR_PAGE;
 
 public class ErrorCommand implements Command {
     @Override
-    public Router execute(HttpServletRequest req) {
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setPagePath(ERROR_PAGE);
         return router;

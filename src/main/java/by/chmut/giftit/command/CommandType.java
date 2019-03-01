@@ -14,6 +14,8 @@ public enum CommandType {
     ADD_ITEM(new AddItemCommand()),
     ACCOUNT(new AccountCommand()),
     PREVIEW_ITEM(new PreviewItemCommand()),
+    CART(new CartCommand()),
+    EMPTY_CART(new EmptyCartCommand()),
     REGISTRATION(new RegistrationCommand());
 
     private Command command;
