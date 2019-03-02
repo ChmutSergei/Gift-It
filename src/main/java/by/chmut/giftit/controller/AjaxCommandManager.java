@@ -1,8 +1,15 @@
 package by.chmut.giftit.controller;
 
+import by.chmut.giftit.dao.DaoException;
+import by.chmut.giftit.dao.DaoFactory;
+import by.chmut.giftit.dao.UserDao;
 import by.chmut.giftit.entity.Bitmap;
+import by.chmut.giftit.entity.User;
+import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +19,7 @@ import static by.chmut.giftit.constant.AttributeName.*;
 
 class AjaxCommandManager {
 
+    private UserDao userDao = DaoFactory.getInstance().getUserDao();
     private Bitmap bitmapPrice;
     private List<Bitmap> checkedBitmaps = new ArrayList<>();
 
@@ -46,6 +54,24 @@ class AjaxCommandManager {
         return itemsId.size();
     }
 
+
+    void updateUserData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String newPhone = request.getParameter(PHONE_PARAMETER_NAME);
+        String newAddress = request.getParameter(ADDRESS_PARAMETER_NAME);
+        User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
+        user.setPhone(newPhone);
+        user.setAddress(newAddress);
+        try {
+            userDao.update(user);
+        } catch (DaoException exception) {
+            newPhone = "ERROR";
+        }
+        UserData data = new UserData();
+        data.phone = newPhone;
+        data.address = newAddress;
+        response.getWriter().write(new Gson().toJson(data));
+    }
+
     private List<Integer> doFilter() {
         List<Integer> result = new ArrayList<>();
         int[] resultFilter = checkedBitmaps.get(0).getData();
@@ -75,5 +101,11 @@ class AjaxCommandManager {
             result[i] = first[i] & second[i];
         }
         return result;
+    }
+
+
+    private static class UserData{
+        String phone;
+        String address;
     }
 }

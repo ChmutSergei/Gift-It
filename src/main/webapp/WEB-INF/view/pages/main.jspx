@@ -258,7 +258,6 @@
                 cursor = "#comments";
             }
             var contextUrl = '${pageContext.request.contextPath}';
-            var ref = $('#preview')[0];
             var command = 'SET_ITEM_ID';
             $.ajax({
                 type: 'POST',

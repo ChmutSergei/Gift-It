@@ -37,6 +37,7 @@ public class CartCommand implements Command {
         try {
             cartList = service.getCart(user.getUserId());
             items = service.getItemsForCart(cartList, request.getServletContext().getRealPath(""));
+            checkItemsOnActive();
         } catch (ServiceException exception) {
             logger.error("Error when try to fill the cart from database", exception);
             router.setRedirectPath(ERROR_PATH);
@@ -59,6 +60,19 @@ public class CartCommand implements Command {
             request.getSession().setAttribute(ITEMS_FOR_CART_PARAMETER_NAME, items);
         }
         return router;
+    }
+
+    private void checkItemsOnActive() {
+        for (Map.Entry entry : items.entrySet()) {
+            Item item = (Item)entry.getValue();
+            if (!item.isActive()) {
+                for (int i = 0; i < cartList.size(); i++) {
+                    if (cartList.get(i).getItemId() == item.getItemId()) {
+                        cartList.remove(i);
+                    }
+                }
+            }
+        }
     }
 
     private void processCommand(String modifyCommand, HttpServletRequest request) throws ServiceException {

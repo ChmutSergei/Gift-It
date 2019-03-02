@@ -19,6 +19,9 @@ public class ItemDaoImpl implements ItemDao {
             "ORDER BY id DESC LIMIT ? OFFSET ?";
     private static final String SELECT_ITEM_BY_ID = "SELECT id, name, type, description, active, cost, image FROM Items " +
             "WHERE id = ?";
+    private static final String SELECT_PAID_ITEMS = "SELECT i.id, i.name, i.type, i.description, i.active, " +
+            "i.cost, i.image FROM orders o join carts c on o.cart_id = c.id join items i on c.item_id = i.id " +
+            "WHERE o.status = 'PAID' AND o.user_id = ?";
     private static final String DELETE_ITEM = "DELETE FROM Items WHERE id=?";
     private static final String CREATE_ITEM = "INSERT INTO Items(name, type, description, active, cost, image) " +
             "VALUES(?,?,?,?,?,?)";
@@ -75,6 +78,28 @@ public class ItemDaoImpl implements ItemDao {
             close(statement);
         }
         return item;
+    }
+
+    @Override
+    public List<Item> findPaidItems(long userId, String filePath) throws DaoException {
+        List<Item> items = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_PAID_ITEMS);
+            statement.setLong(1, userId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Item item = makeFromResultSet(resultSet, filePath);
+                items.add(item);
+            }
+        } catch (IOException | SQLException exception) {
+            throw new DaoException("Error with get paid items", exception);
+        } finally {
+            close(resultSet);
+            close(statement);
+        }
+        return items;
     }
 
     private Item makeFromResultSet(ResultSet resultSet, String filePath) throws SQLException, IOException {

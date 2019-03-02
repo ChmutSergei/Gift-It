@@ -90,11 +90,6 @@
                     <div id="message" class="alert alert-danger col-xs-6 center-block" style="display: none">
                         <strong>${ermessage}</strong>
                     </div>
-                    <!--<div class="form-group">-->
-                    <!--<div class="col-xs-offset-3 col-xs-6">-->
-                    <!--<input id="check" type="button" class="btn btn-primary" value="Check Username"/>-->
-                    <!--</div>-->
-                    <!--</div>-->
                     <div class="form-group has-feedback">
                         <label class="control-label col-xs-3" for="inputPassword"><fmt:message bundle="${i18n}"
                                                                                                key="contact.pass"/></label>
@@ -168,7 +163,6 @@
         check.onclick = function () {
             var username = $('#login')[0].value;
             var contextUrl = '${pageContext.request.contextPath}';
-            // var form = $('#form')[0];
             var submit = $('#check2')[0];
             var command = 'CHECK_USERNAME';
             $.ajax({

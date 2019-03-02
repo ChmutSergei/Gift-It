@@ -10,4 +10,6 @@ public interface ItemDao extends Dao<Long, Item> {
     List<Item> findAll(String filePath, int limit, int offset) throws DaoException;
 
     Optional<Item> find(Long id, String filePath) throws DaoException;
+
+    List<Item> findPaidItems(long userId, String filePath) throws DaoException;
 }

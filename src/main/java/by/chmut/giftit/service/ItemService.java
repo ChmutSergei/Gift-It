@@ -22,6 +22,8 @@ public interface ItemService {
 
     List<Item> findAll(String pathForTempFiles, int limit, int offset) throws ServiceException;
 
+    List<Item> findPaidItems(long userId, String filePath) throws ServiceException;
+
     Map<Long,Integer> findCountCommentsForItem(List<Item> items) throws ServiceException;
 
     List<Comment> findCommentOnItem(long id) throws ServiceException;

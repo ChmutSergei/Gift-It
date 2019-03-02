@@ -45,8 +45,8 @@
                                     <fmt:setLocale value="ru-RU"/>
                                     <td class="col-xs-1"><fmt:formatNumber value="${cart.count * item.price}" type="currency"/></td>
                                     <fmt:setLocale value="${sessionScope.locale}"/>
-                                    <td class="col-xs-1"><span id="delete" onclick="sendCartId()"
-                                                               slot="${cart.cartId}" class="glyphicon glyphicon-trash"/></td>
+                                    <td class="col-xs-1"><span about="${cart.cartId}" onclick="sendCartId($(this))"
+                                                               class="glyphicon glyphicon-trash"/></td>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -83,8 +83,8 @@
     </c:choose>
 
     <script>
-        function sendCartId() {
-            var cartId = $('#delete').attr('slot');
+        function sendCartId(element) {
+            var cartId = $(element).attr('about');
             var command = 'DELETE_FROM_CART';
             $.ajax({
                 type: 'POST',

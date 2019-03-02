@@ -6,161 +6,463 @@
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="i18n.messages" var="i18n"/>
     <!-- message-->
-    <c:if test="${not empty sessionScope.error}">
-        <c:set var="ermessage"><fmt:message key="${sessionScope.error}" bundle="${i18n}"/></c:set>
-        <div class="alert alert-warning col-xs-6 left-arrow">
-            <strong>${ermessage}</strong>
-        </div>
-    </c:if>
-    <h3><custom:hello role="${ sessionScope.user.role }"/></h3>
-    <!-- paid order -->
-    <c:if test="${not empty sessionScope.paidOrder}">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-5 col-xs-offset-2 text-right" style="padding: 10px;">
-                    <p style="font-size: 15px"><fmt:message bundle="${i18n}" key="additem.messagepaid"/></p>
-                </div>
-                <div class="col-xs-1">
-                    <button class="btn btn-default" data-toggle="collapse" data-target="#demo"><fmt:message
-                            bundle="${i18n}" key="additem.view"/></button>
-                </div>
+    <div class="container">
+        <div class="row content">
+            <div class="col-sm-3 sidenav">
+                <h4><fmt:message key="account.sidenav" bundle="${i18n}"/></h4>
+                <ul class="nav nav-pills nav-stacked">
+                    <li id="edit"><a href="#"><fmt:message key="account.edit" bundle="${i18n}"/></a></li>
+                    <li id="story"><a href="#"><fmt:message key="account.story" bundle="${i18n}"/></a></li>
+                    <li id="comments"><a href="#"><fmt:message key="account.comments" bundle="${i18n}"/></a></li>
+                    <li id="questions"><a href="#"><fmt:message key="account.questions" bundle="${i18n}"/></a></li>
+                </ul>
             </div>
-            <div id="demo" class="collapse">
-                <div class="row col-xs-8 col-xs-offset-2 ">
+            <!-- options  -->
+            <!-- edit section  -->
+            <div class="col-sm-9 edit">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr><fmt:message key="account.personaldata" bundle="${i18n}"/></tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th><fmt:message key="account.username" bundle="${i18n}"/></th>
+                        <th>${sessionScope.user.username}</th>
+                    </tr>
+                    <tr>
+                        <th><fmt:message key="account.firstname" bundle="${i18n}"/></th>
+                        <th>${sessionScope.user.firstName}</th>
+                    </tr>
+                    <tr>
+                        <th><fmt:message key="account.lastname" bundle="${i18n}"/></th>
+                        <th>${sessionScope.user.lastName}</th>
+                    </tr>
+                    <tr>
+                        <th>E-mail</th>
+                        <th>${sessionScope.user.email}</th>
+                    </tr>
+                    <tr>
+                        <th><fmt:message key="account.address" bundle="${i18n}"/></th>
+                        <th id="addressArea">${sessionScope.user.address}</th>
+                    </tr>
+                    <tr>
+                        <th><fmt:message key="account.phone" bundle="${i18n}"/></th>
+                        <th id="phoneArea">${sessionScope.user.phone}</th>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="container">
                     <div class="row">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-xs-1">№</th>
-                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.type"/></th>
-                                <th class="col-xs-1"><fmt:message bundle="${i18n}" key="reserv.type"/></th>
-                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkin"/></th>
-                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkout"/></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach var="room" items="${paidRooms}" varStatus="status">
-                                <tr>
-                                    <td class="col-xs-1">${status.index+1}</td>
-                                    <td class="col-xs-2">${room.type}</td>
-                                    <td class="col-xs-1">${room.bedType}</td>
-                                    <td class="col-xs-2">${room.checkIn}</td>
-                                    <td class="col-xs-2">${room.checkOut}</td>
-                                </tr>
-                            </c:forEach>
-                            </tbody>
-                        </table>
+                        <div class="col-xs-5 col-xs-offset-2 text-center" style="padding: 10px;">
+                            <p style="font-size: 15px"><fmt:message bundle="${i18n}" key="account.change"/></p>
+                        </div>
+                        <div class="col-xs-1">
+                            <button class="btn btn-default" data-toggle="collapse" data-target="#change"><fmt:message
+                                    bundle="${i18n}" key="account.ch.button"/></button>
+                        </div>
+                    </div>
+                    <div id="change" class="collapse">
+                        <div class="row col-xs-8 col-xs-offset-2 ">
+                            <div class="row">
+                                <form id="form" class="form-horizontal">
+                                    <div class="form-group has-feedback">
+                                        <label class="control-label col-xs-3" for="phoneNumber"><fmt:message
+                                                bundle="${i18n}"
+                                                key="contact.phone"/></label>
+                                        <div class="col-xs-6">
+                                            <c:set var="phone"><fmt:message key="input.phone" bundle="${i18n}"/></c:set>
+                                            <c:set var="messagephone"><fmt:message key="signup.valid.phone"
+                                                                                   bundle="${i18n}"/></c:set>
+                                            <input type="tel" class="form-control" id="phoneNumber" placeholder="${phone}"
+                                                   name="phone"
+                                                   pattern="^\+375 ?(44|29|25|17|33) ?(\d ?){7}$" title="${messagephone}"
+                                                   required=""/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <label class="control-label col-xs-3" for="address"><fmt:message bundle="${i18n}"
+                                                                                                         key="contact.address"/></label>
+                                        <div class="col-xs-6">
+                                            <c:set var="address"><fmt:message key="input.address" bundle="${i18n}"/></c:set>
+                                            <c:set var="messageaddress"><fmt:message key="signup.valid.address"
+                                                                                     bundle="${i18n}"/></c:set>
+                                            <input type="text" class="form-control" id="address" placeholder="${address}"
+                                                   name="address"
+                                                   pattern="^.{10,80}$" title="${messageaddress}" required=""/>
+                                        </div>
+                                    </div>
+                                    <c:set var="ermessage"><fmt:message key="account.update" bundle="${i18n}"/></c:set>-->
+                                    <div id="message" class="alert alert-warning col-xs-6 left-arrow" style="display: none">
+                                        <strong>${ermessage}</strong>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-offset-3 col-xs-6">
+                                            <c:set var="submit"><fmt:message key="account.ch.button" bundle="${i18n}"/></c:set>
+                                            <c:set var="reset"> <fmt:message key="contact.reset" bundle="${i18n}"/> </c:set>
+                                            <input id="check" type="button" class="btn btn-primary" value="${submit}"/>
+                                            <input type="reset" class="btn btn-default"
+                                                   value="${reset}"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </c:if>
 
-    <c:if test="${not empty warning}">
-        <div class="container">
-            <div class="alert alert-warning col-xs-6 left-arrow">
-                <strong><fmt:message key="reserv.warning" bundle="${i18n}"/></strong>
-                <a href="${pageContext.request.contextPath}/frontController?commandName=payment"><fmt:message
-                        bundle="${i18n}" key="reserv.payorder"/></a>
-            </div>
-        </div>
-    </c:if>
-    <c:choose>
-        <c:when test="${not empty emptyMsg}">
-            <div class="container" style="height: 800px">
-                <div class="alert alert-warning col-xs-6 left-arrow">
-                    <strong><fmt:message key="${emptyMsg}" bundle="${i18n}"/></strong>
-                    <a href="${pageContext.request.contextPath}/frontController?commandName=search"><fmt:message
-                            bundle="${i18n}" key="reserv.search"/></a>
-                </div>
-            </div>
-        </c:when>
-
-        <c:otherwise>
-            <div class="container">
-                <div class="text-left">
-                    <h2><fmt:message bundle="${i18n}" key="reserv.reservation"/></h2>
-                    <p><fmt:message bundle="${i18n}" key="reserv.messedit"/></p>
-                </div>
-                <div class="row col-xs-10 col-xs-offset-1 ">
-                    <div class="row">
-                        <table class="table table-hover">
-                            <thead>
+            <!-- story section  -->
+            <div class="col-sm-9 story">
+                <h3><fmt:message key="account.storyi" bundle="${i18n}"/></h3>
+                <div class="row text-center">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="col-xs-2"><fmt:message bundle="${i18n}" key="cart.foto"/></th>
+                            <th class="col-xs-1"><fmt:message bundle="${i18n}" key="cart.name"/></th>
+                            <th class="col-xs-2"><fmt:message bundle="${i18n}" key="cart.description"/></th>
+                            <th class="col-xs-1"><fmt:message bundle="${i18n}" key="account.instock"/></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="item" items="${sessionScope.items}" varStatus="status">
                             <tr>
-                                <th class="col-xs-1">№</th>
-                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.type"/></th>
-                                <th class="col-xs-1"><span class="glyphicon glyphicon-bed"></span></th>
-                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkin"/></th>
-                                <th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkout"/></th>
-                                <th class="col-xs-1"><fmt:message bundle="${i18n}" key="reserv.price"/></th>
-                                <th class="col-xs-2"></th>
-                                <th class="col-xs-1"></th>
+                                <td class="col-xs-2">
+                                    <img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
+                                         name="${item.itemId}" onclick="sendItemId($(this))" class="img-responsive"
+                                         style="width:60px;" alt="Image"/></td>
+                                <td class="col-xs-1">${item.itemName}</td>
+                                <td class="col-xs-2">${item.description}</td>
+                                <td class="col-xs-1">${item.active}</td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach var="room" items="${tempRooms}" varStatus="status">
-                                <tr>
-                                    <td class="col-xs-1">${status.index+1}</td>
-                                    <td class="col-xs-2">${room.type}</td>
-                                    <td class="col-xs-1">${room.bedType}</td>
-                                    <td class="col-xs-2">${room.checkIn}</td>
-                                    <td class="col-xs-2">${room.checkOut}</td>
-                                    <td class="col-xs-1">${room.price/100}</td>
-                                    <td class="col-xs-2"><a href="#" class="btn bg-info"><fmt:message
-                                            bundle="${i18n}" key="reserv.about"/></a></td>
-                                    <td class="col-xs-1"><a id="${room.temporaryNumber}"
-                                                            href="${pageContext.request.contextPath}/frontController?commandName=reservation&amp;delete=room"
-                                                            class="delete"><fmt:message bundle="${i18n}"
-                                                                                        key="reserv.delete"/></a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th></th>
-                                <th colspan="3"><fmt:message bundle="${i18n}" key="reserv.payment"/></th>
-                                <th></th>
-                                <th>${sessionScope.totalSum/100}</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-                <br/>
-                <br/>
-                <br/>
-                <div class="row col-xs-7 col-xs-offset-3">
-                        <span class="info"><fmt:message bundle="${i18n}" key="reserv.agree"/><a href="#"><fmt:message
-                                bundle="${i18n}" key="reserv.rule"/></a><fmt:message bundle="${i18n}"
-                                                                                     key="reserv.ready"/></span>
-                    <a class="btn bg-primary"
-                       href="${pageContext.request.contextPath}/frontController?commandName=payment"><fmt:message
-                            bundle="${i18n}" key="reserv.pay"/></a>
+                        </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </c:otherwise>
-    </c:choose>
 
+
+            <!-- comments section  -->
+            <div class="col-sm-9 comments">
+                <h1>Comment</h1>
+            </div>
+
+            <!-- questions section  -->
+            <div class="col-sm-9 questions">
+                <h1>Question</h1>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <!--<c:if test="${not empty sessionScope.error}">-->
+    <!--<c:set var="ermessage"><fmt:message key="${sessionScope.error}" bundle="${i18n}"/></c:set>-->
+    <!--<div class="alert alert-warning col-xs-6 left-arrow">-->
+    <!--<strong>${ermessage}</strong>-->
     <!--</div>-->
+    <!--</c:if>-->
+    <!--<h3><custom:hello role="${ sessionScope.user.role }"/></h3>-->
+    <!--&lt;!&ndash; paid order &ndash;&gt;-->
+    <!--<c:if test="${not empty sessionScope.paidOrder}">-->
+    <!--<div class="container">-->
+    <!--<div class="row">-->
+    <!--<div class="col-xs-5 col-xs-offset-2 text-right" style="padding: 10px;">-->
+    <!--<p style="font-size: 15px"><fmt:message bundle="${i18n}" key="additem.messagepaid"/></p>-->
+    <!--</div>-->
+    <!--<div class="col-xs-1">-->
+    <!--<button class="btn btn-default" data-toggle="collapse" data-target="#demo"><fmt:message-->
+    <!--bundle="${i18n}" key="additem.view"/></button>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div id="demo" class="collapse">-->
+    <!--<div class="row col-xs-8 col-xs-offset-2 ">-->
+    <!--<div class="row">-->
+    <!--<table class="table table-hover">-->
+    <!--<thead>-->
+    <!--<tr>-->
+    <!--<th class="col-xs-1">№</th>-->
+    <!--<th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.type"/></th>-->
+    <!--<th class="col-xs-1"><fmt:message bundle="${i18n}" key="reserv.type"/></th>-->
+    <!--<th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkin"/></th>-->
+    <!--<th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkout"/></th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--<tbody>-->
+    <!--<c:forEach var="room" items="${paidRooms}" varStatus="status">-->
+    <!--<tr>-->
+    <!--<td class="col-xs-1">${status.index+1}</td>-->
+    <!--<td class="col-xs-2">${room.type}</td>-->
+    <!--<td class="col-xs-1">${room.bedType}</td>-->
+    <!--<td class="col-xs-2">${room.checkIn}</td>-->
+    <!--<td class="col-xs-2">${room.checkOut}</td>-->
+    <!--</tr>-->
+    <!--</c:forEach>-->
+    <!--</tbody>-->
+    <!--</table>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</c:if>-->
+
+    <!--<c:if test="${not empty warning}">-->
+    <!--<div class="container">-->
+    <!--<div class="alert alert-warning col-xs-6 left-arrow">-->
+    <!--<strong><fmt:message key="reserv.warning" bundle="${i18n}"/></strong>-->
+    <!--<a href="${pageContext.request.contextPath}/frontController?commandName=payment"><fmt:message-->
+    <!--bundle="${i18n}" key="reserv.payorder"/></a>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</c:if>-->
+    <!--<c:choose>-->
+    <!--<c:when test="${not empty emptyMsg}">-->
+    <!--<div class="container" style="height: 800px">-->
+    <!--<div class="alert alert-warning col-xs-6 left-arrow">-->
+    <!--<strong><fmt:message key="${emptyMsg}" bundle="${i18n}"/></strong>-->
+    <!--<a href="${pageContext.request.contextPath}/frontController?commandName=search"><fmt:message-->
+    <!--bundle="${i18n}" key="reserv.search"/></a>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</c:when>-->
+
+    <!--<c:otherwise>-->
+    <!--<div class="container">-->
+    <!--<div class="text-left">-->
+    <!--<h2><fmt:message bundle="${i18n}" key="reserv.reservation"/></h2>-->
+    <!--<p><fmt:message bundle="${i18n}" key="reserv.messedit"/></p>-->
+    <!--</div>-->
+    <!--<div class="row col-xs-10 col-xs-offset-1 ">-->
+    <!--<div class="row">-->
+    <!--<table class="table table-hover">-->
+    <!--<thead>-->
+    <!--<tr>-->
+    <!--<th class="col-xs-1">№</th>-->
+    <!--<th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.type"/></th>-->
+    <!--<th class="col-xs-1"><span class="glyphicon glyphicon-bed"></span></th>-->
+    <!--<th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkin"/></th>-->
+    <!--<th class="col-xs-2"><fmt:message bundle="${i18n}" key="reserv.checkout"/></th>-->
+    <!--<th class="col-xs-1"><fmt:message bundle="${i18n}" key="reserv.price"/></th>-->
+    <!--<th class="col-xs-2"></th>-->
+    <!--<th class="col-xs-1"></th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--<tbody>-->
+    <!--<c:forEach var="room" items="${tempRooms}" varStatus="status">-->
+    <!--<tr>-->
+    <!--<td class="col-xs-1">${status.index+1}</td>-->
+    <!--<td class="col-xs-2">${room.type}</td>-->
+    <!--<td class="col-xs-1">${room.bedType}</td>-->
+    <!--<td class="col-xs-2">${room.checkIn}</td>-->
+    <!--<td class="col-xs-2">${room.checkOut}</td>-->
+    <!--<td class="col-xs-1">${room.price/100}</td>-->
+    <!--<td class="col-xs-2"><a href="#" class="btn bg-info"><fmt:message-->
+    <!--bundle="${i18n}" key="reserv.about"/></a></td>-->
+    <!--<td class="col-xs-1"><a id="${room.temporaryNumber}"-->
+    <!--href="${pageContext.request.contextPath}/frontController?commandName=reservation&amp;delete=room"-->
+    <!--class="delete"><fmt:message bundle="${i18n}"-->
+    <!--key="reserv.delete"/></a>-->
+    <!--</td>-->
+    <!--</tr>-->
+    <!--</c:forEach>-->
+    <!--</tbody>-->
+    <!--<tfoot>-->
+    <!--<tr>-->
+    <!--<th></th>-->
+    <!--<th colspan="3"><fmt:message bundle="${i18n}" key="reserv.payment"/></th>-->
+    <!--<th></th>-->
+    <!--<th>${sessionScope.totalSum/100}</th>-->
+    <!--<th></th>-->
+    <!--<th></th>-->
+    <!--</tr>-->
+    <!--</tfoot>-->
+    <!--</table>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<br/>-->
+    <!--<br/>-->
+    <!--<br/>-->
+    <!--<div class="row col-xs-7 col-xs-offset-3">-->
+    <!--<span class="info"><fmt:message bundle="${i18n}" key="reserv.agree"/><a href="#"><fmt:message-->
+    <!--bundle="${i18n}" key="reserv.rule"/></a><fmt:message bundle="${i18n}"-->
+    <!--key="reserv.ready"/></span>-->
+    <!--<a class="btn bg-primary"-->
+    <!--href="${pageContext.request.contextPath}/frontController?commandName=payment"><fmt:message-->
+    <!--bundle="${i18n}" key="reserv.pay"/></a>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</c:otherwise>-->
+    <!--</c:choose>-->
+
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
     <script>
+
         $(document).ready(function () {
-            $('.delete').click(function () {
-                addRoomId($(this));
+            eOpen();
+            sClose();
+            cClose();
+            qClose();
+            eAdd();
+            $('#edit').click(function () {
+                eOpen();
+                sClose();
+                cClose();
+                qClose();
+                eAdd();
+                sRem();
+                cRem();
+                qRem();
+            });
+            $('#story').click(function () {
+                eClose();
+                sOpen();
+                cClose();
+                qClose();
+                eRem();
+                sAdd();
+                cRem();
+                qRem();
+            });
+            $('#comments').click(function () {
+                eClose();
+                sClose();
+                cOpen();
+                qClose();
+                eRem();
+                sRem();
+                cAdd();
+                qRem();
+            });
+            $('#questions').click(function () {
+                eClose();
+                sClose();
+                cClose();
+                qOpen();
+                eRem();
+                sRem();
+                cRem();
+                qAdd();
             });
         });
 
-        function addRoomId(element) {
-            var tempNumber = $(element).attr('id');
-            var contextUrl = '${pageContext.request.contextPath}';
-            $.ajax({
-                type: 'post',
-                url: contextUrl + '/controller',
-                data: {commandName: 'setUniqueNumber', tempNumber: tempNumber}
-            });
+        function eAdd() {
+            $('#edit').addClass('active');
         }
+
+        function eRem() {
+            $('#edit').removeClass('active');
+        }
+
+        function sAdd() {
+            $('#story').addClass('active');
+        }
+
+        function sRem() {
+            $('#story').removeClass('active');
+        }
+
+        function cAdd() {
+            $('#comments').addClass('active');
+        }
+
+        function cRem() {
+            $('#comments').removeClass('active');
+        }
+
+        function qAdd() {
+            $('#questions').addClass('active');
+        }
+
+        function qRem() {
+            $('#questions').removeClass('active');
+        }
+
+        check.onclick = function () {
+            var form = $('#form')[0];
+            if (form.checkValidity()) {
+                var phone = $('#phoneNumber')[0].value;
+                var address = $('#address')[0].value;
+                var contextUrl = '${pageContext.request.contextPath}';
+                var command = 'UPDATE_USER_ADDRESS_PHONE';
+                $.ajax({
+                    type: 'POST',
+                    data: {command: command, address: address, phone: phone},
+                    url: contextUrl + '/ajax'
+                }).done(function (data) {
+                    var resp = JSON.parse(data);
+                    if (resp.phone != 'ERROR') {
+                        var newPhone = resp.phone;
+                        var newAddress = resp.address;
+                        $('#phoneArea').text(newPhone);
+                        $('#addressArea').text(newAddress);
+                    } else {
+                        $('#message')[0].style.display = "block";
+                    }
+                }).fail(function (data) {
+                    if (console &amp;&amp; console.log) {
+                        console.log("Error data:", data);
+                    }
+                })
+
+            } else {
+                form.reportValidity();
+            }
+        };
+        $('body').click( function (){
+            $('#message')[0].style.display="none";
+        });
+        function eClose() {
+            $('.edit')[0].style.display = "none";
+        }
+
+        function eOpen() {
+            $('.edit')[0].style.display = "block";
+        }
+
+        function sClose() {
+            $('.story')[0].style.display = "none";
+        }
+
+        function sOpen() {
+            $('.story')[0].style.display = "block";
+        }
+
+        function cClose() {
+            $('.comments')[0].style.display = "none";
+        }
+
+        function cOpen() {
+            $('.comments')[0].style.display = "block";
+        }
+
+        function qClose() {
+            $('.questions')[0].style.display = "none";
+        }
+
+        function qOpen() {
+            $('.questions')[0].style.display = "block";
+        }
+        function sendItemId(element) {
+            var itemId = $(element).attr('name');
+            var contextUrl = '${pageContext.request.contextPath}';
+            var command = 'SET_ITEM_ID';
+            $.ajax({
+                type: 'POST',
+                data: {command: command, itemId: itemId},
+                url: contextUrl + '/ajax'
+            }).done(function (data) {
+                if (data == 'true') {
+                    location.href = contextUrl + '/controller?command=preview_item';
+                }
+            }).fail(function (data) {
+                if (console &amp;&amp; console.log) {
+                    console.log("Error data:", data);
+                }
+            })
+        }
+
     </script>
+
 </jsp:root>

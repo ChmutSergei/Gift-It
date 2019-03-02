@@ -73,6 +73,19 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<Item> findPaidItems(long userId, String filePath) throws ServiceException {
+        List<Item> items;
+        try {
+            manager.beginTransaction(itemDao);
+            items = itemDao.findPaidItems(userId, filePath);
+            manager.endTransaction(itemDao);
+        } catch (DaoException exception) {
+            throw new ServiceException(exception);
+        }
+        return items;
+    }
+
+    @Override
     public Optional<Item> find(Long id, String pathForFile) throws ServiceException {
         Optional<Item> item;
         try {

@@ -78,7 +78,14 @@ public class AjaxController extends HttpServlet {
             case DELETE_FROM_CART:
                 deleteFromCart(request);
                 break;
+            case UPDATE_USER_ADDRESS_PHONE:
+                commandManager.updateUserData(request,response);
+                break;
         }
+    }
+
+    private void updateUserData(HttpServletRequest request, HttpServletResponse response) {
+
     }
 
     private void deleteFromCart(HttpServletRequest request) {
@@ -124,6 +131,6 @@ public class AjaxController extends HttpServlet {
     }
 
     private enum AjaxCommand {
-        CHECK_USERNAME, SET_ITEM_ID, SEARCH_FILTER, RESET_FILTER, ADD_TO_CART, DELETE_FROM_CART
+        CHECK_USERNAME, SET_ITEM_ID, SEARCH_FILTER, RESET_FILTER, ADD_TO_CART, DELETE_FROM_CART, UPDATE_USER_ADDRESS_PHONE
     }
 }
