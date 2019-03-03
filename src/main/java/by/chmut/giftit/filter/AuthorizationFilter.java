@@ -32,6 +32,7 @@ public class AuthorizationFilter implements Filter {
      * Account
      * Cart
      * EmptyCart
+     * Administration
      */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

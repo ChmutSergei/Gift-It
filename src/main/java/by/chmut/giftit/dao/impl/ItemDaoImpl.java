@@ -19,9 +19,11 @@ public class ItemDaoImpl implements ItemDao {
             "ORDER BY id DESC LIMIT ? OFFSET ?";
     private static final String SELECT_ITEM_BY_ID = "SELECT id, name, type, description, active, cost, image FROM Items " +
             "WHERE id = ?";
+    private static final String SELECT_ITEM_BY_COMMENT_ID = "SELECT i.id, i.name FROM Items i " +
+            "JOIN Comments c on i.id = c.item_id WHERE c.id = ?";
     private static final String SELECT_PAID_ITEMS = "SELECT i.id, i.name, i.type, i.description, i.active, " +
             "i.cost, i.image FROM orders o join carts c on o.cart_id = c.id join items i on c.item_id = i.id " +
-            "WHERE o.status = 'PAID' AND o.user_id = ?";
+            "WHERE (o.status = 'PAID' OR o.status = 'DONE') AND o.user_id = ?";  //TODO
     private static final String DELETE_ITEM = "DELETE FROM Items WHERE id=?";
     private static final String CREATE_ITEM = "INSERT INTO Items(name, type, description, active, cost, image) " +
             "VALUES(?,?,?,?,?,?)";
@@ -61,7 +63,7 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public Optional<Item> find(Long id, String filePath) throws DaoException {
-        Optional<Item> item = Optional.empty();
+        Optional<Item> item = Optional.empty();//TODO
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -100,6 +102,30 @@ public class ItemDaoImpl implements ItemDao {
             close(statement);
         }
         return items;
+    }
+
+    @Override
+    public Optional<Item> find(long commentId) throws DaoException {
+        Optional<Item> item = Optional.empty();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_ITEM_BY_COMMENT_ID);
+            statement.setLong(1, commentId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Item optinalItem = new Item();
+                optinalItem.setItemId(resultSet.getLong(1));
+                optinalItem.setItemName(resultSet.getString(2));
+                item = Optional.of(optinalItem);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get item by id", exception);
+        } finally {
+            close(resultSet);
+            close(statement);
+        }
+        return item;
     }
 
     private Item makeFromResultSet(ResultSet resultSet, String filePath) throws SQLException, IOException {

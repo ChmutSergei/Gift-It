@@ -92,6 +92,9 @@ public class CartCommand implements Command {
                 Optional<Cart> cartToRemove = service.findCart(cartId);
                 cartToRemove.ifPresent(cart -> cartList.remove(cart));
                 service.delete(cartId);
+                BigDecimal countItemsInCart = (BigDecimal) request.getSession().getAttribute(COUNT_IN_CART_PARAMETER_NAME);
+                countItemsInCart = countItemsInCart.subtract(cartToRemove.get().getCount());
+                request.getSession().setAttribute(COUNT_IN_CART_PARAMETER_NAME, countItemsInCart);
                 request.getSession().removeAttribute(CART_ID_PARAMETER_NAME);
                 request.getSession().removeAttribute(CART_COMMAND_FLAG_PARAMETER_NAME);
                 break;

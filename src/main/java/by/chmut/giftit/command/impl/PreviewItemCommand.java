@@ -60,7 +60,7 @@ public class PreviewItemCommand implements Command {
         Map<Long, User> usersForComments = new HashMap<>();
         for (Comment comment : comments) {
             Optional<User> optionalUser = userService.find(comment.getUserId());
-            optionalUser.ifPresent(user -> usersForComments.put(optionalUser.get().getUserId(), user));
+            optionalUser.ifPresent(user -> usersForComments.put(user.getUserId(), user));
         }
         request.getSession().setAttribute(USERS_PARAMETER_NAME, usersForComments);
     }

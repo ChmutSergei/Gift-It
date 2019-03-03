@@ -81,6 +81,11 @@ public class AjaxController extends HttpServlet {
             case UPDATE_USER_ADDRESS_PHONE:
                 commandManager.updateUserData(request,response);
                 break;
+            case DELETE_COMMENT:
+                commandManager.deleteComment(request,response);
+                break;
+            case ADD_COMMENT:
+                commandManager.addComment(request, response);
         }
     }
 
@@ -107,9 +112,12 @@ public class AjaxController extends HttpServlet {
             count = new BigDecimal(intCount);
         }
         HttpSession session = request.getSession();
+        BigDecimal countInCart = (BigDecimal) session.getAttribute(COUNT_IN_CART_PARAMETER_NAME);
+        countInCart = countInCart.add(count);
         Item item = (Item) session.getAttribute(ITEM_PARAMETER_NAME);
         session.setAttribute(ITEM_TO_ADD_PARAMETER_NAME, item);
         session.setAttribute(COUNT_ITEM_PARAMETER_NAME, count);
+        session.setAttribute(COUNT_IN_CART_PARAMETER_NAME, countInCart);
         session.setAttribute(CART_COMMAND_FLAG_PARAMETER_NAME, ADD_CART_COMMAND);
     }
 
@@ -131,6 +139,7 @@ public class AjaxController extends HttpServlet {
     }
 
     private enum AjaxCommand {
-        CHECK_USERNAME, SET_ITEM_ID, SEARCH_FILTER, RESET_FILTER, ADD_TO_CART, DELETE_FROM_CART, UPDATE_USER_ADDRESS_PHONE
+        CHECK_USERNAME, SET_ITEM_ID, SEARCH_FILTER, RESET_FILTER, ADD_TO_CART, DELETE_FROM_CART, UPDATE_USER_ADDRESS_PHONE,
+        DELETE_COMMENT, ADD_COMMENT
     }
 }

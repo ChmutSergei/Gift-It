@@ -80,6 +80,11 @@ public class ItemServiceImpl implements ItemService {
             items = itemDao.findPaidItems(userId, filePath);
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
         return items;
@@ -205,6 +210,27 @@ public class ItemServiceImpl implements ItemService {
             throw new ServiceException(exception);
         }
         return comment;
+    }
+
+    @Override
+    public List<Item> find(List<Comment> comments) throws ServiceException {
+        List<Item> items = new ArrayList<>();
+        try {
+            manager.beginTransaction(itemDao);
+            for (Comment comment:comments) {
+                Optional<Item> item = itemDao.find(comment.getCommentId());
+                item.ifPresent(items::add);
+            }
+            manager.endTransaction(itemDao);
+        } catch (DaoException e) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            throw new ServiceException(e);
+        }
+        return items;
     }
 
     @Override

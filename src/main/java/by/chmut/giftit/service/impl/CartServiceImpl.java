@@ -30,6 +30,11 @@ public class CartServiceImpl implements CartService {
             carts = cartDao.findAll(userId);
             manager.endTransaction(cartDao);
         } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
         return carts;
@@ -43,6 +48,11 @@ public class CartServiceImpl implements CartService {
             cart = cartDao.findEntity(cartId);
             manager.endTransaction(cartDao);
         } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
         return cart;
@@ -59,6 +69,11 @@ public class CartServiceImpl implements CartService {
             }
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
         return items;
@@ -90,6 +105,11 @@ public class CartServiceImpl implements CartService {
             result = cartDao.delete(cartId);
             manager.endTransaction(cartDao);
         } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
             throw new ServiceException(exception);
         }
         return result;

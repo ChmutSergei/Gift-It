@@ -12,4 +12,6 @@ public interface ItemDao extends Dao<Long, Item> {
     Optional<Item> find(Long id, String filePath) throws DaoException;
 
     List<Item> findPaidItems(long userId, String filePath) throws DaoException;
+
+    Optional<Item> find(long commentId) throws DaoException;
 }

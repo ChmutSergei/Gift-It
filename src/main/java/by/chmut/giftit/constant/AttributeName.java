@@ -57,12 +57,17 @@ public class AttributeName {
     public static final String ITEM_ID_PARAMETER_NAME = "itemId";
     public static final String USERS_PARAMETER_NAME = "users";
     public static final String COUNT_ITEM_PARAMETER_NAME = "count";
+    public static final String COUNT_IN_CART_PARAMETER_NAME = "countInCart";
     public static final String TOTAL_PARAMETER_NAME = "total";
     public static final String ITEM_TO_ADD_PARAMETER_NAME = "itemToAdd";
     public static final String ITEMS_FOR_CART_PARAMETER_NAME = "items";
+    public static final String PAID_ITEMS_PARAMETER_NAME = "paidItems";
     public static final String CART_COMMAND_FLAG_PARAMETER_NAME = "cartCommand";
     public static final String CART_PARAMETER_NAME = "cart";
     public static final String CART_ID_PARAMETER_NAME = "cartId";
+    public static final String COMMENT_ID_PARAMETER_NAME = "commentId";
+    public static final String COMMENT_PARAMETER_NAME = "comment";
+    public static final String QUESTIONS_PARAMETER_NAME = "questions";
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
     public static final String MESSAGE_NOT_FOUND_ID_KEY= "error.notFoundId";

@@ -40,7 +40,9 @@
                                              class="img-responsive" style="width:60px;" alt="Image"/></td>
                                     <td class="col-xs-1">${item.itemName}</td>
                                     <td class="col-xs-2">${item.description}</td>
-                                    <td class="col-xs-1">${item.price}</td>
+                                    <fmt:setLocale value="ru-RU"/>
+                                    <td class="col-xs-1"><fmt:formatNumber value="${item.price}" type="currency"/></td>
+                                    <fmt:setLocale value="${sessionScope.locale}"/>
                                     <td class="col-xs-1">${cart.count}</td>
                                     <fmt:setLocale value="ru-RU"/>
                                     <td class="col-xs-1"><fmt:formatNumber value="${cart.count * item.price}" type="currency"/></td>

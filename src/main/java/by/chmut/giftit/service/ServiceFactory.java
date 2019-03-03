@@ -1,8 +1,6 @@
 package by.chmut.giftit.service;
 
-import by.chmut.giftit.service.impl.CartServiceImpl;
-import by.chmut.giftit.service.impl.ItemServiceImpl;
-import by.chmut.giftit.service.impl.UserServiceImpl;
+import by.chmut.giftit.service.impl.*;
 
 public class ServiceFactory {
 
@@ -11,6 +9,8 @@ public class ServiceFactory {
     private final ItemService itemService = new ItemServiceImpl();
     private final UserService userService = new UserServiceImpl();
     private final CartService cartService = new CartServiceImpl();
+    private final CommentService commentService = new CommentServiceImpl();
+    private final QuestionService questionService = new QuestionServiceImpl();
 
     private ServiceFactory() {
     }
@@ -29,5 +29,13 @@ public class ServiceFactory {
 
     public CartService getCartService() {
         return cartService;
+    }
+
+    public CommentService getCommentService() {
+        return commentService;
+    }
+
+    public QuestionService getQuestionService() {
+        return questionService;
     }
 }

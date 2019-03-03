@@ -3,9 +3,29 @@
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
           version="2.0">
     <div id="hello" class="jumbotron">
-        <div class="container text-center">
-            <img id="logo" src="${pageContext.request.contextPath}/assests/img/logo_giftItmin.jpg"
-                 class="img-logo" style="width:30%" alt="Image"/>
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-xs-4 col-xs-offset-4">
+                    <img id="logo" src="${pageContext.request.contextPath}/assests/img/logo_giftItmin.jpg"
+                         class="img-logo" style="width:100%" alt="Image"/>
+                </div>
+                <c:if test="${not empty sessionScope.user}">
+                <div class="col-xs-2 col-xs-offset-2 align-bottom">
+                    <div class="row">
+                        <p id="userhi" style="font-size: 25px;color: lightseagreen; margin-bottom: unset" class="text"><fmt:message key="nav.hello"
+                                                                 bundle="${i18n}"/>, ${sessionScope.user.firstName}!</p>
+                    </div><!-- TODO  make user Tag-->
+                    <div class="row"><p style="color: blue;font-size: 20px;margin-bottom: unset">${sessionScope.user.role}</p></div>
+                    <div class="row"><c:set var="cart"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
+                            <a href="${pageContext.request.contextPath}/controller?command=cart"
+                               data-toggle="tooltip" title="${cart}">
+                                <span class="glyphicon glyphicon-shopping-cart" style="font-size: 50px;color: black"/>
+                                <span style="color: crimson">${sessionScope.countInCart}</span>
+                            </a>
+                    </div>
+                </div>
+                </c:if>
+            </div>
         </div>
     </div>
     <nav class="navbar navbar-inverse" style="margin-bottom: 0;">
@@ -32,8 +52,7 @@
                             </li>
                         </c:otherwise>
                     </c:choose>
-                    <c:set var="condition" value='${"admin".equalsIgnoreCase(sessionScope.admin)}'/>
-                    <c:if test="${condition}">
+                    <c:if test="${sessionScope.user.role eq 'ADMIN'}">
                         <c:set var="navName">
                             <fmt:message key="nav.admin" bundle="${i18n}"/>
                         </c:set>
@@ -51,6 +70,13 @@
                 </ul>
                 <c:url var="path" value="/controller?command=${sessionScope.title}"/>
                 <ul id="rightbar" class="nav navbar-nav navbar-right">
+                    <c:if test="${not empty sessionScope.user}">
+                        <li>
+                            <a href="${pageContext.request.contextPath}/controller?command=account">
+                                <fmt:message key="nav.account" bundle="${i18n}"/>
+                            </a>
+                        </li>
+                    </c:if>
                     <c:choose>
                         <c:when test="${sessionScope.locale eq 'ru'}">
                             <li class="active"><a href="#">
@@ -83,26 +109,15 @@
                         </li>
                     </c:if>
                     <c:if test="${not empty sessionScope.user}">
-                        <c:set var="cart"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
-                        <li><a href="${pageContext.request.contextPath}/controller?command=cart"
-                               data-toggle="tooltip" title="${cart}"><span class="glyphicon glyphicon-shopping-cart"/>
-                        </a>
-                        </li>
-                        <li><p id="userhi" class="text"><fmt:message key="nav.hello"
-                                                                     bundle="${i18n}"/>, ${sessionScope.user.firstName}!
-                        </p>
-                        </li>
-                    </c:if>
-                    <c:if test="${not empty sessionScope.user}">
-                        <li><a href="${pageContext.request.contextPath}/controller?command=logout"><span
-                                class="glyphicon glyphicon-user"/>
-                            <fmt:message key="nav.signout" bundle="${i18n}"/>
-                        </a>
+                        <li>
+                            <a style="margin-right: 5px;" href="${pageContext.request.contextPath}/controller?command=logout"><span
+                                    class="glyphicon glyphicon-log-out"/><fmt:message key="nav.signout" bundle="${i18n}"/>
+                            </a>
                         </li>
                     </c:if>
                     <c:if test="${empty sessionScope.user}">
                         <li>
-                            <a href="${pageContext.request.contextPath}/controller?command=signin"><span
+                            <a style="margin-right: 5px;" href="${pageContext.request.contextPath}/controller?command=signin"><span
                                     class="glyphicon glyphicon-log-in"/>
                                 <fmt:message key="nav.signin" bundle="${i18n}"/>
                             </a>
@@ -116,6 +131,7 @@
         $(document).ready(function () {
             var menu = $('.navbar-inverse');
             var origOffsetY = menu.offset().top;
+
             function scroll() {
                 if ($(window).scrollTop() >= origOffsetY) {
                     $(menu).addClass('navbar-fixed-top');
@@ -123,6 +139,7 @@
                     $(menu).removeClass('navbar-fixed-top');
                 }
             }
+
             document.onscroll = scroll;
         });
     </script>

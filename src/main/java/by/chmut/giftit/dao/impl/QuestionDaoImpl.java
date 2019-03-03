@@ -15,6 +15,8 @@ public class QuestionDaoImpl implements QuestionDao {
             "request_date, response_date FROM Questions";
     private static final String SELECT_QUESTION_BY_ID = "SELECT id, user_id, request, response, " +
             "request_date, response_date FROM Questions WHERE id = ?";
+    private static final String SELECT_QUESTION_BY_USER_ID = "SELECT id, user_id, request, response," +
+            " request_date, response_date FROM Questions WHERE user_id = ?";
     private static final String DELETE_QUESTION = "DELETE FROM Questions WHERE id=?";
     private static final String CREATE_QUESTION = "INSERT INTO Questions(user_id, request, response, " +
             "request_date, response_date) VALUES(?,?,?,?,?)";
@@ -75,10 +77,10 @@ public class QuestionDaoImpl implements QuestionDao {
         Question question = new Question();
         question.setQuestionId(resultSet.getLong(1));
         question.setUserId(resultSet.getLong(2));
-        question.setRequest(resultSet.getString(4));
-        question.setResponse(resultSet.getString(5));
-        question.setRequestDate(resultSet.getDate(6).toLocalDate());
-        question.setResponseDate(resultSet.getDate(7).toLocalDate());
+        question.setRequest(resultSet.getString(3));
+        question.setResponse(resultSet.getString(4));
+        question.setRequestDate(resultSet.getDate(5).toLocalDate());
+        question.setResponseDate(resultSet.getDate(6).toLocalDate());
         return question;
     }
 
@@ -152,6 +154,28 @@ public class QuestionDaoImpl implements QuestionDao {
             close(statement);
         }
         return question;
+    }
+
+    @Override
+    public List<Question> find(long userId) throws DaoException {
+        List<Question> questions = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_QUESTION_BY_USER_ID);
+            statement.setLong(1, userId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Question question = makeFromResultSet(resultSet);
+                questions.add(question);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get questions on userId", exception);
+        } finally {
+            close(statement);
+            close(resultSet);
+        }
+        return questions;
     }
 }
 

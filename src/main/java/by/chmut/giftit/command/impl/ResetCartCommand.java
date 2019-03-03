@@ -11,11 +11,15 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.math.BigDecimal;
+
 import static by.chmut.giftit.command.CommandType.CART;
+import static by.chmut.giftit.constant.AttributeName.COUNT_IN_CART_PARAMETER_NAME;
+import static by.chmut.giftit.constant.AttributeName.COUNT_ITEM_PARAMETER_NAME;
 import static by.chmut.giftit.constant.AttributeName.USER_PARAMETER_NAME;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
-public class EmptyCartCommand implements Command {
+public class ResetCartCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
     private CartService service = ServiceFactory.getInstance().getCartService();
@@ -31,6 +35,7 @@ public class EmptyCartCommand implements Command {
             logger.error("Error when try to delete ALL cart from database on userId", exception);
             router.setRedirectPath(ERROR_PATH);
         }
+        request.getSession().setAttribute(COUNT_IN_CART_PARAMETER_NAME, BigDecimal.ZERO);
         return router;
     }
 }

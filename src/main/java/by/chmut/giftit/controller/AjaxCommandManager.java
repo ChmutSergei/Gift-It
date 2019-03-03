@@ -1,15 +1,19 @@
 package by.chmut.giftit.controller;
 
+import by.chmut.giftit.dao.CommentDao;
 import by.chmut.giftit.dao.DaoException;
 import by.chmut.giftit.dao.DaoFactory;
 import by.chmut.giftit.dao.UserDao;
 import by.chmut.giftit.entity.Bitmap;
+import by.chmut.giftit.entity.Comment;
+import by.chmut.giftit.entity.Item;
 import by.chmut.giftit.entity.User;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +24,7 @@ import static by.chmut.giftit.constant.AttributeName.*;
 class AjaxCommandManager {
 
     private UserDao userDao = DaoFactory.getInstance().getUserDao();
+    private CommentDao commentDao = DaoFactory.getInstance().getCommentDao();
     private Bitmap bitmapPrice;
     private List<Bitmap> checkedBitmaps = new ArrayList<>();
 
@@ -101,6 +106,41 @@ class AjaxCommandManager {
             result[i] = first[i] & second[i];
         }
         return result;
+    }
+
+    void deleteComment(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        long commentId = Long.parseLong(request.getParameter(COMMENT_ID_PARAMETER_NAME));
+        boolean done;
+        try {
+            done = commentDao.delete(commentId);
+        } catch (DaoException e) {
+            done = false;
+        }
+        if (done) {
+            response.getWriter().write((new Gson()).toJson(true));
+        }
+    }
+
+    void addComment(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Item item = (Item) request.getSession().getAttribute(ITEM_PARAMETER_NAME);
+        User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
+        String commentMessage = request.getParameter(COMMENT_PARAMETER_NAME);
+        Comment comment = new Comment();
+        comment.setItemId(item.getItemId());
+        comment.setUserId(user.getUserId());
+        comment.setDate(LocalDate.now());
+        comment.setMessage(commentMessage);
+        comment.setStatus(Comment.Status.NEW);
+        boolean success = true;
+        try {
+            comment = commentDao.create(comment);
+            if (comment.getCommentId() == 0) {
+                success = false;
+            }
+        } catch (DaoException e) {
+            success = false;
+        }
+        response.getWriter().write((new Gson()).toJson(success));
     }
 
 

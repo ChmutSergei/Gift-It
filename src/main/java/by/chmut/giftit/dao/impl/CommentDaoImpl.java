@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CommentDaoImpl implements CommentDao {
+public class CommentDaoImpl implements CommentDao { //TODO исправить выборку с учетом статуса
 
     private static final String SELECT_ALL_COMMENTS = "SELECT id, user_id, item_id, message, date, status FROM Comments";
     private static final String SELECT_COMMENT_BY_ID = "SELECT id, user_id, item_id, message, date, status FROM Comments WHERE id = ?";
     private static final String SELECT_COMMENTS_BY_ITEM_ID = "SELECT id, user_id, item_id, message, date, status " +
             "FROM Comments WHERE item_id = ?";
+    private static final String SELECT_COMMENTS_BY_USER_ID = "SELECT id, user_id, item_id, message, date, status " +
+            "FROM Comments WHERE user_id = ?";
     private static final String DELETE_COMMENT = "DELETE FROM Comments WHERE id=?";
     private static final String CREATE_COMMENT = "INSERT INTO Comments(user_id, item_id, message, date, status) VALUES(?,?,?,?,?)";
     private static final String UPDATE_COMMENT = "UPDATE Comments SET user_id=?, item_id=?, message=?, date=?, status=? WHERE id=?";
@@ -87,6 +89,28 @@ public class CommentDaoImpl implements CommentDao {
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get all comments by item id", exception);
+        } finally {
+            close(statement);
+            close(resultSet);
+        }
+        return comments;
+    }
+
+    @Override
+    public List<Comment> findByUserId(long id) throws DaoException {
+        List<Comment> comments = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_COMMENTS_BY_USER_ID);
+            statement.setLong(1, id);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Comment comment = makeFromResultSet(resultSet);
+                comments.add(comment);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get all comments by user id", exception);
         } finally {
             close(statement);
             close(resultSet);

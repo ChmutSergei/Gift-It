@@ -104,10 +104,35 @@
                             </div>
                         </div>
                     </c:forEach>
+                    <div class="row">
+                        <button id="addComment" onclick="addComment()">
+                            <fmt:message key="item.preview.addCombtn" bundle="${i18n}"/></button>
+                    </div>
+                    <br/>
+                    <!-- TODO add validity on length-->
+                    <div id="input" class="form-group has-feedback" style="display: none">
+                        <!--<label class="control-label col-xs-3" for="dcomment"><fmt:message bundle="${i18n}"-->
+                        <!--key="item.preview.comm"/></label>-->
+                            <c:set var="mesComment"><fmt:message key="item.preview.comment" bundle="${i18n}"/></c:set>
+                            <c:set var="messagecomment"><fmt:message key="item.preview.comtitle" bundle="${i18n}"/></c:set>
+                            <input type="text" class="form-control" pattern="^.{3,250}$"
+                                      id="dcomment" placeholder="${mesComment}" title="${messagecomment}"/>
+                            <br/>
+                            <button id="send" onclick="sendComment()">
+                                <fmt:message key="item.preview.send" bundle="${i18n}"/></button>
+                    </div>
+                    <br/>
+                    <div id="error" class="row" style="display: none">
+                        <p><fmt:message key="item.preview.error" bundle="${i18n}"/></p>
+                    </div>
+                    <div id="success" class="row" style="display: none">
+                        <p><fmt:message key="item.preview.sent" bundle="${i18n}"/></p>
+                    </div>
                 </div>
             </c:otherwise>
         </c:choose>
     </div>
+    <c:if test="${not empty sessionScope.user}"><c:set var="existUser" value="true" /></c:if>
 
 
     <script>
@@ -133,15 +158,39 @@
                 type: 'POST',
                 data: {command: command, count: count},
                 url: contextUrl + '/ajax'
-            }).done(function (data) {
-                // if (data == 'true') {
+            }).done(function () {
                 location.href = contextUrl + '/controller?command=cart';
-                // }
             }).fail(function (data) {
                 if (console &amp;&amp; console.log) {
                     console.log("Error data:", data);
                 }
             })
+        }
+        function sendComment() {
+            var comment = document.getElementById("dcomment").value;
+            var command = 'ADD_COMMENT';
+            $.ajax({
+                type: 'POST',
+                data: {command: command, comment: comment},
+                url: contextUrl + '/ajax'
+            }).done(function (data) {
+                if (data == 'true') {
+                    $('#success')[0].style.display = "block";
+                }
+            }).fail(function (data) {
+                if (console &amp;&amp; console.log) {
+                    console.log("Error data:", data);
+                }
+            })
+        }
+        function addComment() {
+            var exist = "${existUser}";
+            if (exist) {
+                document.getElementById("input").style.display = "block";
+            } else {
+                document.getElementById("error").style.display = "block";
+            }
+
         }
     </script>
 
