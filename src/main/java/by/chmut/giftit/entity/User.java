@@ -234,6 +234,6 @@ public class User extends Entity {
     }
 
     public enum Role {
-        ADMIN, USER, MODERATOR, EXPERT, DESIGNER
+        ADMIN, MODERATOR, DESIGNER, USER, GUEST
     }
 }

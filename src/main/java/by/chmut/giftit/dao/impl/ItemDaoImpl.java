@@ -3,6 +3,7 @@ package by.chmut.giftit.dao.impl;
 import by.chmut.giftit.dao.DaoException;
 import by.chmut.giftit.dao.ItemDao;
 import by.chmut.giftit.entity.Item;
+import by.chmut.giftit.entity.Order;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,8 +23,11 @@ public class ItemDaoImpl implements ItemDao {
     private static final String SELECT_ITEM_BY_COMMENT_ID = "SELECT i.id, i.name FROM Items i " +
             "JOIN Comments c on i.id = c.item_id WHERE c.id = ?";
     private static final String SELECT_PAID_ITEMS = "SELECT i.id, i.name, i.type, i.description, i.active, " +
-            "i.cost, i.image FROM orders o join carts c on o.cart_id = c.id join items i on c.item_id = i.id " +
-            "WHERE (o.status = 'PAID' OR o.status = 'DONE') AND o.user_id = ?";  //TODO
+            "i.cost, i.image FROM orders o join carts c on o.id = c.order_id join items i on c.item_id = i.id " +
+            "WHERE (o.status = ? OR o.status = ?) AND o.user_id = ?";
+    private static final String SELECT_ITEMS_FOR_ORDER = "SELECT i.id, i.name, i.type, i.description, i.active, " +
+            "i.cost, c.count FROM orders o join carts c on o.id = c.order_id join items i on c.item_id = i.id " +
+            "WHERE o.status = ? AND o.id = ?";
     private static final String DELETE_ITEM = "DELETE FROM Items WHERE id=?";
     private static final String CREATE_ITEM = "INSERT INTO Items(name, type, description, active, cost, image) " +
             "VALUES(?,?,?,?,?,?)";
@@ -31,9 +35,11 @@ public class ItemDaoImpl implements ItemDao {
             "WHERE id=?";
 
     private Connection connection;
+
     public Connection getConnection() {
         return connection;
     }
+
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
@@ -89,7 +95,9 @@ public class ItemDaoImpl implements ItemDao {
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SELECT_PAID_ITEMS);
-            statement.setLong(1, userId);
+            statement.setString(1, Order.OrderStatus.PAID.toString());
+            statement.setString(2, Order.OrderStatus.DONE.toString());
+            statement.setLong(3, userId);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Item item = makeFromResultSet(resultSet, filePath);
@@ -126,6 +134,36 @@ public class ItemDaoImpl implements ItemDao {
             close(statement);
         }
         return item;
+    }
+
+    @Override
+    public List<Item> findForOrder(long orderId) throws DaoException {
+        List<Item> items = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_ITEMS_FOR_ORDER);
+            statement.setString(1, Order.OrderStatus.PAID.toString());
+            statement.setLong(2, orderId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Item item = new Item();
+                item.setItemId(resultSet.getLong(1));
+                item.setItemName(resultSet.getString(2));
+                item.setType(resultSet.getString(3));
+                item.setDescription(resultSet.getString(4));
+                item.setActive(resultSet.getBoolean(5));
+                item.setPrice(resultSet.getBigDecimal(6));
+                item.setCount(resultSet.getBigDecimal(7));
+                items.add(item);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get items for Order", exception);
+        } finally {
+            close(resultSet);
+            close(statement);
+        }
+        return items;
     }
 
     private Item makeFromResultSet(ResultSet resultSet, String filePath) throws SQLException, IOException {

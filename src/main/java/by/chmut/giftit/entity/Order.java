@@ -6,9 +6,8 @@ public class Order extends Entity {
 
     private long orderId;
     private long userId;
-    private long cardId;
     private String details;
-    private String status;
+    private OrderStatus orderStatus;
     private LocalDate initDate;
     private LocalDate issueDate;
 
@@ -28,14 +27,6 @@ public class Order extends Entity {
         this.userId = userId;
     }
 
-    public long getCardId() {
-        return cardId;
-    }
-
-    public void setCardId(long cardId) {
-        this.cardId = cardId;
-    }
-
     public String getDetails() {
         return details;
     }
@@ -44,12 +35,12 @@ public class Order extends Entity {
         this.details = details;
     }
 
-    public String getStatus() {
-        return status;
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public LocalDate getInitDate() {
@@ -77,7 +68,7 @@ public class Order extends Entity {
             return false;
         }
         Order order = (Order) object;
-        if (orderId != order.orderId || userId != order.userId || cardId != order.cardId) return false;
+        if (orderId != order.orderId || userId != order.userId ) return false;
         if (details == null) {
             if (order.details != null) {
                 return false;
@@ -85,11 +76,7 @@ public class Order extends Entity {
         } else if (!details.equals(order.details)) {
             return false;
         }
-        if (status == null) {
-            if (order.status != null) {
-                return false;
-            }
-        } else if (!status.equals(order.status)) {
+        if (orderStatus != order.orderStatus) {
             return false;
         }
         if (initDate == null) {
@@ -114,9 +101,8 @@ public class Order extends Entity {
         int result = 31;
         result = (int) (orderId ^ (orderId >>> 32)) * result;
         result = 31 * result + (int) (userId ^ (userId >>> 32));
-        result = 31 * result + (int) (cardId ^ (cardId >>> 32));
         result = 31 * result + (details != null ? details.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
         result = 31 * result + (initDate != null ? initDate.hashCode() : 0);
         result = 31 * result + (issueDate != null ? issueDate.hashCode() : 0);
         return result;
@@ -127,11 +113,14 @@ public class Order extends Entity {
         return "Order{" +
                 "orderId=" + orderId +
                 ", userId=" + userId +
-                ", cardId=" + cardId +
                 ", details='" + details + '\'' +
-                ", status='" + status + '\'' +
+                ", orderStatus='" + orderStatus + '\'' +
                 ", initDate=" + initDate +
                 ", issueDate=" + issueDate +
                 '}';
+    }
+
+    public enum OrderStatus {
+        PAID, DONE
     }
 }

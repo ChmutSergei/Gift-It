@@ -125,7 +125,7 @@ public class CommentDaoImpl implements CommentDao { //TODO исправить в
         comment.setItemId(resultSet.getLong(3));
         comment.setMessage(resultSet.getString(4));
         comment.setDate(resultSet.getDate(5).toLocalDate());
-        comment.setStatus(Comment.Status.valueOf(resultSet.getString(6)));
+        comment.setCommentStatus(Comment.CommentStatus.valueOf(resultSet.getString(6)));
         return comment;
     }
 
@@ -160,7 +160,7 @@ public class CommentDaoImpl implements CommentDao { //TODO исправить в
             statement.setLong(2, comment.getItemId());
             statement.setString(3, comment.getMessage());
             statement.setDate(4, Date.valueOf(comment.getDate()));
-            statement.setString(5, comment.getStatus().name());
+            statement.setString(5, comment.getCommentStatus().name());
             int result = statement.executeUpdate();
             if (result != 1) {
                 throw new DaoException("Error with creating comment");
@@ -188,7 +188,7 @@ public class CommentDaoImpl implements CommentDao { //TODO исправить в
             statement.setLong(2, comment.getItemId());
             statement.setString(3, comment.getMessage());
             statement.setDate(4, Date.valueOf(comment.getDate()));
-            statement.setString(5, comment.getStatus().name());
+            statement.setString(5, comment.getCommentStatus().name());
             int result = statement.executeUpdate();
             if (result != 1) {
                 throw new DaoException("Error with update comment");

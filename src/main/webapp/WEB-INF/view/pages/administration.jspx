@@ -1,10 +1,272 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
-              xmlns:c="http://java.sun.com/jsp/jstl/core"
-              xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
-              xmlns="http://www.w3.org/1999/xhtml" version="2.0">
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+          xmlns="http://www.w3.org/1999/xhtml" version="2.0">
         <fmt:setLocale value="${sessionScope.locale}"/>
         <fmt:setBundle basename="i18n.messages" var="i18n"/>
+    <div class="container" style="height: 700px">
+        <div class="row content">
+            <div class="col-sm-3 sidenav">
+                <h4><fmt:message key="account.sidenav" bundle="${i18n}"/></h4>
+                <ul class="nav nav-pills nav-stacked">
+                    <li id="orders"><a href="#"><fmt:message key="admin.order" bundle="${i18n}"/></a></li>
+                    <li id="items"><a href="#"><fmt:message key="admin.item" bundle="${i18n}"/></a></li>
+                    <li id="users"><a href="#"><fmt:message key="admin.users" bundle="${i18n}"/></a></li>
+                    <li id="questions"><a href="#"><fmt:message key="admin.questions" bundle="${i18n}"/></a></li>
+                </ul>
+            </div>
+            <!-- options  -->
+            <!-- order section  -->
+            <div class="col-sm-9 orders">
+                <table class="table table-bordered" style="margin-bottom: unset;">
+                    <thead>
+                    <tr>
+                        <th><fmt:message key="admin.orders.orderId" bundle="${i18n}"/></th>
+                        <th>User ID</th>
+                        <th><fmt:message key="admin.orders.username" bundle="${i18n}"/></th>
+                        <th><fmt:message key="admin.orders.nameLastname" bundle="${i18n}"/></th>
+                        <th><fmt:message key="admin.orders.phone" bundle="${i18n}"/></th>
+                        <th>E-mail</th>
+                        <th><fmt:message key="admin.orders.details" bundle="${i18n}"/></th>
+                        <th><fmt:message key="admin.orders.status" bundle="${i18n}"/></th>
+                        <th><fmt:message key="admin.orders.date" bundle="${i18n}"/></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="order" items="${sessionScope.orders}">
+                        <tr>
+                            <c:set var="user" value="${sessionScope.usersOrder.get(order.orderId)}" />
+                            <td>${order.orderId}</td>
+                            <td>${user.userId}</td>
+                            <td>${user.username}</td>
+                            <td>${user.firstName} ${user.lastName}</td>
+                            <td>${user.phone}</td>
+                            <td>${user.email}</td>
+                            <td>${order.details}</td>
+                            <td>${order.orderStatus}</td>
+                            <td>${order.initDate}</td>
+                        </tr>
+                        <c:set var="items" value="${sessionScope.itemsOrder.get(order.orderId)}"/>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th><fmt:message key="admin.orders.itemId" bundle="${i18n}"/></th>
+                                    <th><fmt:message key="admin.orders.item.name" bundle="${i18n}"/></th>
+                                    <th><fmt:message key="admin.orders.item.type" bundle="${i18n}"/></th>
+                                    <th><fmt:message key="admin.orders.item.price" bundle="${i18n}"/></th>
+                                    <th><fmt:message key="admin.orders.item.count" bundle="${i18n}"/></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="item" items="${items}" varStatus="status">
+                                    <tr>
+                                        <td>${status.index+1}</td>
+                                        <td>${item.itemId}</td>
+                                        <td>${item.itemName}</td>
+                                        <td>${item.type}</td>
+                                        <td>${item.price}</td>
+                                        <td>${item.count}</td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+            <!-- items section  -->
+            <div class="col-sm-9 items">
+                <h4><fmt:message key="admin.items.message" bundle="${i18n}"/></h4>
+                <p><fmt:message key="admin.items.info" bundle="${i18n}"/></p>
+                <div class="row text-center">
+                    <table class="table table-bordered">
+                        <thead>
+                        <c:set var="item" value="${sessionScope.item}"/>
+                        <tr>
+                            <th>ID</th>
+                            <th><fmt:message bundle="${i18n}" key="cart.foto"/></th>
+                            <th ><fmt:message bundle="${i18n}" key="cart.name"/></th>
+                            <th ><fmt:message bundle="${i18n}" key="additem.type"/></th>
+                            <th><fmt:message bundle="${i18n}" key="cart.description"/></th>
+                            <th><fmt:message bundle="${i18n}" key="cart.price"/></th>
+                            <th><fmt:message bundle="${i18n}" key="admin.orders.status"/></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${item.itemId}</td>
+                                <td><img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
+                                         class="img-responsive" style="width:50px;" alt="Image"/></td>
+                                <td>${item.itemName}</td>
+                                <td>${item.type}</td>
+                                <td>${item.description}</td>
+                                <fmt:setLocale value="ru-RU"/>
+                                <td><fmt:formatNumber value="${item.price}" type="currency"/></td>
+                                <fmt:setLocale value="${sessionScope.locale}"/>
+                                <td style="color: crimson">${item.active}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><fmt:message key="admin.items.delete" bundle="${i18n}"/></p>
+                <button name="${item.itemId}" class="btn btn-default" onclick="sendItemId($(this))">
+                    <fmt:message key="admin.items.change" bundle="${i18n}"/></button>
+                <p id="done" style="color: crimson; display: none">Done</p>
+            </div>
 
-    <h3>Here is Admin page!</h3>
+            <!-- users section  -->
+            <div class="col-sm-9 users">
+                <h3><fmt:message key="admin.users" bundle="${i18n}"/></h3>
+
+            </div>
+
+            <!-- questions section  -->
+            <div class="col-sm-9 questions">
+                <h3><fmt:message key="admin.questions" bundle="${i18n}"/></h3>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+            oOpen();iClose();uClose();qClose();oAdd();
+            $('#orders').click(function () {
+                oOpen();iClose();uClose();qClose();
+                oAdd();iRem();uRem();qRem();
+            });
+            $('#items').click(function () {
+                oClose();iOpen();uClose();qClose();
+                oRem();iAdd();uRem();qRem();
+            });
+            $('#users').click(function () {
+                oClose();iClose();uOpen();qClose();
+                oRem();iRem();uAdd();qRem();
+            });
+            $('#questions').click(function () {
+                oClose();iClose();uClose();qOpen();
+                oRem();iRem();uRem();qAdd();
+            });
+        });
+        function oAdd() {
+            $('#orders').addClass('active');
+        }
+        function oRem() {
+            $('#orders').removeClass('active');
+        }
+        function iAdd() {
+            $('#items').addClass('active');
+        }
+        function iRem() {
+            $('#items').removeClass('active');
+        }
+        function uAdd() {
+            $('#users').addClass('active');
+        }
+        function uRem() {
+            $('#users').removeClass('active');
+        }
+        function qAdd() {
+            $('#questions').addClass('active');
+        }
+        function qRem() {
+            $('#questions').removeClass('active');
+        }
+        check.onclick = function () {
+            var form = $('#form')[0];
+            if (form.checkValidity()) {
+                var phone = $('#phoneNumber')[0].value;
+                var address = $('#address')[0].value;
+                var contextUrl = '${pageContext.request.contextPath}';
+                var command = 'UPDATE_USER_ADDRESS_PHONE';
+                $.ajax({
+                    type: 'POST',
+                    data: {command: command, address: address, phone: phone},
+                    url: contextUrl + '/ajax'
+                }).done(function (data) {
+                    var resp = JSON.parse(data);
+                    if (resp.phone != 'ERROR') {
+                        var newPhone = resp.phone;
+                        var newAddress = resp.address;
+                        $('#phoneArea').text(newPhone);
+                        $('#addressArea').text(newAddress);
+                    } else {
+                        $('#message')[0].style.display = "block";
+                    }
+                }).fail(function (data) {
+                    if (console &amp;&amp; console.log) {
+                        console.log("Error data:", data);
+                    }
+                })
+
+            } else {
+                form.reportValidity();
+            }
+        };
+        $('body').click(function () {
+            $('#done')[0].style.display = "none";
+        });
+        function oClose() {
+            $('.orders')[0].style.display = "none";
+        }
+        function oOpen() {
+            $('.orders')[0].style.display = "block";
+        }
+        function iClose() {
+            $('.items')[0].style.display = "none";
+        }
+        function iOpen() {
+            $('.items')[0].style.display = "block";
+        }
+        function uClose() {
+            $('.users')[0].style.display = "none";
+        }
+        function uOpen() {
+            $('.users')[0].style.display = "block";
+        }
+        function qClose() {
+            $('.questions')[0].style.display = "none";
+        }
+        function qOpen() {
+            $('.questions')[0].style.display = "block";
+        }
+        function sendItemId(element) {
+            var itemId = $(element).attr('name');
+            var contextUrl = '${pageContext.request.contextPath}';
+            var command = 'CHANGE_STATUS_ITEM';
+            $.ajax({
+                type: 'POST',
+                data: {command: command, itemId: itemId},
+                url: contextUrl + '/ajax'
+            }).done(function (data) {
+                if(data == 'true') {
+                    $('#done')[0].style.display = "block";
+                }
+            }).fail(function (data) {
+                if (console &amp;&amp; console.log) {
+                    console.log("Error data:", data);
+                }
+            })
+        }
+        function sendId(element) {
+            var commentId = $(element).attr('about');
+            var command = 'DELETE_COMMENT';
+            $.ajax({
+                type: 'POST',
+                data: {command: command, commentId: commentId},
+                url: contextUrl + '/ajax'
+            }).done(function (data) {
+                if (data == 'true') {
+                    // $('#done')[0].style.display = "block";
+                }
+            }).fail(function (data) {
+                if (console &amp;&amp; console.log) {
+                    console.log("Error data:", data);
+                }
+            })
+        }
+    </script>
 
 </jsp:root>

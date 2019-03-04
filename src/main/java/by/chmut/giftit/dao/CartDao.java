@@ -1,6 +1,7 @@
 package by.chmut.giftit.dao;
 
 import by.chmut.giftit.entity.Cart;
+import by.chmut.giftit.entity.Item;
 
 import java.util.List;
 

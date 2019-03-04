@@ -11,6 +11,7 @@ public class ServiceFactory {
     private final CartService cartService = new CartServiceImpl();
     private final CommentService commentService = new CommentServiceImpl();
     private final QuestionService questionService = new QuestionServiceImpl();
+    private final OrderService orderService = new OrderServiceImpl();
 
     private ServiceFactory() {
     }
@@ -37,5 +38,9 @@ public class ServiceFactory {
 
     public QuestionService getQuestionService() {
         return questionService;
+    }
+
+    public OrderService getOrderService() {
+        return orderService;
     }
 }

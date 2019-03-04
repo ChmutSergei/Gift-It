@@ -1,9 +1,6 @@
 package by.chmut.giftit.controller;
 
-import by.chmut.giftit.dao.CommentDao;
-import by.chmut.giftit.dao.DaoException;
-import by.chmut.giftit.dao.DaoFactory;
-import by.chmut.giftit.dao.UserDao;
+import by.chmut.giftit.dao.*;
 import by.chmut.giftit.entity.Bitmap;
 import by.chmut.giftit.entity.Comment;
 import by.chmut.giftit.entity.Item;
@@ -25,6 +22,7 @@ class AjaxCommandManager {
 
     private UserDao userDao = DaoFactory.getInstance().getUserDao();
     private CommentDao commentDao = DaoFactory.getInstance().getCommentDao();
+    private ItemDao itemDao = DaoFactory.getInstance().getItemDao();
     private Bitmap bitmapPrice;
     private List<Bitmap> checkedBitmaps = new ArrayList<>();
 
@@ -130,7 +128,7 @@ class AjaxCommandManager {
         comment.setUserId(user.getUserId());
         comment.setDate(LocalDate.now());
         comment.setMessage(commentMessage);
-        comment.setStatus(Comment.Status.NEW);
+        comment.setCommentStatus(Comment.CommentStatus.NEW);
         boolean success = true;
         try {
             comment = commentDao.create(comment);
@@ -141,6 +139,25 @@ class AjaxCommandManager {
             success = false;
         }
         response.getWriter().write((new Gson()).toJson(success));
+    }
+
+    void changeItemStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String stringId = request.getParameter(ITEM_ID_PARAMETER_NAME);
+        if (stringId != null) {
+            long itemId = Long.parseLong(stringId);
+            Item item;
+            try {
+                item = itemDao.find(itemId, request.getServletContext().getRealPath("")).get();
+                boolean status = item.isActive();
+                item.setActive(!status);
+                item = itemDao.update(item);
+            } catch (DaoException e) {
+                item = null;
+            }
+            if (item != null) {
+                response.getWriter().write((new Gson()).toJson(true));
+            }
+        }
     }
 
 

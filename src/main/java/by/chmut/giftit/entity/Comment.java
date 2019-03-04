@@ -9,7 +9,7 @@ public class Comment extends Entity {
     private long itemId;
     private String message;
     private LocalDate date;
-    private Status status;
+    private CommentStatus commentStatus;
 
     public long getCommentId() {
         return commentId;
@@ -51,12 +51,12 @@ public class Comment extends Entity {
         this.itemId = itemId;
     }
 
-    public Status getStatus() {
-        return status;
+    public CommentStatus getCommentStatus() {
+        return commentStatus;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setCommentStatus(CommentStatus commentStatus) {
+        this.commentStatus = commentStatus;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class Comment extends Entity {
         } else if (!date.equals(comment.date)) {
             return false;
         }
-        return status == comment.status;
+        return commentStatus == comment.commentStatus;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Comment extends Entity {
         result = 31 * result + (int) (itemId ^ (itemId >>> 32));
         result = 31 * result + (message != null ? message.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (commentStatus != null ? commentStatus.hashCode() : 0);
         return result;
     }
 
@@ -108,11 +108,11 @@ public class Comment extends Entity {
                 ", itemId=" + itemId +
                 ", message='" + message + '\'' +
                 ", date=" + date +
-                ", status=" + status +
+                ", commentStatus=" + commentStatus +
                 '}';
     }
 
-    public enum Status {
+    public enum CommentStatus {
         NEW, ACTIVE, BLOCKED
     }
 }

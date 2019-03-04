@@ -7,6 +7,7 @@ public class Cart extends Entity {
     private long cartId;
     private long userId;
     private long itemId;
+    private long orderId;
     private BigDecimal count;
 
     public long getCartId() {
@@ -33,6 +34,14 @@ public class Cart extends Entity {
         this.itemId = itemId;
     }
 
+    public long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
+    }
+
     public BigDecimal getCount() {
         return count;
     }
@@ -50,7 +59,7 @@ public class Cart extends Entity {
             return false;
         }
         Cart cart = (Cart) object;
-        if (cartId != cart.cartId || userId != cart.userId || itemId != cart.itemId) {
+        if (cartId != cart.cartId || userId != cart.userId || itemId != cart.itemId || orderId != cart.orderId) {
             return false;
         }
         if (count == null) {
@@ -69,6 +78,7 @@ public class Cart extends Entity {
         result = (int) (cartId ^ (cartId >>> 32)) * result;
         result = 31 * result + (int) (userId ^ (userId >>> 32));
         result = 31 * result + (int) (itemId ^ (itemId >>> 32));
+        result = 31 * result + (int) (orderId ^ (orderId >>> 32));
         result = 31 * result + (count != null ? count.hashCode() * result : 0);
         return result;
     }
@@ -79,6 +89,7 @@ public class Cart extends Entity {
                 "cartId=" + cartId +
                 ", userId=" + userId +
                 ", itemId=" + itemId +
+                ", orderId=" + orderId +
                 ", count=" + count +
                 '}';
     }

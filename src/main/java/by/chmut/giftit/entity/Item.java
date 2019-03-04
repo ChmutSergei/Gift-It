@@ -11,6 +11,7 @@ public class Item extends Entity {
     private String description;
     private boolean active;
     private BigDecimal price;
+    private BigDecimal count;
     private File image;
 
     public long getItemId() {
@@ -61,6 +62,14 @@ public class Item extends Entity {
         this.price = price;
     }
 
+    public BigDecimal getCount() {
+        return count;
+    }
+
+    public void setCount(BigDecimal count) {
+        this.count = count;
+    }
+
     public File getImage() {
         return image;
     }
@@ -108,6 +117,13 @@ public class Item extends Entity {
         } else if (!price.equals(item.price)) {
             return false;
         }
+        if (count == null) {
+            if (item.count != null) {
+                return false;
+            }
+        } else if (!count.equals(item.count)) {
+            return false;
+        }
         if (image == null) {
             if (item.image != null) {
                 return false;
@@ -127,6 +143,7 @@ public class Item extends Entity {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (count != null ? count.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);
         return result;
     }

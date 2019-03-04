@@ -11,14 +11,16 @@ import java.util.Optional;
 
 public class OrderDaoImpl implements OrderDao {
 
-    private static final String SELECT_ALL_ORDERS = "SELECT id, user_id, cart_id, details, status, " +
+    private static final String SELECT_ALL_ORDERS = "SELECT id, user_id, details, status, " +
             "init_date, issue_date FROM Orders";
-    private static final String SELECT_ORDER_BY_ID = "SELECT id, user_id, cart_id, details, status, " +
+    private static final String SELECT_PAID_ORDERS = "SELECT id, user_id, details, status, " +
+            "init_date, issue_date FROM Orders WHERE status = 'PAID'";
+    private static final String SELECT_ORDER_BY_ID = "SELECT id, user_id, details, status, " +
             "init_date, issue_date FROM Orders WHERE id = ?";
     private static final String DELETE_ORDER = "DELETE FROM Orders WHERE id=?";
-    private static final String CREATE_ORDER = "INSERT INTO Orders(user_id, cart_id, details, status, " +
+    private static final String CREATE_ORDER = "INSERT INTO Orders(user_id, details, status, " +
             "init_date, issue_date) VALUES(?,?,?,?,?,?)";
-    private static final String UPDATE_ORDER = "UPDATE Orders SET user_id=?, cart_id=?, details=?, status=?, " +
+    private static final String UPDATE_ORDER = "UPDATE Orders SET user_id=?, details=?, status=?, " +
             "init_date=?, issue_date=? WHERE id=?";
 
     private Connection connection;
@@ -76,11 +78,13 @@ public class OrderDaoImpl implements OrderDao {
         Order order = new Order();
         order.setOrderId(resultSet.getLong(1));
         order.setUserId(resultSet.getLong(2));
-        order.setCardId(resultSet.getLong(3));
-        order.setDetails(resultSet.getString(4));
-        order.setStatus(resultSet.getString(5));
-        order.setInitDate(resultSet.getDate(6).toLocalDate());
-        order.setIssueDate(resultSet.getDate(7).toLocalDate());
+        order.setDetails(resultSet.getString(3));
+        order.setOrderStatus(Order.OrderStatus.valueOf(resultSet.getString(4)));
+        order.setInitDate(resultSet.getDate(5).toLocalDate());
+        Date date = resultSet.getDate(6);
+        if (date != null) {
+            order.setIssueDate(date.toLocalDate());
+        }
         return order;
     }
 
@@ -112,11 +116,10 @@ public class OrderDaoImpl implements OrderDao {
         try {
             statement = connection.prepareStatement(CREATE_ORDER, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, order.getUserId());
-            statement.setLong(2, order.getCardId());
-            statement.setString(3, order.getDetails());
-            statement.setString(4, order.getStatus());
-            statement.setDate(5, Date.valueOf(order.getInitDate()));
-            statement.setDate(6, Date.valueOf(order.getIssueDate()));
+            statement.setString(2, order.getDetails());
+            statement.setString(3, order.getOrderStatus().toString());
+            statement.setDate(4, Date.valueOf(order.getInitDate()));
+            statement.setDate(5, Date.valueOf(order.getIssueDate()));
             int result = statement.executeUpdate();
             if (result != 1) {
                 throw new DaoException("Error with creating order");
@@ -139,13 +142,12 @@ public class OrderDaoImpl implements OrderDao {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(UPDATE_ORDER);
-            statement.setLong(7, order.getOrderId());
+            statement.setLong(6, order.getOrderId());
             statement.setLong(1, order.getUserId());
-            statement.setLong(2, order.getCardId());
-            statement.setString(3, order.getDetails());
-            statement.setString(4, order.getStatus());
-            statement.setDate(5, Date.valueOf(order.getInitDate()));
-            statement.setDate(6, Date.valueOf(order.getIssueDate()));
+            statement.setString(2, order.getDetails());
+            statement.setString(3, order.getOrderStatus().toString());
+            statement.setDate(4, Date.valueOf(order.getInitDate()));
+            statement.setDate(5, Date.valueOf(order.getIssueDate()));
             int result = statement.executeUpdate();
             if (result != 1) {
                 throw new DaoException("Error with update order");
@@ -156,5 +158,26 @@ public class OrderDaoImpl implements OrderDao {
             close(statement);
         }
         return order;
+    }
+
+    @Override
+    public List<Order> findPaidOrder() throws DaoException {
+        List<Order> orders = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_PAID_ORDERS);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Order order = makeFromResultSet(resultSet);
+                orders.add(order);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get paid orders", exception);
+        } finally {
+            close(resultSet);
+            close(statement);
+        }
+        return orders;
     }
 }

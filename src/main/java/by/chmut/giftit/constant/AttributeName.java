@@ -68,10 +68,14 @@ public class AttributeName {
     public static final String COMMENT_ID_PARAMETER_NAME = "commentId";
     public static final String COMMENT_PARAMETER_NAME = "comment";
     public static final String QUESTIONS_PARAMETER_NAME = "questions";
+    public static final String ORDERS_PARAMETER_NAME = "orders";
+    public static final String ITEMS_FOR_ORDERS_PARAMETER_NAME = "itemsOrder";
+    public static final String USERS_FOR_ORDERS_PARAMETER_NAME = "usersOrder";
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
     public static final String MESSAGE_NOT_FOUND_ID_KEY= "error.notFoundId";
     public static final String MESSAGE_CART_EMPTY_KEY= "cart.emptyCart";
+    public static final String MESSAGE_ADMIN_ORDERS_ERROR_KEY= "admin.error.orders";
 
     public static final String ADD_CART_COMMAND= "ADD_ITEM";
     public static final String DELETE_CART_COMMAND= "DELETE_ITEM";

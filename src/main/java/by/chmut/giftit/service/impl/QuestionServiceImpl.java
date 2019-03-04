@@ -26,13 +26,13 @@ public class QuestionServiceImpl implements QuestionService {
             manager.beginTransaction(questionDao);
             questions = questionDao.find(userId);
             manager.endTransaction(questionDao);
-        } catch (DaoException e) {
+        } catch (DaoException exception) {
             try {
                 manager.rollback();
             } catch (DaoException rollbackException) {
                 logger.error(rollbackException);
             }
-            throw new ServiceException(e);
+            throw new ServiceException(exception);
         }
         return questions;
     }

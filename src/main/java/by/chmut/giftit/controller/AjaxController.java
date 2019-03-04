@@ -63,7 +63,6 @@ public class AjaxController extends HttpServlet {
                 break;
             case SET_ITEM_ID:
                 request.getSession().setAttribute(ITEM_ID_PARAMETER_NAME, request.getParameter(ITEM_ID_PARAMETER_NAME));
-                response.getWriter().write(new Gson().toJson(true));
                 break;
             case SEARCH_FILTER:
                 int countItems = commandManager.countItemsOnFilter(request, bitmapStorage);
@@ -86,6 +85,9 @@ public class AjaxController extends HttpServlet {
                 break;
             case ADD_COMMENT:
                 commandManager.addComment(request, response);
+            case CHANGE_STATUS_ITEM:
+                commandManager.changeItemStatus(request, response);
+                break;
         }
     }
 
@@ -140,6 +142,6 @@ public class AjaxController extends HttpServlet {
 
     private enum AjaxCommand {
         CHECK_USERNAME, SET_ITEM_ID, SEARCH_FILTER, RESET_FILTER, ADD_TO_CART, DELETE_FROM_CART, UPDATE_USER_ADDRESS_PHONE,
-        DELETE_COMMENT, ADD_COMMENT
+        DELETE_COMMENT, ADD_COMMENT, CHANGE_STATUS_ITEM
     }
 }

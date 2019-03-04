@@ -188,12 +188,17 @@
                             <h3><fmt:setLocale value="ru-RU"/>
                                 <fmt:formatNumber value="${item.price}" type="currency"/><br/>
                                 <fmt:setLocale value="${sessionScope.locale}"/></h3>
+                            <c:if test="${sessionScope.user.role eq 'ADMIN'}" >
+                                <p style="color: crimson">ACTIVE: ${item.active}</p>
+                                <button id="forAdmin" name="${item.itemId}" class="btn btn-default" onclick="sendItemId($(this))" >
+                                    <fmt:message key="main.sendId" bundle="${i18n}"/></button>
+                            </c:if>
                             <c:set var="cart"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
                             <a id="comment" class="forSend" name="${item.itemId}" onclick="sendItemId($(this))">Comments
                                 <span class="badge">${sessionScope.countComments.get(item.itemId)}</span></a>
                             <a class="forSend" onclick="sendItemId($(this))" data-toggle="tooltip"
                                name="${item.itemId}" title="${cart}"><span class="glyphicon glyphicon-shopping-cart"
-                                                                           style="font-size: 30px;"/></a>
+                                                                           style="font-size: 30px;margin-left: 15px"/></a>
                         </div>
                     </div>
                 </div>
@@ -252,9 +257,10 @@
         }
 
         function sendItemId(element) {
+            var eId = $(element).attr('id');
             var itemId = $(element).attr('name');
             var cursor = "";
-            if ($(element).attr('id') == 'comment') {
+            if (eId == 'comment') {
                 cursor = "#comments";
             }
             var contextUrl = '${pageContext.request.contextPath}';
@@ -264,7 +270,9 @@
                 data: {command: command, itemId: itemId},
                 url: contextUrl + '/ajax'
             }).done(function (data) {
-                if (data == 'true') {
+                if (eId == 'forAdmin') {
+                    location.href = contextUrl + '/controller?command=administration';
+                } else {
                     location.href = contextUrl + '/controller?command=preview_item' + cursor;
                 }
             }).fail(function (data) {
@@ -273,7 +281,6 @@
                 }
             })
         }
-
     </script>
 
 </jsp:root>

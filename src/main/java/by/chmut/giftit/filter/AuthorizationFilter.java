@@ -15,6 +15,7 @@ import static by.chmut.giftit.command.CommandType.SIGNIN;
 import static by.chmut.giftit.command.CommandType.SIGNUP;
 import static by.chmut.giftit.constant.AttributeName.COMMAND_PARAMETER_NAME;
 import static by.chmut.giftit.constant.AttributeName.USER_PARAMETER_NAME;
+import static by.chmut.giftit.entity.User.Role.GUEST;
 
 @WebFilter(urlPatterns = "/controller")
 
@@ -22,6 +23,8 @@ public class AuthorizationFilter implements Filter {
 
     private static final String HOME_PART_PATH = "/controller?command=home";
     private static final String SIGN_UP_PART_PATH = "/controller?command=signup";
+
+    private User.Role role;
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -33,6 +36,9 @@ public class AuthorizationFilter implements Filter {
      * Cart
      * EmptyCart
      * Administration
+     * AddItem - страница для moderator
+     *
+     * идея создать список доступных страниц для каждой роли и проверять на contains в switch
      */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -43,6 +49,10 @@ public class AuthorizationFilter implements Filter {
         String contextPath = req.getContextPath();
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute(USER_PARAMETER_NAME);
+
+
+        role = (user != null) ? user.getRole() : GUEST; // делаем Map с ключами role
+
         if ((SIGNIN.equals(type) || SIGNUP.equals(type)) && user != null) {
             res.sendRedirect(contextPath + HOME_PART_PATH);
             return;
