@@ -71,11 +71,25 @@ public class AttributeName {
     public static final String ORDERS_PARAMETER_NAME = "orders";
     public static final String ITEMS_FOR_ORDERS_PARAMETER_NAME = "itemsOrder";
     public static final String USERS_FOR_ORDERS_PARAMETER_NAME = "usersOrder";
+    public static final String USER_SEARCH_TYPE_PARAMETER_NAME = "type";
+    public static final String USER_ID_PARAMETER_NAME = "userId";
+    public static final String INIT_DATE_PARAMETER_NAME = "initDate";
+    public static final String RESULT_OF_SEARCH_USERS_PARAMETER_NAME = "resultUsers";
+    public static final String BLOCKED_UNTIL_DATE_PARAMETER_NAME = "blockedUntil";
+    public static final String TYPE_COMMAND_PARAMETER_NAME = "typeCommand";
+    public static final String BLOCKED_COMMAND_PARAMETER_NAME = "block";
+    public static final String UNLOCK_COMMAND_PARAMETER_NAME = "unlock";
+    public static final String SET_ROLE_COMMAND_PARAMETER_NAME = "setRole";
+    public static final String ROLE_PARAMETER_NAME = "role";
+    public static final String DELETE_USER_COMMAND_PARAMETER_NAME = "delete";
+    public static final String SHOW_RESULT_PARAMETER_NAME = "show";
+    public static final String SUCCESSFULLY_COMPLETED_PARAMETER_NAME = "success";
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
     public static final String MESSAGE_NOT_FOUND_ID_KEY= "error.notFoundId";
     public static final String MESSAGE_CART_EMPTY_KEY= "cart.emptyCart";
     public static final String MESSAGE_ADMIN_ORDERS_ERROR_KEY= "admin.error.orders";
+    public static final String MESSAGE_NOT_FOUND_USERS_KEY= "user.not.found";
 
     public static final String ADD_CART_COMMAND= "ADD_ITEM";
     public static final String DELETE_CART_COMMAND= "DELETE_ITEM";
@@ -86,4 +100,7 @@ public class AttributeName {
     public static final int DEFAULT_PAGINATION_OFFSET = 0;
     public static final int DEFAULT_PAGINATION_LIMIT = 20;
     public static final int MAX_COUNT_FOR_ITEM_TO_CART = 300;
+    public static final int MIN_LENGTH_COMMENT = 3;
+    public static final int MAX_LENGTH_COMMENT = 250;
+
 }

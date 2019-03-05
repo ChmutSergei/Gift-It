@@ -5,6 +5,7 @@ import by.chmut.giftit.dao.UserDao;
 import by.chmut.giftit.entity.User;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,10 @@ public class UserDaoImpl implements UserDao {
             "phone, address, account, init_date, blocked_until, role FROM Users";
     private static final String SELECT_USER_BY_USERNAME = "SELECT id, username, password, first_name, last_name, " +
             "email, phone, address, account, init_date, blocked_until, role FROM Users WHERE username = ?";
+    private static final String SELECT_USER_BY_PART_OF_USERNAME = "SELECT id, username, password, first_name, last_name, " +
+            "email, phone, address, account, init_date, blocked_until, role FROM Users WHERE username LIKE ?";
+    private static final String SELECT_USER_BY_INIT_DATE = "SELECT id, username, password, first_name, last_name, " +
+            "email, phone, address, account, init_date, blocked_until, role FROM Users WHERE init_date >= ?";
     private static final String SELECT_USER_BY_ID = "SELECT id, username, password, first_name, last_name, " +
             "email, phone, address, account, init_date, blocked_until, role FROM Users WHERE id = ?";
     private static final String DELETE_USER = "DELETE FROM Users WHERE id=?";
@@ -72,6 +77,51 @@ public class UserDaoImpl implements UserDao {
             close(resultSet);
         }
         return user;
+    }
+
+    @Override
+    public List<User> findByPartOfUsername(String part) throws DaoException {
+        List<User> users = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_USER_BY_PART_OF_USERNAME);
+            part = "%" + part + "%";
+            statement.setString(1, part);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                User user = makeFromResultSet(resultSet);
+                users.add(user);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get user by part of username", exception);
+        } finally {
+            close(statement);
+            close(resultSet);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> findByInitDate(LocalDate initDate) throws DaoException {
+        List<User> users = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_USER_BY_INIT_DATE);
+            statement.setDate(1, Date.valueOf(initDate));
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                User user = makeFromResultSet(resultSet);
+                users.add(user);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get users by init date", exception);
+        } finally {
+            close(statement);
+            close(resultSet);
+        }
+        return users;
     }
 
     @Override

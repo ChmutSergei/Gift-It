@@ -123,20 +123,22 @@ class AjaxCommandManager {
         Item item = (Item) request.getSession().getAttribute(ITEM_PARAMETER_NAME);
         User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
         String commentMessage = request.getParameter(COMMENT_PARAMETER_NAME);
-        Comment comment = new Comment();
-        comment.setItemId(item.getItemId());
-        comment.setUserId(user.getUserId());
-        comment.setDate(LocalDate.now());
-        comment.setMessage(commentMessage);
-        comment.setCommentStatus(Comment.CommentStatus.NEW);
-        boolean success = true;
-        try {
-            comment = commentDao.create(comment);
-            if (comment.getCommentId() == 0) {
-                success = false;
+        boolean success = false;
+        if (user != null && commentMessage.length() > MIN_LENGTH_COMMENT && commentMessage.length() < MAX_LENGTH_COMMENT ) {
+            Comment comment = new Comment();
+            comment.setItemId(item.getItemId());
+            comment.setUserId(user.getUserId());
+            comment.setDate(LocalDate.now());
+            comment.setMessage(commentMessage);
+            comment.setCommentStatus(Comment.CommentStatus.NEW);
+            try {
+                comment = commentDao.create(comment);
+                if (comment.getCommentId() != 0) {
+                    success = true;
+                }
+            } catch (DaoException e) {
+                //TODO
             }
-        } catch (DaoException e) {
-            success = false;
         }
         response.getWriter().write((new Gson()).toJson(success));
     }

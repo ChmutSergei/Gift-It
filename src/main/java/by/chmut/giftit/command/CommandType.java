@@ -17,6 +17,8 @@ public enum CommandType {
     CART(new CartCommand()),
     EMPTY_CART(new ResetCartCommand()),
     ADMINISTRATION(new AdminCommand()),
+    SEARCH_USER(new SearchUserCommand()),
+    USER_PROCESSING(new UserProcessingCommand()),
     REGISTRATION(new RegistrationCommand());
 
     private Command command;

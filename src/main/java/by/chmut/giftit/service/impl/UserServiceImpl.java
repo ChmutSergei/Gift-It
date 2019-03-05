@@ -15,8 +15,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import javax.servlet.http.Cookie;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static by.chmut.giftit.constant.AttributeName.*;
@@ -38,6 +38,110 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean validateUser(User user, String password) {
         return PasswordValidator.validateUser(user, password);
+    }
+
+    @Override
+    public List<User> searchUserByParams(Map<String, String> parametersSearch) throws ServiceException {
+        List<User> users;
+        String searchType = parametersSearch.get(USER_SEARCH_TYPE_PARAMETER_NAME);
+        if (searchType == null) {
+            return Collections.emptyList();
+        }
+        try {
+            manager.beginTransaction(userDao);
+            users = searchUsers(searchType, parametersSearch);
+            manager.endTransaction(userDao);
+        } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            throw new ServiceException(exception);
+        }
+        return users;
+    }
+
+    @Override
+    public boolean executeUserProcessingCommand(String typeCommand, long userId,
+                                                LocalDate blockedUntil, String newRole) throws ServiceException {
+        boolean result = false;
+        try {
+            manager.beginTransaction(userDao);
+            if (typeCommand.equals(DELETE_USER_COMMAND_PARAMETER_NAME)) {
+                result = userDao.delete(userId);
+            } else {
+                Optional<User> optionalUser = userDao.findEntity(userId);
+                if (optionalUser.isPresent()) {
+                    User user = optionalUser.get();
+                    switch (typeCommand) {
+                        case BLOCKED_COMMAND_PARAMETER_NAME:
+                            user.setBlockedUntil(blockedUntil);
+                            break;
+                        case UNLOCK_COMMAND_PARAMETER_NAME:
+                            user.setBlockedUntil(LocalDate.now());
+                            break;
+                        case SET_ROLE_COMMAND_PARAMETER_NAME:
+                            user.setRole(User.Role.valueOf(newRole));
+                            break;
+                        default:
+                            throw new ServiceException("Impossible state - unsupported command user processing command");
+                    }
+                    userDao.update(user);
+                    result = true;
+                }
+            }
+            manager.endTransaction(userDao);
+        } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            throw new ServiceException(exception);
+        }
+        return result;
+    }
+
+    @Override
+    public List<User> findUsersAfterUpdate(List<User> users) {
+        List<User> actualUsers = new ArrayList<>();
+        try {
+            manager.beginTransaction(userDao);
+            for (User user:users) {
+                Optional<User> optionalUser = userDao.findEntity(user.getUserId());
+                actualUsers.add(optionalUser.get());
+            }
+            manager.endTransaction(userDao);
+        } catch (DaoException exception) {
+            exception.printStackTrace();
+        }
+        return actualUsers;
+    }
+
+    private List<User> searchUsers(String searchType, Map<String, String> parametersSearch) throws DaoException, ServiceException {
+        List<User> result;
+        switch (searchType) {
+            case USER_ID_PARAMETER_NAME:
+                result = new ArrayList<>();
+                String parameterId = parametersSearch.get(USER_ID_PARAMETER_NAME);
+                long userId = (parameterId != null) ? Long.parseLong(parameterId) : 0;
+                Optional<User> optionalUser = userDao.findEntity(userId);
+                optionalUser.ifPresent(result::add);
+                break;
+            case USERNAME_PARAMETER_NAME:
+                result = userDao.findByPartOfUsername(parametersSearch.get(USERNAME_PARAMETER_NAME));
+                break;
+            case INIT_DATE_PARAMETER_NAME:
+                String date = parametersSearch.get(INIT_DATE_PARAMETER_NAME);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                LocalDate initDate = date != null ? LocalDate.parse(date, formatter) : LocalDate.now();
+                result = userDao.findByInitDate(initDate);
+                break;
+            default:
+                throw new ServiceException("Impossible state - unsupported command when search User");
+        }
+        return result;
     }
 
     @Override

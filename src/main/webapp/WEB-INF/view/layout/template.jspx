@@ -42,8 +42,5 @@
             <!--</div>-->
         </div>
         <jsp:directive.include file="../common/footer.jspx"/>
-        <![CDATA[
-        <script src="${pageContext.request.contextPath}/assests/js/utils.js?ver=5" type="text/javascript"><jsp:text/></script>
-    ]]>
     </body>
 </html>

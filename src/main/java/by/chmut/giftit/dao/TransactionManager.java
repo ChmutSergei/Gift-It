@@ -41,7 +41,7 @@ public class TransactionManager {
 
     public void rollback() throws DaoException {
         try {
-            if (connection != null) {
+            if (connection != null) { //TODO РАЗОБРАТЬСЯ с ролбэк потеря коннекшена
                 connection.rollback();
             }
         } catch (SQLException exception) {

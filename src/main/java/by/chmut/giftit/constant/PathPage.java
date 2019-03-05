@@ -14,6 +14,7 @@ public class PathPage {
     public static final String PREVIEW_ITEM_PAGE = "pages/item_preview.jspx";
     public static final String CART_PAGE = "pages/cart.jspx";
     public static final String ADMIN_PAGE = "pages/administration.jspx";
+    public static final String USER_PROCESSING_PAGE = "pages/user_processing.jspx";
     public static final String PREFIX = "/controller?command=";
 
     public static final String ERROR_PATH = "error";

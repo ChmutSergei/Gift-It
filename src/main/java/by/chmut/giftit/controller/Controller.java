@@ -78,6 +78,7 @@ public class Controller extends HttpServlet {
         if (!title.equals(commandName)) {
             session.setAttribute(PREVIOUS_PAGE_PARAMETER_NAME, title);
             session.removeAttribute(MESSAGE_PARAMETER_NAME);
+            session.removeAttribute(SUCCESSFULLY_COMPLETED_PARAMETER_NAME);
         }
         session.setAttribute(TITLE_ATTRIBUTE_NAME, commandName);
         session.setAttribute(PAGE_PATH_PARAMETER_NAME, router.getPagePath());

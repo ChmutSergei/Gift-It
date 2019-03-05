@@ -1,0 +1,212 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+          xmlns="http://www.w3.org/1999/xhtml" version="2.0">
+    <div class="container">
+        <fmt:setLocale value="${sessionScope.locale}"/>
+        <fmt:setBundle basename="i18n.messages" var="i18n"/>
+        <div id="done" class="alert alert-info center-block" style="display: none">
+            <strong><fmt:message key="user.done" bundle="${i18n}"/></strong>
+        </div>
+        <c:choose>
+            <c:when test="${not empty sessionScope.message}">
+                <c:set var="ermessage"><fmt:message key="${sessionScope.message}" bundle="${i18n}"/></c:set>
+                <div id="message" class="alert alert-info center-block">
+                    <strong>${ermessage}</strong>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <h4><fmt:message key="user.message" bundle="${i18n}"/></h4>
+                <form id="form" class="form-horizontal"
+                      action="${pageContext.request.contextPath}/controller?command=user_processing" method="post">
+                    <div class="col-xs-9 col-xs-offset-1">
+                        <table class="table table-bordered" style="margin-bottom: unset;">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>ID</th>
+                                <th><fmt:message key="admin.orders.username" bundle="${i18n}"/></th>
+                                <th><fmt:message key="admin.orders.nameLastname" bundle="${i18n}"/></th>
+                                <th><fmt:message key="admin.orders.phone" bundle="${i18n}"/></th>
+                                <th>E-mail</th>
+                                <th><fmt:message key="user.initdate" bundle="${i18n}"/></th>
+                                <th><fmt:message key="user.blockeddate" bundle="${i18n}"/></th>
+                                <th><fmt:message key="user.role" bundle="${i18n}"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="user" items="${sessionScope.resultUsers}">
+                                <tr>
+                                    <td><input type="radio" name="userId" value="${user.userId}" required=""
+                                               title="userId"/></td>
+                                    <td>${user.userId}</td>
+                                    <td>${user.username}</td>
+                                    <td>${user.firstName} ${user.lastName}</td>
+                                    <td>${user.phone}</td>
+                                    <td>${user.email}</td>
+                                    <td>${user.initDate}</td>
+                                    <td>${user.blockedUntil}</td>
+                                    <td>${user.role}</td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-9 col-xs-offset-1">
+                        <p><fmt:message key="user.diffsearch" bundle="${i18n}"/></p>
+                        <p><fmt:message key="admin.users.searchtype" bundle="${i18n}"/></p>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-offset-3 col-xs-6">
+                            <label class="radio"><input type="radio" name="typeCommand" value="block"
+                                                        onclick="bChoice()" checked=""/>
+                                <fmt:message bundle="${i18n}" key="user.block"/>
+                            </label>
+                            <label class="radio"><input type="radio" name="typeCommand" value="unlock"
+                                                        onclick="uChoice()"/>
+                                <fmt:message bundle="${i18n}" key="user.unlock"/>
+                            </label>
+                            <label class="radio"><input type="radio" name="typeCommand" value="setRole"
+                                                        onclick="rChoice()"/>
+                                <fmt:message bundle="${i18n}" key="user.type.role"/>
+                            </label>
+                            <label class="radio"><input type="radio" name="typeCommand" value="delete"
+                                                        onclick="dChoice()"/>
+                                <fmt:message bundle="${i18n}" key="user.delete"/>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- block-->
+                    <div id="block" class="form-group" style="display: block">
+                        <label class="control-label col-xs-4" for="datetimepicker"><fmt:message bundle="${i18n}"
+                                                                                                key="user.block.date"/></label>
+                        <div class="col-xs-5">
+                            <div class="form-group">
+                                <div class="input-group date" id="datetimepicker">
+                                    <c:set var="date"><fmt:message key="admin.input.enterdate"
+                                                                   bundle="${i18n}"/></c:set>
+                                    <input class="form-control col-xs-5" name="blockedUntil" id="inputDate"
+                                           placeholder="${date}"/>
+                                    <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"/>
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- unlock-->
+                    <div id="unlock" class="form-group" style="display: none">
+                        <p><fmt:message key="user.unlockmess" bundle="${i18n}"/></p>
+                    </div>
+                    <!-- role-->
+                    <div id="role" class="form-group" style="display: none">
+                        <div class="form-group">
+                            <p><fmt:message key="user.change.role" bundle="${i18n}"/></p>
+                            <div class="col-xs-offset-3 col-xs-6">
+                                <label class="radio"><input type="radio" name="role" value="USER" checked=""/>
+                                    <fmt:message bundle="${i18n}" key="user.role.user"/>
+                                </label>
+                                <label class="radio"><input type="radio" name="role" value="DESIGNER"/>
+                                    <fmt:message bundle="${i18n}" key="user.role.designer"/>
+                                </label>
+                                <label class="radio"><input type="radio" name="role" value="MODERATOR"/>
+                                    <fmt:message bundle="${i18n}" key="user.role.moderator"/>
+                                </label>
+                                <label class="radio"><input type="radio" name="role" value="ADMIN"/>
+                                    <fmt:message bundle="${i18n}" key="user.role.admin"/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- delete-->
+                    <div id="delete" class="form-group" style="display: none">
+                        <p style="color: crimson"><fmt:message key="user.delete.info" bundle="${i18n}"/></p>
+                    </div>
+                    <div class="col-xs-3 col-xs-offset-4">
+                        <c:set var="sub"><fmt:message key="user.submitbtn" bundle="${i18n}"/></c:set>
+                        <input type="submit" class="btn btn-default" value="${sub}" />
+                    </div>
+                </form>
+            </c:otherwise>
+        </c:choose>
+    </div>
+    <c:set var="locale" value="${sessionScope.locale}"/>
+    <c:set var="done" value="${sessionScope.success}"/>
+    <script>
+
+        $(document).ready(function () {
+            var locale = '${locale}';
+            var done = '${done}';
+            $('#datetimepicker').datetimepicker({
+                format: 'DD.MM.YYYY',
+                locale: locale
+            });
+            $('#datetimepicker').data("DateTimePicker").minDate(moment(new Date(), 'DD.MM.YYYY'));
+            if (done == 'true') {
+                $('#done')[0].style.display = "block";
+            }
+        });
+
+        function bChoice() {
+            bOpen();
+            uClose();
+            rClose();
+            dClose();
+        }
+
+        function uChoice() {
+            bClose();
+            uOpen();
+            rClose();
+            dClose();
+        }
+
+        function rChoice() {
+            bClose();
+            uClose();
+            rOpen();
+            dClose();
+        }
+
+        function dChoice() {
+            bClose();
+            uClose();
+            rClose();
+            dOpen();
+        }
+
+        function bOpen() {
+            $('#block')[0].style.display = "block";
+        }
+
+        function bClose() {
+            $('#block')[0].style.display = "none";
+        }
+
+        function uOpen() {
+            $('#unlock')[0].style.display = "block";
+        }
+
+        function uClose() {
+            $('#unlock')[0].style.display = "none";
+        }
+
+        function rOpen() {
+            $('#role')[0].style.display = "block";
+        }
+
+        function rClose() {
+            $('#role')[0].style.display = "none";
+        }
+
+        function dOpen() {
+            $('#delete')[0].style.display = "block";
+        }
+
+        function dClose() {
+            $('#delete')[0].style.display = "none";
+        }
+
+    </script>
+
+</jsp:root>
