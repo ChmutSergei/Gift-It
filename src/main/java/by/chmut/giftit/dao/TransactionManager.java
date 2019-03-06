@@ -30,24 +30,29 @@ public class TransactionManager {
             if (connection != null) {
                 connection.commit();
                 connection.setAutoCommit(true);
-                connection.close();
-                connection = null;
             }
         } catch (SQLException exception) {
             rollback();
+            throw new DaoException("Error when try to finish transaction", exception);
+        }
+        try {
+            connection.close();
+            connection = null;
+        } catch (SQLException exception) {
             throw new DaoException("Error when try to finish transaction", exception);
         }
     }
 
     public void rollback() throws DaoException {
         try {
-            if (connection != null) { //TODO РАЗОБРАТЬСЯ с ролбэк потеря коннекшена
+            if (connection != null) {
                 connection.rollback();
+                connection.close();
+                connection = null;
             }
         } catch (SQLException exception) {
-            throw new DaoException("Rollback Error", exception);
+            throw new DaoException("Rollback Error - connection missing", exception);
         }
-        throw new DaoException("Rollback Error - connection missing");
     }
 
 }

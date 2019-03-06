@@ -33,7 +33,7 @@ public class AddItemCommand implements Command {
         try {
             service.create(itemParameters);
         } catch (ServiceException exception) {
-            logger.error("Error when create new item");
+            logger.error("Error when create new item", exception);
             request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
             router.setRedirectPath(ERROR_PATH);
         }

@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebFilter(filterName = "encodingFilter", urlPatterns = "/*", initParams = {@WebInitParam(name = "encoding", value = "UTF-8")})
+//@WebFilter(filterName = "encodingFilter", urlPatterns = "/*", initParams = {@WebInitParam(name = "encoding", value = "UTF-8")})
 public class EncodingFilter implements Filter {
-    private String encoding = "utf-8";
+    private String encoding = "UTF-8";
 
     @Override
     public void init(FilterConfig filterConfig) {

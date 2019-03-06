@@ -41,6 +41,7 @@ public class AccountCommand implements Command {
             request.getSession().setAttribute(QUESTIONS_PARAMETER_NAME, questions);
         } catch (ServiceException exception) {
             logger.error("Error when try to find paid Items, comments, questions", exception);
+            request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
             router.setRedirectPath(ERROR_PATH);
         }
         return router;

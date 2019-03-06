@@ -7,4 +7,10 @@ import java.util.List;
 public interface QuestionService {
 
     List<Question> find(long userId) throws ServiceException;
+
+    List<Question> findActualQuestion() throws ServiceException;
+
+    Question setAnswer(long questionId, String answer) throws ServiceException;
+
+    List<Question> findAllQuestion() throws ServiceException;
 }

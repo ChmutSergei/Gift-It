@@ -17,7 +17,7 @@ import static by.chmut.giftit.constant.AttributeName.COMMAND_PARAMETER_NAME;
 import static by.chmut.giftit.constant.AttributeName.USER_PARAMETER_NAME;
 import static by.chmut.giftit.entity.User.Role.GUEST;
 
-@WebFilter(urlPatterns = "/controller")
+//@WebFilter(filterName = "security", urlPatterns = "/controller")
 
 public class AuthorizationFilter implements Filter {
 

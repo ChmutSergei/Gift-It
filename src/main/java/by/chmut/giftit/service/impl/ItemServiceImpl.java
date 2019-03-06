@@ -57,8 +57,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> findAll(String pathForTempFiles, int limit, int offset) throws ServiceException {
         List<Item> result;
-        try {
-            manager.beginTransaction(itemDao);
+        try { manager.beginTransaction(itemDao);
             result = itemDao.findAll(pathForTempFiles, limit, offset);
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {

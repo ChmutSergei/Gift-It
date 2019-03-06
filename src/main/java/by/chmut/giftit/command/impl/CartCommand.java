@@ -40,6 +40,7 @@ public class CartCommand implements Command {
             checkItemsOnActive();
         } catch (ServiceException exception) {
             logger.error("Error when try to fill the cart from database", exception);
+            request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
             router.setRedirectPath(ERROR_PATH);
         }
         String modifyCommand = (String) request.getSession().getAttribute(CART_COMMAND_FLAG_PARAMETER_NAME);
@@ -48,6 +49,7 @@ public class CartCommand implements Command {
                 processCommand(modifyCommand, request);
             } catch (ServiceException exception) {
                 logger.error("Error when try to modify the cart", exception);
+                request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
                 router.setRedirectPath(ERROR_PATH);
             }
         }

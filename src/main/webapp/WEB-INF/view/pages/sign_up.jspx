@@ -62,9 +62,9 @@
                                                                                      key="contact.address"/></label>
                     <div class="col-xs-6">
                         <c:set var="address"><fmt:message key="input.address" bundle="${i18n}"/></c:set>
-                        <c:set var="messagecomment"><fmt:message key="signup.valid.address" bundle="${i18n}"/></c:set>
+                        <c:set var="messageaddress"><fmt:message key="signup.valid.address" bundle="${i18n}"/></c:set>
                         <input type="text" class="form-control" id="address" placeholder="${address}" name="address"
-                               pattern="^.{10,80}$" title="${messagecomment}" required=""/>
+                               pattern="^.{10,80}$" title="${messageaddress}" required=""/>
                     </div>
                 </div>
 

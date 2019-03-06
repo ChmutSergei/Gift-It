@@ -2,14 +2,8 @@ package by.chmut.giftit.command.impl;
 
 import by.chmut.giftit.command.Command;
 import by.chmut.giftit.controller.Router;
-import by.chmut.giftit.entity.Cart;
-import by.chmut.giftit.entity.Item;
-import by.chmut.giftit.entity.Order;
-import by.chmut.giftit.entity.User;
-import by.chmut.giftit.service.ItemService;
-import by.chmut.giftit.service.OrderService;
-import by.chmut.giftit.service.ServiceException;
-import by.chmut.giftit.service.ServiceFactory;
+import by.chmut.giftit.entity.*;
+import by.chmut.giftit.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,6 +18,7 @@ public class AdminCommand implements Command {
 
     private OrderService orderService = ServiceFactory.getInstance().getOrderService();
     private ItemService itemService = ServiceFactory.getInstance().getItemService();
+    private QuestionService questionService = ServiceFactory.getInstance().getQuestionService();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -35,10 +30,14 @@ public class AdminCommand implements Command {
             Map<Long, User> userForOrders = orderService.findUserForOrders(orders);
             Map<Long, List<Item>> itemForOrders = orderService.findItemForOrders(orders);
             Item item = findCheckedItem(request).get();
+            List<Question> unansweredQuestion = questionService.findActualQuestion();
+            List<Question> allQuestion = questionService.findAllQuestion();
             request.getSession().setAttribute(ORDERS_PARAMETER_NAME, orders);
             request.getSession().setAttribute(USERS_FOR_ORDERS_PARAMETER_NAME, userForOrders);
             request.getSession().setAttribute(ITEMS_FOR_ORDERS_PARAMETER_NAME, itemForOrders);
             request.getSession().setAttribute(ITEM_PARAMETER_NAME, item);
+            request.getSession().setAttribute(UNANSWERED_QUESTIONS_PARAMETER_NAME, unansweredQuestion);
+            request.getSession().setAttribute(QUESTIONS_PARAMETER_NAME, allQuestion);
         } catch (ServiceException exception) {
             request.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_ADMIN_ORDERS_ERROR_KEY);
         }

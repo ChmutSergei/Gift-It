@@ -111,8 +111,6 @@
                     <br/>
                     <!-- TODO add validity on length-->
                     <div id="input" class="form-group has-feedback" style="display: none">
-                        <!--<label class="control-label col-xs-3" for="dcomment"><fmt:message bundle="${i18n}"-->
-                        <!--key="item.preview.comm"/></label>-->
                             <c:set var="mesComment"><fmt:message key="item.preview.comment" bundle="${i18n}"/></c:set>
                             <c:set var="messagecomment"><fmt:message key="item.preview.comtitle" bundle="${i18n}"/></c:set>
                             <input type="text" class="form-control" pattern="^.{3,250}$"

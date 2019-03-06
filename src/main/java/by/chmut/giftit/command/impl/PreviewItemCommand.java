@@ -50,7 +50,8 @@ public class PreviewItemCommand implements Command {
                 findUserOnComment(comments, request);
             }
         } catch (ServiceException exception) {
-            logger.error("Error when try to preview Item");
+            logger.error("Error when try to preview Item", exception);
+            request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
             router.setPagePath(ERROR_PAGE);
         }
         return router;

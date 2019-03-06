@@ -19,6 +19,7 @@ public enum CommandType {
     ADMINISTRATION(new AdminCommand()),
     SEARCH_USER(new SearchUserCommand()),
     USER_PROCESSING(new UserProcessingCommand()),
+    GIVE_ANSWER(new GiveAnswerCommand()),
     REGISTRATION(new RegistrationCommand());
 
     private Command command;

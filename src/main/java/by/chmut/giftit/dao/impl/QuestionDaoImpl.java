@@ -13,6 +13,8 @@ public class QuestionDaoImpl implements QuestionDao {
 
     private static final String SELECT_ALL_QUESTIONS = "SELECT id, user_id, request, response, " +
             "request_date, response_date FROM Questions";
+    private static final String SELECT_UNANSWERED_QUESTIONS = "SELECT id, user_id, request, response, " +
+            "request_date, response_date FROM Questions WHERE response IS NULL";
     private static final String SELECT_QUESTION_BY_ID = "SELECT id, user_id, request, response, " +
             "request_date, response_date FROM Questions WHERE id = ?";
     private static final String SELECT_QUESTION_BY_USER_ID = "SELECT id, user_id, request, response," +
@@ -79,8 +81,11 @@ public class QuestionDaoImpl implements QuestionDao {
         question.setUserId(resultSet.getLong(2));
         question.setRequest(resultSet.getString(3));
         question.setResponse(resultSet.getString(4));
-        question.setRequestDate(resultSet.getDate(5).toLocalDate());
-        question.setResponseDate(resultSet.getDate(6).toLocalDate());
+        question.setRequestDate(resultSet.getDate(5).toLocalDate()); //TODO защитить все даты в табл от Null
+        Date responseDate = resultSet.getDate(6);
+        if (responseDate != null) {
+            question.setResponseDate(responseDate.toLocalDate());
+        }
         return question;
     }
 
@@ -171,6 +176,27 @@ public class QuestionDaoImpl implements QuestionDao {
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get questions on userId", exception);
+        } finally {
+            close(statement);
+            close(resultSet);
+        }
+        return questions;
+    }
+
+    @Override
+    public List<Question> findUnanswered() throws DaoException {
+        List<Question> questions = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_UNANSWERED_QUESTIONS);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Question question = makeFromResultSet(resultSet);
+                questions.add(question);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get unanswered questions", exception);
         } finally {
             close(statement);
             close(resultSet);

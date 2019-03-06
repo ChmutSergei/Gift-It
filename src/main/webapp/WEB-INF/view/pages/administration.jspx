@@ -2,8 +2,8 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
           xmlns="http://www.w3.org/1999/xhtml" version="2.0">
-        <fmt:setLocale value="${sessionScope.locale}"/>
-        <fmt:setBundle basename="i18n.messages" var="i18n"/>
+    <fmt:setLocale value="${sessionScope.locale}"/>
+    <fmt:setBundle basename="i18n.messages" var="i18n"/>
     <div class="container" style="height: 700px">
         <div class="row content">
             <div class="col-sm-3 sidenav">
@@ -35,7 +35,7 @@
                     <tbody>
                     <c:forEach var="order" items="${sessionScope.orders}">
                         <tr>
-                            <c:set var="user" value="${sessionScope.usersOrder.get(order.orderId)}" />
+                            <c:set var="user" value="${sessionScope.usersOrder.get(order.orderId)}"/>
                             <td>${order.orderId}</td>
                             <td>${user.userId}</td>
                             <td>${user.username}</td>
@@ -47,30 +47,30 @@
                             <td>${order.initDate}</td>
                         </tr>
                         <c:set var="items" value="${sessionScope.itemsOrder.get(order.orderId)}"/>
-                            <table class="table table-bordered">
-                                <thead>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th><fmt:message key="admin.orders.itemId" bundle="${i18n}"/></th>
+                                <th><fmt:message key="admin.orders.item.name" bundle="${i18n}"/></th>
+                                <th><fmt:message key="admin.orders.item.type" bundle="${i18n}"/></th>
+                                <th><fmt:message key="admin.orders.item.price" bundle="${i18n}"/></th>
+                                <th><fmt:message key="admin.orders.item.count" bundle="${i18n}"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="item" items="${items}" varStatus="status">
                                 <tr>
-                                    <th>#</th>
-                                    <th><fmt:message key="admin.orders.itemId" bundle="${i18n}"/></th>
-                                    <th><fmt:message key="admin.orders.item.name" bundle="${i18n}"/></th>
-                                    <th><fmt:message key="admin.orders.item.type" bundle="${i18n}"/></th>
-                                    <th><fmt:message key="admin.orders.item.price" bundle="${i18n}"/></th>
-                                    <th><fmt:message key="admin.orders.item.count" bundle="${i18n}"/></th>
+                                    <td>${status.index+1}</td>
+                                    <td>${item.itemId}</td>
+                                    <td>${item.itemName}</td>
+                                    <td>${item.type}</td>
+                                    <td>${item.price}</td>
+                                    <td>${item.count}</td>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach var="item" items="${items}" varStatus="status">
-                                    <tr>
-                                        <td>${status.index+1}</td>
-                                        <td>${item.itemId}</td>
-                                        <td>${item.itemName}</td>
-                                        <td>${item.type}</td>
-                                        <td>${item.price}</td>
-                                        <td>${item.count}</td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
+                            </c:forEach>
+                            </tbody>
+                        </table>
                     </c:forEach>
                     </tbody>
                 </table>
@@ -86,26 +86,26 @@
                         <tr>
                             <th>ID</th>
                             <th><fmt:message bundle="${i18n}" key="cart.foto"/></th>
-                            <th ><fmt:message bundle="${i18n}" key="cart.name"/></th>
-                            <th ><fmt:message bundle="${i18n}" key="additem.type"/></th>
+                            <th><fmt:message bundle="${i18n}" key="cart.name"/></th>
+                            <th><fmt:message bundle="${i18n}" key="additem.type"/></th>
                             <th><fmt:message bundle="${i18n}" key="cart.description"/></th>
                             <th><fmt:message bundle="${i18n}" key="cart.price"/></th>
                             <th><fmt:message bundle="${i18n}" key="admin.orders.status"/></th>
                         </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>${item.itemId}</td>
-                                <td><img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
-                                         class="img-responsive" style="width:50px;" alt="Image"/></td>
-                                <td>${item.itemName}</td>
-                                <td>${item.type}</td>
-                                <td>${item.description}</td>
-                                <fmt:setLocale value="ru-RU"/>
-                                <td><fmt:formatNumber value="${item.price}" type="currency"/></td>
-                                <fmt:setLocale value="${sessionScope.locale}"/>
-                                <td style="color: crimson">${item.active}</td>
-                            </tr>
+                        <tr>
+                            <td>${item.itemId}</td>
+                            <td><img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
+                                     class="img-responsive" style="width:50px;" alt="Image"/></td>
+                            <td>${item.itemName}</td>
+                            <td>${item.type}</td>
+                            <td>${item.description}</td>
+                            <fmt:setLocale value="ru-RU"/>
+                            <td><fmt:formatNumber value="${item.price}" type="currency"/></td>
+                            <fmt:setLocale value="${sessionScope.locale}"/>
+                            <td style="color: crimson">${item.active}</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -118,12 +118,12 @@
             <!-- users section  -->
             <div class="col-sm-9 users">
                 <h4><fmt:message key="admin.users.message" bundle="${i18n}"/></h4>
-                <p><fmt:message key="admin.users.diffsearch" bundle="${i18n}" /></p>
+                <p><fmt:message key="admin.users.diffsearch" bundle="${i18n}"/></p>
                 <form id="form" class="form-horizontal"
                       action="${pageContext.request.contextPath}/controller?command=search_user" method="post">
                     <div class="form-group has-feedback">
                         <label class="control-label col-xs-3" for="inputId"><fmt:message bundle="${i18n}"
-                                                                                          key="admin.input.id"/></label>
+                                                                                         key="admin.input.id"/></label>
                         <div class="col-xs-6">
                             <c:set var="inputId"><fmt:message key="admin.input.idtitle" bundle="${i18n}"/></c:set>
                             <c:set var="messageForId"><fmt:message key="admin.input.id" bundle="${i18n}"/></c:set>
@@ -133,27 +133,28 @@
                     </div>
                     <div class="form-group has-feedback">
                         <label class="control-label col-xs-3" for="username"><fmt:message bundle="${i18n}"
-                                                                                       key="admin.input.username"/></label>
+                                                                                          key="admin.input.username"/></label>
                         <div class="col-xs-6">
                             <c:set var="elogin"><fmt:message key="admin.enter.username" bundle="${i18n}"/></c:set>
                             <c:set var="messagelogin"><fmt:message key="admin.input.username" bundle="${i18n}"/></c:set>
-                            <input type="text" class="form-control" id="username" placeholder="${elogin}" name="username"
-                                   pattern="^[\w_]{1,20}$" title="${messagelogin}" />
+                            <input type="text" class="form-control" id="username" placeholder="${elogin}"
+                                   name="username"
+                                   pattern="^[\w_]{1,20}$" title="${messagelogin}"/>
                         </div>
                     </div>
                     <label class="control-label col-xs-4" for="datetimepicker"><fmt:message bundle="${i18n}"
-                                                                                      key="admin.input.date"/></label>
+                                                                                            key="admin.input.date"/></label>
                     <div class="col-xs-5">
-                    <div class="form-group">
-                        <div class="input-group date" id="datetimepicker">
-                            <c:set var="date"><fmt:message key="admin.input.enterdate" bundle="${i18n}"/></c:set>
-                            <input class="form-control col-xs-5" name="initDate" id="inputDate"
-                               placeholder="${date}" />
-                            <span class="input-group-addon">
+                        <div class="form-group">
+                            <div class="input-group date" id="datetimepicker">
+                                <c:set var="date"><fmt:message key="admin.input.enterdate" bundle="${i18n}"/></c:set>
+                                <input class="form-control col-xs-5" name="initDate" id="inputDate"
+                                       placeholder="${date}"/>
+                                <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"/>
                             </span>
+                            </div>
                         </div>
-                    </div>
                     </div>
                     <div class="form-group">
                         <p><fmt:message key="admin.users.searchtype" bundle="${i18n}"/></p>
@@ -176,8 +177,81 @@
 
             <!-- questions section  -->
             <div class="col-sm-9 questions">
-                <h3><fmt:message key="admin.questions" bundle="${i18n}"/></h3>
+                <h4><fmt:message key="admin.questions.info" bundle="${i18n}"/></h4>
+                <form id="form2" class="form-horizontal"
+                      action="${pageContext.request.contextPath}/controller?command=give_answer" method="post" content="UTF-8">
+                    <table class="table table-bordered" style="margin-bottom: unset;">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th><fmt:message key="admin.question.userId" bundle="${i18n}"/></th>
+                            <th><fmt:message key="admin.question.request" bundle="${i18n}"/></th>
+                            <th><fmt:message key="admin.question.requestdate" bundle="${i18n}"/></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="question" items="${sessionScope.unanswered}">
+                            <tr>
+                                <td>${question.questionId}</td>
+                                <td>${question.userId}</td>
+                                <td>${question.request}</td>
+                                <td>${question.requestDate}</td>
+                                <td><div class="form-group">
+                                    <input type="radio" name="questionId" value="${question.questionId}" required=""
+                                           title="questionId"/></div></td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
 
+                    <div class="col-xs-9">
+                        <p><fmt:message key="admin.question.choose" bundle="${i18n}"/></p>
+                        <div class="form-group has-feedback">
+                            <c:set var="messageAnswer"><fmt:message key="admin.answer" bundle="${i18n}"/></c:set>
+                            <c:set var="enterAnswer"><fmt:message key="admin.answer" bundle="${i18n}"/></c:set>
+                            <input type="text" class="form-control" pattern="^.{3,250}$"
+                                   id="answe" name="respon" placeholder="${enterAnswer}" title="${messageAnswer}"/>
+                        </div>
+                        <div class="form-group">
+                            <c:set var="sub"><fmt:message key="admin.submitbtn" bundle="${i18n}"/></c:set>
+                            <input type="submit" class="btn btn-default" value="${sub}"/>
+                        </div>
+                    </div>
+                </form>
+                <div class="col-xs-9">
+                    <p><fmt:message key="admin.question.review" bundle="${i18n}"/></p>
+                    <button class="btn btn-default" data-toggle="collapse" data-target="#review"><fmt:message
+                            bundle="${i18n}" key="admin.show.button"/></button>
+                </div>
+                <div id="review" class="collapse">
+                    <div class="col-xs-9">
+                        <table class="table table-bordered" style="margin-bottom: unset;">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th><fmt:message key="admin.question.userId" bundle="${i18n}"/></th>
+                                <th><fmt:message key="admin.question.request" bundle="${i18n}"/></th>
+                                <th><fmt:message key="admin.question.response" bundle="${i18n}"/></th>
+                                <th><fmt:message key="admin.question.requestdate" bundle="${i18n}"/></th>
+                                <th><fmt:message key="admin.question.responsedate" bundle="${i18n}"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="question" items="${sessionScope.questions}">
+                                <tr>
+                                    <td>${question.questionId}</td>
+                                    <td>${question.userId}</td>
+                                    <td>${question.request}</td>
+                                    <td>${question.response}</td>
+                                    <td>${question.requestDate}</td>
+                                    <td>${question.responseDate}</td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -187,22 +261,50 @@
 
         $(document).ready(function () {
             var locale = '${locale}';
-            oOpen();iClose();uClose();qClose();oAdd();
+            oOpen();
+            iClose();
+            uClose();
+            qClose();
+            oAdd();
             $('#orders').click(function () {
-                oOpen();iClose();uClose();qClose();
-                oAdd();iRem();uRem();qRem();
+                oOpen();
+                iClose();
+                uClose();
+                qClose();
+                oAdd();
+                iRem();
+                uRem();
+                qRem();
             });
             $('#items').click(function () {
-                oClose();iOpen();uClose();qClose();
-                oRem();iAdd();uRem();qRem();
+                oClose();
+                iOpen();
+                uClose();
+                qClose();
+                oRem();
+                iAdd();
+                uRem();
+                qRem();
             });
             $('#users').click(function () {
-                oClose();iClose();uOpen();qClose();
-                oRem();iRem();uAdd();qRem();
+                oClose();
+                iClose();
+                uOpen();
+                qClose();
+                oRem();
+                iRem();
+                uAdd();
+                qRem();
             });
             $('#questions').click(function () {
-                oClose();iClose();uClose();qOpen();
-                oRem();iRem();uRem();qAdd();
+                oClose();
+                iClose();
+                uClose();
+                qOpen();
+                oRem();
+                iRem();
+                uRem();
+                qAdd();
             });
             $('#datetimepicker').datetimepicker({
                 format: 'DD.MM.YYYY',
@@ -210,30 +312,39 @@
             });
             $('#datetimepicker').data("DateTimePicker").maxDate(moment(new Date(), 'DD.MM.YYYY'));
         });
+
         function oAdd() {
             $('#orders').addClass('active');
         }
+
         function oRem() {
             $('#orders').removeClass('active');
         }
+
         function iAdd() {
             $('#items').addClass('active');
         }
+
         function iRem() {
             $('#items').removeClass('active');
         }
+
         function uAdd() {
             $('#users').addClass('active');
         }
+
         function uRem() {
             $('#users').removeClass('active');
         }
+
         function qAdd() {
             $('#questions').addClass('active');
         }
+
         function qRem() {
             $('#questions').removeClass('active');
         }
+
         check.onclick = function () {
             var form = $('#form')[0];
             if (form.checkValidity()) {
@@ -268,30 +379,39 @@
         $('body').click(function () {
             $('#done')[0].style.display = "none";
         });
+
         function oClose() {
             $('.orders')[0].style.display = "none";
         }
+
         function oOpen() {
             $('.orders')[0].style.display = "block";
         }
+
         function iClose() {
             $('.items')[0].style.display = "none";
         }
+
         function iOpen() {
             $('.items')[0].style.display = "block";
         }
+
         function uClose() {
             $('.users')[0].style.display = "none";
         }
+
         function uOpen() {
             $('.users')[0].style.display = "block";
         }
+
         function qClose() {
             $('.questions')[0].style.display = "none";
         }
+
         function qOpen() {
             $('.questions')[0].style.display = "block";
         }
+
         function sendItemId(element) {
             var itemId = $(element).attr('name');
             var contextUrl = '${pageContext.request.contextPath}';
@@ -301,7 +421,7 @@
                 data: {command: command, itemId: itemId},
                 url: contextUrl + '/ajax'
             }).done(function (data) {
-                if(data == 'true') {
+                if (data == 'true') {
                     $('#done')[0].style.display = "block";
                 }
             }).fail(function (data) {
@@ -310,6 +430,7 @@
                 }
             })
         }
+
         function sendId(element) {
             var commentId = $(element).attr('about');
             var command = 'DELETE_COMMENT';

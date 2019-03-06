@@ -30,7 +30,7 @@ public class UserProcessingCommand implements Command {
         String typeCommand = request.getParameter(TYPE_COMMAND_PARAMETER_NAME);
         String optionalId = request.getParameter(USER_ID_PARAMETER_NAME);
         String optionalDate = request.getParameter(BLOCKED_UNTIL_DATE_PARAMETER_NAME);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         LocalDate blockedUntil = !optionalDate.isEmpty() ? LocalDate.parse(optionalDate, formatter) : LocalDate.now();
         String newRole = request.getParameter(ROLE_PARAMETER_NAME);
         long userId = optionalId != null ? Long.parseLong(optionalId) : 0;
@@ -41,7 +41,9 @@ public class UserProcessingCommand implements Command {
             }
             request.getSession().setAttribute(SHOW_RESULT_PARAMETER_NAME, true);
         } catch (ServiceException exception) {
-            exception.printStackTrace();
+            logger.error("Error when processing user", exception);
+            request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
+            router.setRedirectPath(ERROR_PATH);
         }
         return router;
     }

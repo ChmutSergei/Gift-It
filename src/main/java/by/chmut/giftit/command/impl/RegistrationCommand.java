@@ -33,7 +33,7 @@ public class RegistrationCommand implements Command {
         try {
             user = Optional.ofNullable(service.create(userParameters));
         } catch (ServiceException exception) {
-            logger.error(exception);
+            logger.error("Error when try to save new User", exception);
             request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
             router.setRedirectPath(ERROR_PATH);
         }

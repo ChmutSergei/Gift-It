@@ -47,7 +47,7 @@
                 <h3>Request from ${pageContext.errorData.requestURI} is failed</h3>
             </div>
         </c:if>
-        <c:if test="${not empty pageContext.errorData.statusCode}">
+        <c:if test="${pageContext.errorData.statusCode > 0}">
             <div class="row">
                 <h3>Status code: ${pageContext.errorData.statusCode}</h3>
             </div>

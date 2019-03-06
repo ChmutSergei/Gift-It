@@ -43,7 +43,7 @@ public class SearchUserCommand implements Command {
                     request.getSession().setAttribute(RESULT_OF_SEARCH_USERS_PARAMETER_NAME, users);
                 }
             } catch (ServiceException exception) {
-                logger.error(exception);
+                logger.error("Error when try to search Users by parameters", exception);
                 request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
                 router.setRedirectPath(ERROR_PATH);
             }

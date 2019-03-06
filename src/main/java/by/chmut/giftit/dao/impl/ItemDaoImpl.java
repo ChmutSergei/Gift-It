@@ -58,13 +58,14 @@ public class ItemDaoImpl implements ItemDao {
                 Item item = makeFromResultSet(resultSet, filePath);
                 items.add(item);
             }
+            throw new SQLException("Test");
         } catch (IOException | SQLException exception) {
             throw new DaoException("Error with get all items", exception);
         } finally {
             close(resultSet);
             close(statement);
         }
-        return items;
+//        return items;
     }
 
     @Override

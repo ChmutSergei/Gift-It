@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
                 break;
             case INIT_DATE_PARAMETER_NAME:
                 String date = parametersSearch.get(INIT_DATE_PARAMETER_NAME);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
                 LocalDate initDate = date != null ? LocalDate.parse(date, formatter) : LocalDate.now();
                 result = userDao.findByInitDate(initDate);
                 break;

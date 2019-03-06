@@ -38,6 +38,7 @@ public class DefaultCommand implements Command {
                 results = service.findItemsOnId(itemIdList, limit, offset, pathForTempFiles);
             } catch (ServiceException exception) {
                 logger.error("Error when find Item on filter", exception);
+                request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
                 router.setPagePath(ERROR_PAGE);
             }
         } else {
@@ -45,6 +46,7 @@ public class DefaultCommand implements Command {
                 results = service.findAll(pathForTempFiles, 3, offset);
             } catch (ServiceException exception) {
                 logger.error("Error when find all Item", exception);
+                request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
                 router.setPagePath(ERROR_PAGE);
             }
         }

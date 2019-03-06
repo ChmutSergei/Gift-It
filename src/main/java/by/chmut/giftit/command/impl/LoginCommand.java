@@ -42,7 +42,7 @@ public class LoginCommand implements Command {
                 userValid = service.validateUser(user.get(), password);
             }
         } catch (ServiceException exception) {
-            logger.error(exception);
+            logger.error("Error when try to find User", exception);
             request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
             router.setRedirectPath(ERROR_PATH);
         }

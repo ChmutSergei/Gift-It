@@ -84,12 +84,16 @@ public class AttributeName {
     public static final String DELETE_USER_COMMAND_PARAMETER_NAME = "delete";
     public static final String SHOW_RESULT_PARAMETER_NAME = "show";
     public static final String SUCCESSFULLY_COMPLETED_PARAMETER_NAME = "success";
+    public static final String UNANSWERED_QUESTIONS_PARAMETER_NAME = "unanswered";
+    public static final String QUESTION_ID_PARAMETER_NAME = "questionId";
+    public static final String ANSWER_PARAMETER_NAME = "respon";
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
     public static final String MESSAGE_NOT_FOUND_ID_KEY= "error.notFoundId";
     public static final String MESSAGE_CART_EMPTY_KEY= "cart.emptyCart";
     public static final String MESSAGE_ADMIN_ORDERS_ERROR_KEY= "admin.error.orders";
     public static final String MESSAGE_NOT_FOUND_USERS_KEY= "user.not.found";
+    public static final String MESSAGE_WRONG_DATA_KEY= "admin.answer.error";
 
     public static final String ADD_CART_COMMAND= "ADD_ITEM";
     public static final String DELETE_CART_COMMAND= "DELETE_ITEM";
@@ -102,5 +106,6 @@ public class AttributeName {
     public static final int MAX_COUNT_FOR_ITEM_TO_CART = 300;
     public static final int MIN_LENGTH_COMMENT = 3;
     public static final int MAX_LENGTH_COMMENT = 250;
+    public static final String DATE_TIME_FORMAT = "dd.MM.yyyy";
 
 }
