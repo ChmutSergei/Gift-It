@@ -60,15 +60,15 @@ public class UserDaoImpl implements UserDao {
     }
 
     public Optional<User> findByUsername(String username) throws DaoException {
-        Optional<User> user = Optional.empty();
+        User user = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SELECT_USER_BY_USERNAME);
             statement.setString(1, username);
             resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                user = Optional.of(makeFromResultSet(resultSet));
+            while (resultSet.next()) {
+                user = makeFromResultSet(resultSet);
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get user by username", exception);
@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDao {
             close(statement);
             close(resultSet);
         }
-        return user;
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class UserDaoImpl implements UserDao {
             part = "%" + part + "%";
             statement.setString(1, part);
             resultSet = statement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 User user = makeFromResultSet(resultSet);
                 users.add(user);
             }
@@ -126,15 +126,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findEntity(Long id) throws DaoException {
-        Optional<User> user = Optional.empty();
+        User user = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SELECT_USER_BY_ID);
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                user = Optional.of(makeFromResultSet(resultSet));
+            while (resultSet.next()) {
+                user = makeFromResultSet(resultSet);
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get user by id", exception);
@@ -142,7 +142,7 @@ public class UserDaoImpl implements UserDao {
             close(statement);
             close(resultSet);
         }
-        return user;
+        return Optional.ofNullable(user);
     }
 
     private User makeFromResultSet(ResultSet resultSet) throws SQLException {

@@ -58,19 +58,18 @@ public class ItemDaoImpl implements ItemDao {
                 Item item = makeFromResultSet(resultSet, filePath);
                 items.add(item);
             }
-            throw new SQLException("Test");
         } catch (IOException | SQLException exception) {
             throw new DaoException("Error with get all items", exception);
         } finally {
             close(resultSet);
             close(statement);
         }
-//        return items;
+        return items;
     }
 
     @Override
     public Optional<Item> find(Long id, String filePath) throws DaoException {
-        Optional<Item> item = Optional.empty();//TODO
+        Item item = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -78,7 +77,7 @@ public class ItemDaoImpl implements ItemDao {
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                item = Optional.of(makeFromResultSet(resultSet, filePath));
+                item = makeFromResultSet(resultSet, filePath);
             }
         } catch (IOException | SQLException exception) {
             throw new DaoException("Error with get item by id", exception);
@@ -86,7 +85,7 @@ public class ItemDaoImpl implements ItemDao {
             close(resultSet);
             close(statement);
         }
-        return item;
+        return Optional.ofNullable(item);
     }
 
     @Override
@@ -115,7 +114,7 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public Optional<Item> find(long commentId) throws DaoException {
-        Optional<Item> item = Optional.empty();
+        Item item = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -123,10 +122,9 @@ public class ItemDaoImpl implements ItemDao {
             statement.setLong(1, commentId);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Item optinalItem = new Item();
-                optinalItem.setItemId(resultSet.getLong(1));
-                optinalItem.setItemName(resultSet.getString(2));
-                item = Optional.of(optinalItem);
+                item = new Item();
+                item.setItemId(resultSet.getLong(1));
+                item.setItemName(resultSet.getString(2));
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get item by id", exception);
@@ -134,7 +132,7 @@ public class ItemDaoImpl implements ItemDao {
             close(resultSet);
             close(statement);
         }
-        return item;
+        return Optional.ofNullable(item);
     }
 
     @Override

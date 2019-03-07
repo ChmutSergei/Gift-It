@@ -5,6 +5,7 @@ import by.chmut.giftit.dao.QuestionDao;
 import by.chmut.giftit.entity.Question;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +57,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
     @Override
     public Optional<Question> findEntity(Long id) throws DaoException {
-        Optional<Question> question = Optional.empty();
+        Question question = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -64,7 +65,7 @@ public class QuestionDaoImpl implements QuestionDao {
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                question = Optional.of(makeFromResultSet(resultSet));
+                question = makeFromResultSet(resultSet);
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get question by id", exception);
@@ -72,7 +73,7 @@ public class QuestionDaoImpl implements QuestionDao {
             close(statement);
             close(resultSet);
         }
-        return question;
+        return Optional.ofNullable(question);
     }
 
     private Question makeFromResultSet(ResultSet resultSet) throws SQLException {
@@ -120,7 +121,9 @@ public class QuestionDaoImpl implements QuestionDao {
             statement.setString(2, question.getRequest());
             statement.setString(3, question.getResponse());
             statement.setDate(4, Date.valueOf(question.getRequestDate()));
-            statement.setDate(5, Date.valueOf(question.getResponseDate()));
+            LocalDate responseLocalDate = question.getResponseDate();
+            Date responseDate = responseLocalDate != null ? Date.valueOf(responseLocalDate) : null;
+            statement.setDate(5, responseDate);
             int result = statement.executeUpdate();
             if (result != 1) {
                 throw new DaoException("Error with creating question");

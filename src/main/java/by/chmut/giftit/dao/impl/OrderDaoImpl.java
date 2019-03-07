@@ -55,7 +55,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Optional<Order> findEntity(Long id) throws DaoException {
-        Optional<Order> order = Optional.empty();
+        Order order = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -63,7 +63,7 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                order = Optional.of(makeFromResultSet(resultSet));
+                order = makeFromResultSet(resultSet);
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get order by id", exception);
@@ -71,7 +71,7 @@ public class OrderDaoImpl implements OrderDao {
             close(statement);
             close(resultSet);
         }
-        return order;
+        return Optional.ofNullable(order);
     }
 
     private Order makeFromResultSet(ResultSet resultSet) throws SQLException {

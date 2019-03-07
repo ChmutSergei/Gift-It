@@ -68,6 +68,7 @@ public class AttributeName {
     public static final String COMMENT_ID_PARAMETER_NAME = "commentId";
     public static final String COMMENT_PARAMETER_NAME = "comment";
     public static final String QUESTIONS_PARAMETER_NAME = "questions";
+    public static final String QUESTION_PARAMETER_NAME = "question";
     public static final String ORDERS_PARAMETER_NAME = "orders";
     public static final String ITEMS_FOR_ORDERS_PARAMETER_NAME = "itemsOrder";
     public static final String USERS_FOR_ORDERS_PARAMETER_NAME = "usersOrder";

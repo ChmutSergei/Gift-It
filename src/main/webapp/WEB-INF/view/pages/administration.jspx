@@ -312,7 +312,7 @@
             });
             $('#datetimepicker').data("DateTimePicker").maxDate(moment(new Date(), 'DD.MM.YYYY'));
         });
-
+        $('.img-responsive').css( 'cursor', 'pointer' );
         function oAdd() {
             $('#orders').addClass('active');
         }
@@ -423,24 +423,6 @@
             }).done(function (data) {
                 if (data == 'true') {
                     $('#done')[0].style.display = "block";
-                }
-            }).fail(function (data) {
-                if (console &amp;&amp; console.log) {
-                    console.log("Error data:", data);
-                }
-            })
-        }
-
-        function sendId(element) {
-            var commentId = $(element).attr('about');
-            var command = 'DELETE_COMMENT';
-            $.ajax({
-                type: 'POST',
-                data: {command: command, commentId: commentId},
-                url: contextUrl + '/ajax'
-            }).done(function (data) {
-                if (data == 'true') {
-                    // $('#done')[0].style.display = "block";
                 }
             }).fail(function (data) {
                 if (console &amp;&amp; console.log) {

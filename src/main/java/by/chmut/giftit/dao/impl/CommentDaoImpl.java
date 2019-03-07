@@ -55,7 +55,7 @@ public class CommentDaoImpl implements CommentDao { //TODO исправить в
 
     @Override
     public Optional<Comment> findEntity(Long id) throws DaoException {
-        Optional<Comment> comment = Optional.empty();
+        Comment comment = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -63,7 +63,7 @@ public class CommentDaoImpl implements CommentDao { //TODO исправить в
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                comment = Optional.of(makeFromResultSet(resultSet));
+                comment = makeFromResultSet(resultSet);
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get comment by id", exception);
@@ -71,7 +71,7 @@ public class CommentDaoImpl implements CommentDao { //TODO исправить в
             close(statement);
             close(resultSet);
         }
-        return comment;
+        return Optional.ofNullable(comment);
     }
 
     @Override

@@ -43,4 +43,8 @@
         </div>
         <jsp:directive.include file="../common/footer.jspx"/>
     </body>
+    <script>
+        $('.glyphicon-shopping-cart').css( 'cursor', 'pointer' );
+        $('.glyphicon-trash').css( 'cursor', 'pointer' );
+    </script>
 </html>

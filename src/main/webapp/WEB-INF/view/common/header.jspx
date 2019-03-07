@@ -52,6 +52,17 @@
                             </li>
                         </c:otherwise>
                     </c:choose>
+                    <c:choose>
+                        <c:when test="${sessionScope.title eq 'about'}">
+                            <li class="active"><a href="#"><fmt:message key="nav.about" bundle="${i18n}"/></a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/controller?command=about">
+                                    <fmt:message key="nav.about" bundle="${i18n}"/></a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
                     <c:if test="${sessionScope.user.role eq 'ADMIN'}">
                         <c:set var="navName">
                             <fmt:message key="nav.admin" bundle="${i18n}"/>

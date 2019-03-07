@@ -215,7 +215,8 @@
                 addPriceForSearch($(this));
             });
         });
-
+        $('.img-responsive').css( 'cursor', 'pointer' );
+        $('.forSend').css( 'cursor', 'pointer' );
         function addTypeForSearch(element) {
             var type = $(element).attr('name');
             var action = 'OFF';

@@ -12,6 +12,7 @@ public class ServiceFactory {
     private final CommentService commentService = new CommentServiceImpl();
     private final QuestionService questionService = new QuestionServiceImpl();
     private final OrderService orderService = new OrderServiceImpl();
+    private final AjaxService ajaxService = new AjaxServiceImpl();
 
     private ServiceFactory() {
     }
@@ -42,5 +43,9 @@ public class ServiceFactory {
 
     public OrderService getOrderService() {
         return orderService;
+    }
+
+    public AjaxService getAjaxService() {
+        return ajaxService;
     }
 }

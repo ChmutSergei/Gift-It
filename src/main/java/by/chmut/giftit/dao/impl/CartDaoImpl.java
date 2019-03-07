@@ -52,7 +52,7 @@ public class CartDaoImpl implements CartDao {
 
     @Override
     public Optional<Cart> findEntity(Long id) throws DaoException {
-        Optional<Cart> cart = Optional.empty();
+        Cart cart = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -60,7 +60,7 @@ public class CartDaoImpl implements CartDao {
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                cart = Optional.of(makeFromResultSet(resultSet));
+                cart = makeFromResultSet(resultSet);
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with get cart by id", exception);
@@ -68,7 +68,7 @@ public class CartDaoImpl implements CartDao {
             close(statement);
             close(resultSet);
         }
-        return cart;
+        return Optional.ofNullable(cart);
     }
 
     private Cart makeFromResultSet(ResultSet resultSet) throws SQLException {

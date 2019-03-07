@@ -35,7 +35,6 @@ public class AjaxController extends HttpServlet {
     private static final Logger logger = LogManager.getLogger();
     private static final Map<String, Bitmap> bitmapStorage;
 
-    private UserService userService = new UserServiceImpl();
     private AjaxCommandManager commandManager = new AjaxCommandManager();
 
     static {
@@ -59,7 +58,7 @@ public class AjaxController extends HttpServlet {
         AjaxCommand command = AjaxCommand.valueOf(type);
         switch (command) {
             case CHECK_USERNAME:
-                checkUsernameOnExist(request, response);
+                commandManager.checkUsernameOnExist(request, response);
                 break;
             case SET_ITEM_ID:
                 request.getSession().setAttribute(ITEM_ID_PARAMETER_NAME, request.getParameter(ITEM_ID_PARAMETER_NAME));
@@ -71,10 +70,10 @@ public class AjaxController extends HttpServlet {
             case RESET_FILTER:
                 resetFilter(request, response);
                 break;
-            case ADD_TO_CART:
+            case ADD_TO_CART: // TODO check User exist
                 addToCart(request);
                 break;
-            case DELETE_FROM_CART:
+            case DELETE_FROM_CART: // TODO check User exist?
                 deleteFromCart(request);
                 break;
             case UPDATE_USER_ADDRESS_PHONE:
@@ -88,11 +87,10 @@ public class AjaxController extends HttpServlet {
             case CHANGE_STATUS_ITEM:
                 commandManager.changeItemStatus(request, response);
                 break;
+            case ACCEPT_QUESTION:
+                commandManager.acceptQuestion(request,response);
+                break;
         }
-    }
-
-    private void updateUserData(HttpServletRequest request, HttpServletResponse response) {
-
     }
 
     private void deleteFromCart(HttpServletRequest request) {
@@ -127,21 +125,17 @@ public class AjaxController extends HttpServlet {
 
     }
 
-    private void checkUsernameOnExist(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        String username = request.getParameter(USERNAME_PARAMETER_NAME);
-        try {
-            Optional<User> user = userService.find(username);
-            if (user.isPresent()) {
-                resp.getWriter().write(new Gson().toJson(true));
-            }
-        } catch (ServiceException exception) {
-            logger.error(exception);
-            throw new ServletException("Error when try to find user");
-        }
-    }
-
     private enum AjaxCommand {
-        CHECK_USERNAME, SET_ITEM_ID, SEARCH_FILTER, RESET_FILTER, ADD_TO_CART, DELETE_FROM_CART, UPDATE_USER_ADDRESS_PHONE,
-        DELETE_COMMENT, ADD_COMMENT, CHANGE_STATUS_ITEM
+        CHECK_USERNAME,
+        SET_ITEM_ID,
+        SEARCH_FILTER,
+        RESET_FILTER,
+        ADD_TO_CART,
+        DELETE_FROM_CART,
+        UPDATE_USER_ADDRESS_PHONE,
+        DELETE_COMMENT,
+        ADD_COMMENT,
+        CHANGE_STATUS_ITEM,
+        ACCEPT_QUESTION
     }
 }

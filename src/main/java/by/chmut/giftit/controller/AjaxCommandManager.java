@@ -1,16 +1,15 @@
 package by.chmut.giftit.controller;
 
-import by.chmut.giftit.dao.*;
 import by.chmut.giftit.entity.Bitmap;
-import by.chmut.giftit.entity.Comment;
 import by.chmut.giftit.entity.Item;
 import by.chmut.giftit.entity.User;
+import by.chmut.giftit.service.AjaxService;
+import by.chmut.giftit.service.ServiceFactory;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,9 +19,7 @@ import static by.chmut.giftit.constant.AttributeName.*;
 
 class AjaxCommandManager {
 
-    private UserDao userDao = DaoFactory.getInstance().getUserDao();
-    private CommentDao commentDao = DaoFactory.getInstance().getCommentDao();
-    private ItemDao itemDao = DaoFactory.getInstance().getItemDao();
+    private AjaxService ajaxService = ServiceFactory.getInstance().getAjaxService();
     private Bitmap bitmapPrice;
     private List<Bitmap> checkedBitmaps = new ArrayList<>();
 
@@ -64,14 +61,14 @@ class AjaxCommandManager {
         User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
         user.setPhone(newPhone);
         user.setAddress(newAddress);
-        try {
-            userDao.update(user);
-        } catch (DaoException exception) {
-            newPhone = "ERROR";
-        }
+        boolean result = ajaxService.updateUserData(user);
         UserData data = new UserData();
-        data.phone = newPhone;
         data.address = newAddress;
+        if (result) {
+            data.phone = newPhone;
+        } else {
+            data.phone = "ERROR";
+        }
         response.getWriter().write(new Gson().toJson(data));
     }
 
@@ -106,64 +103,45 @@ class AjaxCommandManager {
         return result;
     }
 
+    void checkUsernameOnExist(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String username = request.getParameter(USERNAME_PARAMETER_NAME);
+        boolean result = ajaxService.checkUsernameOnExist(username);
+        response.getWriter().write(new Gson().toJson(result));
+    }
+
     void deleteComment(HttpServletRequest request, HttpServletResponse response) throws IOException {
         long commentId = Long.parseLong(request.getParameter(COMMENT_ID_PARAMETER_NAME));
-        boolean done;
-        try {
-            done = commentDao.delete(commentId);
-        } catch (DaoException e) {
-            done = false;
-        }
-        if (done) {
-            response.getWriter().write((new Gson()).toJson(true));
-        }
+        boolean result = ajaxService.deleteComment(commentId);
+        response.getWriter().write((new Gson()).toJson(result));
     }
 
     void addComment(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Item item = (Item) request.getSession().getAttribute(ITEM_PARAMETER_NAME);
         User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
         String commentMessage = request.getParameter(COMMENT_PARAMETER_NAME);
-        boolean success = false;
-        if (user != null && commentMessage.length() > MIN_LENGTH_COMMENT && commentMessage.length() < MAX_LENGTH_COMMENT ) {
-            Comment comment = new Comment();
-            comment.setItemId(item.getItemId());
-            comment.setUserId(user.getUserId());
-            comment.setDate(LocalDate.now());
-            comment.setMessage(commentMessage);
-            comment.setCommentStatus(Comment.CommentStatus.NEW);
-            try {
-                comment = commentDao.create(comment);
-                if (comment.getCommentId() != 0) {
-                    success = true;
-                }
-            } catch (DaoException e) {
-                //TODO
-            }
+        if (user != null && commentMessage.length() > MIN_LENGTH_COMMENT && commentMessage.length() < MAX_LENGTH_COMMENT) {
+            boolean result = ajaxService.addComment(item.getItemId(), user.getUserId(), commentMessage);
+            response.getWriter().write((new Gson()).toJson(result));
         }
-        response.getWriter().write((new Gson()).toJson(success));
     }
 
     void changeItemStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String stringId = request.getParameter(ITEM_ID_PARAMETER_NAME);
-        if (stringId != null) {
-            long itemId = Long.parseLong(stringId);
-            Item item;
-            try {
-                item = itemDao.find(itemId, request.getServletContext().getRealPath("")).get();
-                boolean status = item.isActive();
-                item.setActive(!status);
-                item = itemDao.update(item);
-            } catch (DaoException e) {
-                item = null;
-            }
-            if (item != null) {
-                response.getWriter().write((new Gson()).toJson(true));
-            }
+        long itemId = Long.parseLong(stringId);
+        boolean result = ajaxService.changeItemStatus(itemId, request.getServletContext().getRealPath(""));
+        response.getWriter().write((new Gson()).toJson(result));
+    }
+
+    void acceptQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String message = request.getParameter(QUESTION_PARAMETER_NAME);
+        User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
+        if (user != null && message.length() > MIN_LENGTH_COMMENT && message.length() < MAX_LENGTH_COMMENT) {
+            boolean result = ajaxService.acceptQuestion(user.getUserId(), message);
+            response.getWriter().write((new Gson()).toJson(result));
         }
     }
 
-
-    private static class UserData{
+    private static class UserData {
         String phone;
         String address;
     }

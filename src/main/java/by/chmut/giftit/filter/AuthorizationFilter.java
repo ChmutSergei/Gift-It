@@ -37,7 +37,7 @@ public class AuthorizationFilter implements Filter {
      * EmptyCart
      * Administration
      * AddItem - страница для moderator
-     *
+     * Processing User
      * идея создать список доступных страниц для каждой роли и проверять на contains в switch
      */
     @Override
