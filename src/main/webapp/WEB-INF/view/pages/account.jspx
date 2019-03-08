@@ -167,7 +167,7 @@
                         </thead>
                         <tbody>
                         <c:forEach var="comment" items="${sessionScope.comments}">
-                            <c:set var="item" value="${sessionScope.items.get(comment.itemId)}"/>
+                            <c:set var="item" value="${sessionScope.items.get(comment.commentId)}"/>
                             <tr>
                                 <td class="col-xs-2"><a id="item" name="${item.itemId}"
                                                         onclick="sendItemId($(this))" href="#">${item.itemName}</a></td>
@@ -175,7 +175,7 @@
                                 <td class="col-xs-2">${comment.date}</td>
                                 <td class="col-xs-1"><a><span about="${comment.commentId}" onclick="sendId($(this))"
                                                               class="glyphicon glyphicon-trash"/></a>
-                                    <i id="done" style="display: none;color: coral;">
+                                    <i id="d${comment.commentId}" style="display: none;color: coral;">
                                         <fmt:message key="account.done" bundle="${i18n}"/></i></td>
                             </tr>
                         </c:forEach>
@@ -343,7 +343,7 @@
                 url: contextUrl + '/ajax'
             }).done(function (data) {
                 if (data == 'true') {
-                    $('#done')[0].style.display = "block";
+                    $('#d' + commentId)[0].style.display = "block";
                 }
             }).fail(function (data) {
                 if (console &amp;&amp; console.log) {

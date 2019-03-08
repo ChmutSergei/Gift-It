@@ -154,4 +154,30 @@ public class AjaxServiceImpl implements AjaxService {
         }
         return result;
     }
+
+    @Override
+    public boolean acceptComment(long commentId) {
+        boolean result = true;
+        try {
+            manager.beginTransaction(commentDao);
+            Optional<Comment> optionalComment = commentDao.findEntity(commentId);
+            if (optionalComment.isPresent()) {
+                Comment comment = optionalComment.get();
+                comment.setCommentStatus(Comment.CommentStatus.ACTIVE);
+                commentDao.update(comment);
+            } else {
+                result = false;
+            }
+            manager.endTransaction(commentDao);
+        } catch (DaoException exception) {
+            logger.error("Error when try to accept comment");
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            result = false;
+        }
+        return result;
+    }
 }

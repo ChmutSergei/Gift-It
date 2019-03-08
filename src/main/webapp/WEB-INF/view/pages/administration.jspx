@@ -179,7 +179,7 @@
             <div class="col-sm-9 questions">
                 <h4><fmt:message key="admin.questions.info" bundle="${i18n}"/></h4>
                 <form id="form2" class="form-horizontal"
-                      action="${pageContext.request.contextPath}/controller?command=give_answer" method="post" content="UTF-8">
+                      action="${pageContext.request.contextPath}/controller?command=give_answer" method="post">
                     <table class="table table-bordered" style="margin-bottom: unset;">
                         <thead>
                         <tr>

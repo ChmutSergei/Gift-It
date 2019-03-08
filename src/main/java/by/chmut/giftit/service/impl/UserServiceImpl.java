@@ -4,6 +4,7 @@ import by.chmut.giftit.dao.DaoException;
 import by.chmut.giftit.dao.DaoFactory;
 import by.chmut.giftit.dao.TransactionManager;
 import by.chmut.giftit.dao.UserDao;
+import by.chmut.giftit.entity.Comment;
 import by.chmut.giftit.entity.User;
 import by.chmut.giftit.service.ServiceException;
 import by.chmut.giftit.service.UserService;
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
         List<User> actualUsers = new ArrayList<>();
         try {
             manager.beginTransaction(userDao);
-            for (User user:users) {
+            for (User user : users) {
                 Optional<User> optionalUser = userDao.findEntity(user.getUserId());
                 actualUsers.add(optionalUser.get());
             }
@@ -117,6 +118,28 @@ public class UserServiceImpl implements UserService {
             exception.printStackTrace();
         }
         return actualUsers;
+    }
+
+    @Override
+    public Map<Long, User> findByComment(List<Comment> comments) throws ServiceException {
+        Map<Long, User> users = new HashMap<>();
+        try {
+            manager.beginTransaction(userDao);
+            for (Comment comment : comments) {
+                long userId = comment.getUserId();
+                Optional<User> optionalUser = userDao.findEntity(userId);
+                optionalUser.ifPresent(user -> users.put(comment.getCommentId(), user));
+            }
+            manager.endTransaction(userDao);
+        } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            throw new ServiceException(exception);
+        }
+        return users;
     }
 
     private List<User> searchUsers(String searchType, Map<String, String> parametersSearch) throws DaoException, ServiceException {

@@ -13,4 +13,6 @@ public interface UserDao extends Dao<Long, User> {
     List<User> findByPartOfUsername(String username) throws DaoException;
 
     List<User> findByInitDate(LocalDate initDate) throws DaoException;
+
+    boolean blockForDays(long userId, int countDayForBlock) throws DaoException;
 }

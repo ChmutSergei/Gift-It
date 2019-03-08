@@ -21,6 +21,8 @@ public enum CommandType {
     USER_PROCESSING(new UserProcessingCommand()),
     GIVE_ANSWER(new GiveAnswerCommand()),
     ABOUT(new AboutCommand()),
+    MODERATOR( new ModeratorCommand()),
+    MODERATE( new ModerateCommand()),
     REGISTRATION(new RegistrationCommand());
 
     private Command command;

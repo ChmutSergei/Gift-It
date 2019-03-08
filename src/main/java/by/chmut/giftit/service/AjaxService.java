@@ -10,4 +10,5 @@ public interface AjaxService {
     boolean changeItemStatus(long itemId, String filePath);
     boolean acceptQuestion(long userId, String message);
     boolean checkUsernameOnExist(String username);
+    boolean acceptComment(long commentId);
 }

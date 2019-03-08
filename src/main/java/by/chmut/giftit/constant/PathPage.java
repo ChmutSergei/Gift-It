@@ -16,6 +16,7 @@ public class PathPage {
     public static final String ADMIN_PAGE = "pages/administration.jspx";
     public static final String USER_PROCESSING_PAGE = "pages/user_processing.jspx";
     public static final String ABOUT_PAGE = "pages/about.jspx";
+    public static final String MODERATE_COMMENT_PAGE = "pages/moderate_comment.jspx";
     public static final String PREFIX = "/controller?command=";
     public static final String ERROR = "/controller?command=error";
 

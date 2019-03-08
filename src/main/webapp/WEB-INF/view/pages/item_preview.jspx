@@ -173,7 +173,8 @@
                 url: contextUrl + '/ajax'
             }).done(function (data) {
                 if (data == 'true') {
-                    $('#success')[0].style.display = "block";
+                    document.getElementById("success").style.display = "block";
+                    document.getElementById("input").style.display = "none";
                 }
             }).fail(function (data) {
                 if (console &amp;&amp; console.log) {

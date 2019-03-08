@@ -27,6 +27,8 @@ public class UserDaoImpl implements UserDao {
             "phone, address, account, init_date, blocked_until, role) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
     private static final String UPDATE_USER = "UPDATE Users SET username=?, password=?, first_name=?, last_name=?, " +
             "email=?, phone=?, address=?, account=?, init_date=?, blocked_until=?, role=? WHERE id=?";
+    private static final String UPDATE_USER_BLOCK_FOR_DAYS = "UPDATE Users SET blocked_until=? WHERE id=?";
+
 
     private Connection connection;
 
@@ -122,6 +124,27 @@ public class UserDaoImpl implements UserDao {
             close(resultSet);
         }
         return users;
+    }
+
+    @Override
+    public boolean blockForDays(long userId, int countDayForBlock) throws DaoException {
+        boolean result = true;
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(UPDATE_USER_BLOCK_FOR_DAYS);
+            statement.setLong(2, userId);
+            LocalDate blockedUntil = LocalDate.now().plusDays(countDayForBlock);
+            statement.setDate(1, Date.valueOf(blockedUntil));
+            int rows = statement.executeUpdate();
+            if (rows != 1) {
+                result = false;
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with update User", exception);
+        } finally {
+            close(statement);
+        }
+        return result;
     }
 
     @Override

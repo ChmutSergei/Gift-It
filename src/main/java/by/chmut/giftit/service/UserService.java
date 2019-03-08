@@ -1,5 +1,7 @@
 package by.chmut.giftit.service;
 
+import by.chmut.giftit.entity.Comment;
+import by.chmut.giftit.entity.Item;
 import by.chmut.giftit.entity.User;
 
 import javax.servlet.http.Cookie;
@@ -21,6 +23,8 @@ public interface UserService {
     boolean executeUserProcessingCommand(String typeCommand, long userId, LocalDate blockedUntil, String newRole) throws ServiceException;
 
     List<User> findUsersAfterUpdate(List<User> users);
+
+    Map<Long, User> findByComment(List<Comment> comments) throws ServiceException;
 
 //    Cookie addRememberMe(User user) throws ServiceException;
 }

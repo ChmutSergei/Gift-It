@@ -42,9 +42,7 @@ public class PreviewItemCommand implements Command {
             } else {
                 request.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_NOT_FOUND_ID_KEY); // TODO заменить сообщение
             }
-
-            List<Comment> comments = itemService.findCommentOnItem(id);
-
+            List<Comment> comments = itemService.findCommentOnItem(id, Comment.CommentStatus.ACTIVE);
             request.getSession().setAttribute(COMMENTS_PARAMETER_NAME, comments);
             if (!comments.isEmpty()) {
                 findUserOnComment(comments, request);

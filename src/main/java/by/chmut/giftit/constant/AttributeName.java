@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 
 public class AttributeName {
 
-    private AttributeName(){}
+    private AttributeName() {
+    }
 
     public static final String COMMAND_PARAMETER_NAME = "command";
     public static final String CUP_PARAMETER_NAME = "cup";
@@ -88,16 +89,21 @@ public class AttributeName {
     public static final String UNANSWERED_QUESTIONS_PARAMETER_NAME = "unanswered";
     public static final String QUESTION_ID_PARAMETER_NAME = "questionId";
     public static final String ANSWER_PARAMETER_NAME = "respon";
+    public static final String ITEMS_PARAMETER_NAME = "items";
+    public static final String MODERATE_COMMAND_PARAMETER_NAME = "action";
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
-    public static final String MESSAGE_NOT_FOUND_ID_KEY= "error.notFoundId";
-    public static final String MESSAGE_CART_EMPTY_KEY= "cart.emptyCart";
-    public static final String MESSAGE_ADMIN_ORDERS_ERROR_KEY= "admin.error.orders";
-    public static final String MESSAGE_NOT_FOUND_USERS_KEY= "user.not.found";
-    public static final String MESSAGE_WRONG_DATA_KEY= "admin.answer.error";
+    public static final String MESSAGE_NOT_FOUND_ID_KEY = "error.notFoundId";
+    public static final String MESSAGE_CART_EMPTY_KEY = "cart.emptyCart";
+    public static final String MESSAGE_ADMIN_ORDERS_ERROR_KEY = "admin.error.orders";
+    public static final String MESSAGE_NOT_FOUND_USERS_KEY = "user.not.found";
+    public static final String MESSAGE_WRONG_DATA_KEY = "admin.answer.error";
 
-    public static final String ADD_CART_COMMAND= "ADD_ITEM";
-    public static final String DELETE_CART_COMMAND= "DELETE_ITEM";
+    public static final String ADD_CART_COMMAND = "ADD_ITEM";
+    public static final String DELETE_CART_COMMAND = "DELETE_ITEM";
+    public static final String MODERATE_DELETE_COMMAND = "delete";
+    public static final String MODERATE_DELETE_BLOCK_LOW_COMMAND = "deleteb7";
+    public static final String MODERATE_DELETE_BLOCK_HIGH_COMMAND = "deleteb14";
 
     public static final BigDecimal LOW_BORDER_PRICE = new BigDecimal(50);
     public static final BigDecimal MEDIUM_BORDER_PRICE = new BigDecimal(100);
@@ -107,6 +113,8 @@ public class AttributeName {
     public static final int MAX_COUNT_FOR_ITEM_TO_CART = 300;
     public static final int MIN_LENGTH_COMMENT = 3;
     public static final int MAX_LENGTH_COMMENT = 250;
+    public static final int LOW_LEVEL_BLOCKING_DAYS = 7;
+    public static final int HIGH_LEVEL_BLOCKING_DAYS = 14;
     public static final String DATE_TIME_FORMAT = "dd.MM.yyyy";
 
 }

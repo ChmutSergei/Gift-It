@@ -141,6 +141,13 @@ class AjaxCommandManager {
         }
     }
 
+    void acceptComment(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String stringId = request.getParameter(COMMENT_ID_PARAMETER_NAME);
+        long commentId = Long.parseLong(stringId);
+        boolean result = ajaxService.acceptComment(commentId);
+        response.getWriter().write((new Gson()).toJson(result));
+    }
+
     private static class UserData {
         String phone;
         String address;

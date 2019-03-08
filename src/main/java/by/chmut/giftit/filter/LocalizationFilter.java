@@ -7,8 +7,6 @@ import java.io.IOException;
 
 import static by.chmut.giftit.constant.AttributeName.LOCALE_PARAMETER_NAME;
 
-//@WebFilter (filterName = "locale", urlPatterns = "/controller")
-
 public class LocalizationFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) {

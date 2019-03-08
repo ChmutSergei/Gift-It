@@ -194,11 +194,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Comment> findCommentOnItem(long id) throws ServiceException {
+    public List<Comment> findCommentOnItem(long id, Comment.CommentStatus status) throws ServiceException {
         List<Comment> comment;
         try {
             manager.beginTransaction(itemDao);
-            comment = commentDao.findByItemId(id);
+            comment = commentDao.findByItemId(id, status);
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {
             try {
@@ -212,22 +212,22 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> find(List<Comment> comments) throws ServiceException {
-        List<Item> items = new ArrayList<>();
+    public Map<Long, Item> findByComment(List<Comment> comments) throws ServiceException {
+        Map<Long, Item> items = new HashMap<>();
         try {
             manager.beginTransaction(itemDao);
             for (Comment comment:comments) {
-                Optional<Item> item = itemDao.find(comment.getCommentId());
-                item.ifPresent(items::add);
+                Optional<Item> optionalItem = itemDao.find(comment.getCommentId());
+                optionalItem.ifPresent(item -> items.put(comment.getCommentId(), item));
             }
             manager.endTransaction(itemDao);
-        } catch (DaoException e) {
+        } catch (DaoException exception) {
             try {
                 manager.rollback();
             } catch (DaoException rollbackException) {
                 logger.error(rollbackException);
             }
-            throw new ServiceException(e);
+            throw new ServiceException(exception);
         }
         return items;
     }

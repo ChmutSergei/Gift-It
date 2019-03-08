@@ -35,7 +35,7 @@ public class AccountCommand implements Command {
             request.getSession().setAttribute(PAID_ITEMS_PARAMETER_NAME, paidItems);
             List<Comment> comments = commentService.find(user.getUserId());
             request.getSession().setAttribute(COMMENTS_PARAMETER_NAME, comments);
-            Map<Long, Item> items = findItemForComment(comments);
+            Map<Long, Item> items = itemService.findByComment(comments);
             request.getSession().setAttribute(ITEMS_FOR_CART_PARAMETER_NAME, items);
             List<Question> questions = questionService.find(user.getUserId());
             request.getSession().setAttribute(QUESTIONS_PARAMETER_NAME, questions);
@@ -47,10 +47,10 @@ public class AccountCommand implements Command {
         return router;
     }
 
-    private Map<Long, Item> findItemForComment(List<Comment> comments) throws ServiceException {
-        List<Item> items = itemService.find(comments);
-        Map<Long, Item> result = new HashMap<>();
-        items.forEach(item -> result.put(item.getItemId(), item));
-        return result;
-    }
+//    private Map<Long, Item> findItemForComment(List<Comment> comments) throws ServiceException {
+//        List<Item> items = itemService.find(comments);
+//        Map<Long, Item> result = new HashMap<>();
+//        items.forEach(item -> result.put(item.getItemId(), item));
+//        return result;
+//    }
 }

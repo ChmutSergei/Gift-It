@@ -90,6 +90,9 @@ public class AjaxController extends HttpServlet {
             case ACCEPT_QUESTION:
                 commandManager.acceptQuestion(request,response);
                 break;
+            case ACCEPT_COMMENT:
+                commandManager.acceptComment(request, response);
+                break;
         }
     }
 
@@ -136,6 +139,7 @@ public class AjaxController extends HttpServlet {
         DELETE_COMMENT,
         ADD_COMMENT,
         CHANGE_STATUS_ITEM,
-        ACCEPT_QUESTION
+        ACCEPT_QUESTION,
+        ACCEPT_COMMENT
     }
 }
