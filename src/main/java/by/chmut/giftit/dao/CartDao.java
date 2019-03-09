@@ -10,4 +10,6 @@ public interface CartDao extends Dao<Long, Cart> {
     List<Cart> findAll(long userId) throws DaoException;
 
     boolean deleteAll(long userId) throws DaoException;
+
+    boolean setOrderId(long cartId, long orderId) throws DaoException;
 }

@@ -121,6 +121,6 @@ public class Order extends Entity {
     }
 
     public enum OrderStatus {
-        PAID, DONE
+        NEW, PAID, DONE
     }
 }

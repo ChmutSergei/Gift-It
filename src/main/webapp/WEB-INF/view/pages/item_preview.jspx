@@ -109,7 +109,7 @@
                             <fmt:message key="item.preview.addCombtn" bundle="${i18n}"/></button>
                     </div>
                     <br/>
-                    <!-- TODO add validity on length-->
+                    <form id="form" class="form-horizontal">
                     <div id="input" class="form-group has-feedback" style="display: none">
                             <c:set var="mesComment"><fmt:message key="item.preview.comment" bundle="${i18n}"/></c:set>
                             <c:set var="messagecomment"><fmt:message key="item.preview.comtitle" bundle="${i18n}"/></c:set>
@@ -119,6 +119,7 @@
                             <button id="send" onclick="sendComment()">
                                 <fmt:message key="item.preview.send" bundle="${i18n}"/></button>
                     </div>
+                    </form>
                     <br/>
                     <div id="error" class="row" style="display: none">
                         <p><fmt:message key="item.preview.error" bundle="${i18n}"/></p>
@@ -165,22 +166,27 @@
             })
         }
         function sendComment() {
+            var form = $('#form')[0];
             var comment = document.getElementById("dcomment").value;
-            var command = 'ADD_COMMENT';
-            $.ajax({
-                type: 'POST',
-                data: {command: command, comment: comment},
-                url: contextUrl + '/ajax'
-            }).done(function (data) {
-                if (data == 'true') {
-                    document.getElementById("success").style.display = "block";
-                    document.getElementById("input").style.display = "none";
-                }
-            }).fail(function (data) {
-                if (console &amp;&amp; console.log) {
-                    console.log("Error data:", data);
-                }
-            })
+            if (form.checkValidity()) {
+                var command = 'ADD_COMMENT';
+                $.ajax({
+                    type: 'POST',
+                    data: {command: command, comment: comment},
+                    url: contextUrl + '/ajax'
+                }).done(function (data) {
+                    if (data == 'true') {
+                        document.getElementById("success").style.display = "block";
+                        document.getElementById("input").style.display = "none";
+                    }
+                }).fail(function (data) {
+                    if (console &amp;&amp; console.log) {
+                        console.log("Error data:", data);
+                    }
+                })
+            } else {
+                form.reportValidity();
+            }
         }
         function addComment() {
             var exist = "${existUser}";

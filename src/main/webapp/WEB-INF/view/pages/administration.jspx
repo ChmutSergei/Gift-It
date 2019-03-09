@@ -345,37 +345,6 @@
             $('#questions').removeClass('active');
         }
 
-        check.onclick = function () {
-            var form = $('#form')[0];
-            if (form.checkValidity()) {
-                var phone = $('#phoneNumber')[0].value;
-                var address = $('#address')[0].value;
-                var contextUrl = '${pageContext.request.contextPath}';
-                var command = 'UPDATE_USER_ADDRESS_PHONE';
-                $.ajax({
-                    type: 'POST',
-                    data: {command: command, address: address, phone: phone},
-                    url: contextUrl + '/ajax'
-                }).done(function (data) {
-                    var resp = JSON.parse(data);
-                    if (resp.phone != 'ERROR') {
-                        var newPhone = resp.phone;
-                        var newAddress = resp.address;
-                        $('#phoneArea').text(newPhone);
-                        $('#addressArea').text(newAddress);
-                    } else {
-                        $('#message')[0].style.display = "block";
-                    }
-                }).fail(function (data) {
-                    if (console &amp;&amp; console.log) {
-                        console.log("Error data:", data);
-                    }
-                })
-
-            } else {
-                form.reportValidity();
-            }
-        };
         $('body').click(function () {
             $('#done')[0].style.display = "none";
         });

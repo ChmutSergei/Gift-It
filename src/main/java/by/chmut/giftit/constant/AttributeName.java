@@ -6,15 +6,7 @@ public class AttributeName {
 
     private AttributeName() {
     }
-
     public static final String COMMAND_PARAMETER_NAME = "command";
-    public static final String CUP_PARAMETER_NAME = "cup";
-    public static final String SHIRT_PARAMETER_NAME = "shirt";
-    public static final String PLATE_PARAMETER_NAME = "plate";
-    public static final String PILLOW_PARAMETER_NAME = "pillow";
-    public static final String PUZZLE_PARAMETER_NAME = "puzzle";
-    public static final String MOUSE_PAD_PARAMETER_NAME = "mousepad";
-    public static final String TOWEL_PARAMETER_NAME = "towel";
     public static final String LOW_PARAMETER_NAME = "low";
     public static final String MEDIUM_PARAMETER_NAME = "medium";
     public static final String HIGH_PARAMETER_NAME = "high";
@@ -64,7 +56,7 @@ public class AttributeName {
     public static final String ITEMS_FOR_CART_PARAMETER_NAME = "items";
     public static final String PAID_ITEMS_PARAMETER_NAME = "paidItems";
     public static final String CART_COMMAND_FLAG_PARAMETER_NAME = "cartCommand";
-    public static final String CART_PARAMETER_NAME = "cart";
+    public static final String CART_PARAMETER_NAME = "carts";
     public static final String CART_ID_PARAMETER_NAME = "cartId";
     public static final String COMMENT_ID_PARAMETER_NAME = "commentId";
     public static final String COMMENT_PARAMETER_NAME = "comment";
@@ -91,6 +83,14 @@ public class AttributeName {
     public static final String ANSWER_PARAMETER_NAME = "respon";
     public static final String ITEMS_PARAMETER_NAME = "items";
     public static final String MODERATE_COMMAND_PARAMETER_NAME = "action";
+    public static final String ORDER_DETAILS_PARAMETER_NAME = "details";
+    public static final String CARD_NAME_PARAMETER_NAME = "nameCard";
+    public static final String CARD_CVC_PARAMETER_NAME = "cvc2";
+    public static final String CARD_NUMBER_PARAMETER_NAME = "numCard";
+    public static final String CARD_MONTH_PARAMETER_NAME = "month";
+    public static final String CARD_YEAR_PARAMETER_NAME = "year";
+    public static final String NEW_ORDER_PARAMETER_NAME = "newOrder";
+    public static final String PAYMENT_SUCCESS_PARAMETER_NAME = "payment";
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
     public static final String MESSAGE_NOT_FOUND_ID_KEY = "error.notFoundId";
@@ -98,6 +98,7 @@ public class AttributeName {
     public static final String MESSAGE_ADMIN_ORDERS_ERROR_KEY = "admin.error.orders";
     public static final String MESSAGE_NOT_FOUND_USERS_KEY = "user.not.found";
     public static final String MESSAGE_WRONG_DATA_KEY = "admin.answer.error";
+    public static final String MESSAGE_PAYMENT_FAILED_KEY = "payment.failed";
 
     public static final String ADD_CART_COMMAND = "ADD_ITEM";
     public static final String DELETE_CART_COMMAND = "DELETE_ITEM";

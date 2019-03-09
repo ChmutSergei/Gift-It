@@ -84,6 +84,7 @@ public class AjaxController extends HttpServlet {
                 break;
             case ADD_COMMENT:
                 commandManager.addComment(request, response);
+                break;
             case CHANGE_STATUS_ITEM:
                 commandManager.changeItemStatus(request, response);
                 break;

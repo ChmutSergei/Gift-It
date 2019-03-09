@@ -15,7 +15,7 @@ public enum CommandType {
     ACCOUNT(new AccountCommand()),
     PREVIEW_ITEM(new PreviewItemCommand()),
     CART(new CartCommand()),
-    EMPTY_CART(new ResetCartCommand()),
+    RESET_CART(new ResetCartCommand()),
     ADMINISTRATION(new AdminCommand()),
     SEARCH_USER(new SearchUserCommand()),
     USER_PROCESSING(new UserProcessingCommand()),
@@ -23,6 +23,8 @@ public enum CommandType {
     ABOUT(new AboutCommand()),
     MODERATOR( new ModeratorCommand()),
     MODERATE( new ModerateCommand()),
+    PAYMENT( new PaymentCommand()),
+    CHECK_PAYMENT( new CheckPaymentCommand()),
     REGISTRATION(new RegistrationCommand());
 
     private Command command;

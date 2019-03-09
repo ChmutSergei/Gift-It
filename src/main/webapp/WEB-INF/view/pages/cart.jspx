@@ -31,9 +31,9 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="cart" items="${sessionScope.cart}" varStatus="status">
+                            <c:forEach var="cart" items="${sessionScope.carts}" varStatus="status">
                                 <tr>
-                                    <c:set var="item" value="${sessionScope.items.get(cart.cartId)}" />
+                                    <c:set var="item" value="${sessionScope.items.get(cart.cartId)}"/>
                                     <td class="col-xs-1">${status.index+1}</td>
                                     <td class="col-xs-2">
                                         <img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
@@ -45,7 +45,8 @@
                                     <fmt:setLocale value="${sessionScope.locale}"/>
                                     <td class="col-xs-1">${cart.count}</td>
                                     <fmt:setLocale value="ru-RU"/>
-                                    <td class="col-xs-1"><fmt:formatNumber value="${cart.count * item.price}" type="currency"/></td>
+                                    <td class="col-xs-1"><fmt:formatNumber value="${cart.count * item.price}"
+                                                                           type="currency"/></td>
                                     <fmt:setLocale value="${sessionScope.locale}"/>
                                     <td class="col-xs-1"><span about="${cart.cartId}" onclick="sendCartId($(this))"
                                                                class="glyphicon glyphicon-trash"/></td>
@@ -71,14 +72,31 @@
                 <br/>
                 <br/>
                 <div class="row col-xs-2 col-xs-offset-3">
-                    <a class="btn bg-primary"
-                       href="${pageContext.request.contextPath}/controller?command=payment"><fmt:message
-                            bundle="${i18n}" key="cart.pay"/></a>
+                    <button class="btn btn-default" data-toggle="collapse" data-target="#checkout"><fmt:message
+                            bundle="${i18n}" key="cart.checkout.button"/></button>
                 </div>
                 <div class="row col-xs-2 col-xs-offset-5">
                     <a class="btn bg-primary"
-                       href="${pageContext.request.contextPath}/controller?command=empty_cart"><fmt:message
+                       href="${pageContext.request.contextPath}/controller?command=reset_cart"><fmt:message
                             bundle="${i18n}" key="cart.empty"/></a>
+                </div>
+                <div id="checkout" class="collapse row col-xs-8 col-xs-offset-2">
+                    <p><fmt:message key="cart.details" bundle="${i18n}"/></p>
+                    <form id="form" class="form-horizontal"
+                          action="${pageContext.request.contextPath}/controller?command=payment" method="post">
+                        <div class="form-group has-feedback">
+                            <c:set var="details"><fmt:message key="cart.detail"
+                                                               bundle="${i18n}"/></c:set>
+                            <c:set var="messaged"><fmt:message key="cart.title.details"
+                                                                      bundle="${i18n}"/></c:set>
+                            <input type="text" class="form-control"  placeholder="${details}"
+                                   name="details" pattern="^.{0,250}$" title="${messaged}" />
+                        </div>
+                        <div class="form-group">
+                            <c:set var="button" ><fmt:message bundle="${i18n}" key="cart.pay"/></c:set>
+                            <input type="submit" class="btn bg-primary" value="${button}" />
+                        </div>
+                    </form>
                 </div>
             </div>
         </c:otherwise>
@@ -92,7 +110,7 @@
                 type: 'POST',
                 data: {command: command, cartId: cartId},
                 url: contextUrl + '/ajax'
-            }).done(function (data) {
+            }).done(function () {
                 location.href = contextUrl + '/controller?command=cart';
             }).fail(function (data) {
                 if (console &amp;&amp; console.log) {

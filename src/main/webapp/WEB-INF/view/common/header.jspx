@@ -78,6 +78,32 @@
                             </c:otherwise>
                         </c:choose>
                     </c:if>
+                    <c:if test="${sessionScope.user.role eq 'MODERATOR'}">
+                        <c:choose>
+                            <c:when test="${sessionScope.title eq 'moderator'}">
+                                <li class="active"><a href="#"><fmt:message key="moderator" bundle="${i18n}"/></a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/controller?command=moderator">
+                                        <fmt:message key="moderator" bundle="${i18n}"/></a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+                    <c:if test="${sessionScope.user.role eq 'DESIGNER'}">
+                        <c:choose>
+                            <c:when test="${sessionScope.title eq 'create_item'}">
+                                <li class="active"><a href="#"><fmt:message key="create_item" bundle="${i18n}"/></a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/controller?command=create_item">
+                                        <fmt:message key="create_item" bundle="${i18n}"/></a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
                 </ul>
                 <c:url var="path" value="/controller?command=${sessionScope.title}"/>
                 <ul id="rightbar" class="nav navbar-nav navbar-right">

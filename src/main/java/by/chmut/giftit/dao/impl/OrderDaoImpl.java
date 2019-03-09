@@ -5,6 +5,7 @@ import by.chmut.giftit.dao.OrderDao;
 import by.chmut.giftit.entity.Order;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +20,10 @@ public class OrderDaoImpl implements OrderDao {
             "init_date, issue_date FROM Orders WHERE id = ?";
     private static final String DELETE_ORDER = "DELETE FROM Orders WHERE id=?";
     private static final String CREATE_ORDER = "INSERT INTO Orders(user_id, details, status, " +
-            "init_date, issue_date) VALUES(?,?,?,?,?,?)";
+            "init_date, issue_date) VALUES(?,?,?,?,?)";
     private static final String UPDATE_ORDER = "UPDATE Orders SET user_id=?, details=?, status=?, " +
             "init_date=?, issue_date=? WHERE id=?";
+    private static final String UPDATE_ORDER_SET_PAID_STATUS = "UPDATE Orders SET status=? WHERE id= ?";
 
     private Connection connection;
     public Connection getConnection() {
@@ -119,7 +121,9 @@ public class OrderDaoImpl implements OrderDao {
             statement.setString(2, order.getDetails());
             statement.setString(3, order.getOrderStatus().toString());
             statement.setDate(4, Date.valueOf(order.getInitDate()));
-            statement.setDate(5, Date.valueOf(order.getIssueDate()));
+            LocalDate date = order.getIssueDate();
+            Date issueDate = date != null ? Date.valueOf(date) : null;
+            statement.setDate(5, issueDate);
             int result = statement.executeUpdate();
             if (result != 1) {
                 throw new DaoException("Error with creating order");
@@ -179,5 +183,25 @@ public class OrderDaoImpl implements OrderDao {
             close(statement);
         }
         return orders;
+    }
+
+    @Override
+    public boolean setPaidStatus(long orderId) throws DaoException {
+        boolean result = false;
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(UPDATE_ORDER_SET_PAID_STATUS);
+            statement.setLong(2, orderId);
+            statement.setString(1, Order.OrderStatus.PAID.name());
+            int rows = statement.executeUpdate();
+            if (rows == 1) {
+                result = true;
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with update order", exception);
+        } finally {
+            close(statement);
+        }
+        return result;
     }
 }
