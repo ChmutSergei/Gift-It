@@ -6,7 +6,7 @@ import by.chmut.giftit.controller.Router;
 import javax.servlet.http.HttpServletRequest;
 
 import static by.chmut.giftit.constant.AttributeName.USER_PARAMETER_NAME;
-import static by.chmut.giftit.constant.PathPage.HOME_PATH;
+import static by.chmut.giftit.constant.PathPage.MAIN_PATH;
 
 public class LogoutCommand implements Command {
 
@@ -14,7 +14,7 @@ public class LogoutCommand implements Command {
     public Router execute(HttpServletRequest request) {
         request.getSession().removeAttribute(USER_PARAMETER_NAME);
         Router router = new Router();
-        router.setRedirectPath(HOME_PATH); // TODO добавить ликвидацию сессии
+        router.setRedirectPath(MAIN_PATH); // TODO добавить ликвидацию сессии
         return router;
     }
 }

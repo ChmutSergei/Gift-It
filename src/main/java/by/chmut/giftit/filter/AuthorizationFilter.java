@@ -4,23 +4,21 @@ import by.chmut.giftit.command.CommandType;
 import by.chmut.giftit.entity.User;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static by.chmut.giftit.command.CommandType.PREVIEW_ITEM;
-import static by.chmut.giftit.command.CommandType.SIGNIN;
-import static by.chmut.giftit.command.CommandType.SIGNUP;
+import static by.chmut.giftit.command.CommandType.SIGN_IN;
+import static by.chmut.giftit.command.CommandType.SIGN_UP;
 import static by.chmut.giftit.constant.AttributeName.COMMAND_PARAMETER_NAME;
 import static by.chmut.giftit.constant.AttributeName.USER_PARAMETER_NAME;
 import static by.chmut.giftit.entity.User.Role.GUEST;
 
 public class AuthorizationFilter implements Filter {
 
-    private static final String HOME_PART_PATH = "/controller?command=home";
-    private static final String SIGN_UP_PART_PATH = "/controller?command=signup";
+    private static final String MAIN_PART_PATH = "/controller?command=main";
+    private static final String SIGN_UP_PART_PATH = "/controller?command=sign_up";
 
     private User.Role role;
 
@@ -53,8 +51,8 @@ public class AuthorizationFilter implements Filter {
 
         role = (user != null) ? user.getRole() : GUEST; // делаем Map с ключами role
 
-        if ((SIGNIN.equals(type) || SIGNUP.equals(type)) && user != null) {
-            res.sendRedirect(contextPath + HOME_PART_PATH);
+        if ((SIGN_IN.equals(type) || SIGN_UP.equals(type)) && user != null) {
+            res.sendRedirect(contextPath + MAIN_PART_PATH);
             return;
         }
 //        if (PREVIEW_ITEM.equals(type) && (user == null)) {
@@ -75,5 +73,5 @@ public class AuthorizationFilter implements Filter {
 //                return;
 //            }
 //            if (!user.getRole().equals("admin") & ADMIN.equals(type)) {
-//            res.sendRedirect(contextPath + HOME_PART_PATH);
+//            res.sendRedirect(contextPath + MAIN_PART_PATH);
 //                return;

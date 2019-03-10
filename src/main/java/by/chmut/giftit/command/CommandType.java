@@ -4,10 +4,10 @@ import by.chmut.giftit.command.impl.*;
 
 public enum CommandType {
 
-    HOME(new DefaultCommand()),
+    MAIN(new MainCommand()),
     ERROR(new ErrorCommand()),
-    SIGNIN(new SignInCommand()),
-    SIGNUP(new SignUpCommand()),
+    SIGN_IN(new SignInCommand()),
+    SIGN_UP(new SignUpCommand()),
     LOGIN(new LoginCommand()),
     LOGOUT(new LogoutCommand()),
     CREATE_ITEM(new CreateItemCommand()),

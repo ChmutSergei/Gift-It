@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static by.chmut.giftit.command.CommandType.HOME;
+import static by.chmut.giftit.command.CommandType.MAIN;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
@@ -73,7 +73,7 @@ public class Controller extends HttpServlet {
         String title = (String) session.getAttribute(TITLE_ATTRIBUTE_NAME);
         String commandName = commandType.name().toLowerCase();
         if (title == null) {
-            title = HOME.name().toLowerCase();
+            title = MAIN.name().toLowerCase();
         }
         if (!title.equals(commandName)) {
             session.setAttribute(PREVIOUS_PAGE_PARAMETER_NAME, title);

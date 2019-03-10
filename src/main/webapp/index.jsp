@@ -4,7 +4,7 @@
 <head>
   <title>Parsing XML</title>
 </head>
-<jsp:forward page="/controller?command=home"/>
+<jsp:forward page="/controller?command=main"/>
 <body>
 </body>
 </html>

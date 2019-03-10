@@ -52,7 +52,7 @@ public class LoginCommand implements Command {
             request.getSession().setAttribute(COUNT_IN_CART_PARAMETER_NAME, count);
         } else {
             request.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_LOGIN_FAILED_KEY);
-            router.setRedirectPath(SIGNIN_PATH);
+            router.setRedirectPath(SIGN_IN_PATH);
         }
         return router;
     }

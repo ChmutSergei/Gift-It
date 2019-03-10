@@ -7,6 +7,13 @@ public class AttributeName {
     private AttributeName() {
     }
     public static final String COMMAND_PARAMETER_NAME = "command";
+    public static final String CUP_PARAMETER_NAME = "cup";
+    public static final String SHIRT_PARAMETER_NAME = "shirt";
+    public static final String PLATE_PARAMETER_NAME = "plate";
+    public static final String PILLOW_PARAMETER_NAME = "pillow";
+    public static final String PUZZLE_PARAMETER_NAME = "puzzle";
+    public static final String MOUSE_PAD_PARAMETER_NAME = "mousepad";
+    public static final String TOWEL_PARAMETER_NAME = "towel";
     public static final String LOW_PARAMETER_NAME = "low";
     public static final String MEDIUM_PARAMETER_NAME = "medium";
     public static final String HIGH_PARAMETER_NAME = "high";
@@ -91,6 +98,8 @@ public class AttributeName {
     public static final String CARD_YEAR_PARAMETER_NAME = "year";
     public static final String NEW_ORDER_PARAMETER_NAME = "newOrder";
     public static final String PAYMENT_SUCCESS_PARAMETER_NAME = "payment";
+    public static final String COUNT_ITEM_AFTER_SEARCH_PARAMETER_NAME = "countSearch";
+    public static final String NUMBER_PAGE_PARAMETER_NAME = "page";
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
     public static final String MESSAGE_NOT_FOUND_ID_KEY = "error.notFoundId";
@@ -106,16 +115,19 @@ public class AttributeName {
     public static final String MODERATE_DELETE_BLOCK_LOW_COMMAND = "deleteb7";
     public static final String MODERATE_DELETE_BLOCK_HIGH_COMMAND = "deleteb14";
 
-    public static final BigDecimal LOW_BORDER_PRICE = new BigDecimal(50);
-    public static final BigDecimal MEDIUM_BORDER_PRICE = new BigDecimal(100);
-    public static final BigDecimal HIGH_BORDER_PRICE = new BigDecimal(150);
-    public static final int DEFAULT_PAGINATION_OFFSET = 0;
-    public static final int DEFAULT_PAGINATION_LIMIT = 20;
+    public static final BigDecimal LOW_BORDER_PRICE = new BigDecimal(30);
+    public static final BigDecimal MEDIUM_BORDER_PRICE = new BigDecimal(60);
+    public static final BigDecimal HIGH_BORDER_PRICE = new BigDecimal(100);
+    public static final int DEFAULT_NUMBER_PAGE = 0;
+    public static final int DEFAULT_PAGINATION_LIMIT = 16;
     public static final int MAX_COUNT_FOR_ITEM_TO_CART = 300;
     public static final int MIN_LENGTH_COMMENT = 3;
     public static final int MAX_LENGTH_COMMENT = 250;
     public static final int LOW_LEVEL_BLOCKING_DAYS = 7;
     public static final int HIGH_LEVEL_BLOCKING_DAYS = 14;
     public static final String DATE_TIME_FORMAT = "dd.MM.yyyy";
+    public static final String PREVIOUS_PAGE = "previous";
+    public static final String NEXT_PAGE = "next";
+
 
 }

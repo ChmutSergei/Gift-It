@@ -11,18 +11,38 @@ import java.util.Optional;
 
 public class CommentDaoImpl implements CommentDao { //TODO исправить выборку с учетом статуса
 
-    private static final String SELECT_ALL_COMMENTS = "SELECT id, user_id, item_id, message, date, status FROM Comments";
-    private static final String SELECT_COMMENTS_FOR_MODERATOR = "SELECT id, user_id, item_id, message, date, status " +
-            "FROM Comments WHERE status = 'NEW'";
-    private static final String SELECT_COMMENT_BY_ID = "SELECT id, user_id, item_id, message, date, status FROM Comments WHERE id = ?";
-    private static final String SELECT_COMMENTS_BY_ITEM_ID = "SELECT id, user_id, item_id, message, date, status " +
-            "FROM Comments WHERE item_id = ? AND status = ?";
-    private static final String SELECT_COMMENTS_BY_USER_ID = "SELECT id, user_id, item_id, message, date, status " +
-            "FROM Comments WHERE user_id = ?";
-    private static final String DELETE_COMMENT = "DELETE FROM Comments WHERE id=?";
-    private static final String CREATE_COMMENT = "INSERT INTO Comments(user_id, item_id, message, date, status) VALUES(?,?,?,?,?)";
-    private static final String UPDATE_COMMENT = "UPDATE Comments SET user_id=?, item_id=?, message=?, date=?, status=? WHERE id=?";
-    private static final String COUNT_COMMENT = "SELECT COUNT(id) FROM Comments WHERE item_id = ? AND status = ?";
+    private static final String SELECT_ALL_COMMENTS =
+            "SELECT id, user_id, item_id, message, date, status " +
+                    "FROM Comments";
+    private static final String SELECT_COMMENTS_FOR_MODERATOR =
+            "SELECT id, user_id, item_id, message, date, status " +
+                    "FROM Comments " +
+                    "WHERE status = 'NEW'";
+    private static final String SELECT_COMMENT_BY_ID =
+            "SELECT id, user_id, item_id, message, date, status " +
+                    "FROM Comments " +
+                    "WHERE id = ?";
+    private static final String SELECT_COMMENTS_BY_ITEM_ID =
+            "SELECT id, user_id, item_id, message, date, status " +
+                    "FROM Comments " +
+                    "WHERE item_id = ? AND status = ?";
+    private static final String SELECT_COMMENTS_BY_USER_ID =
+            "SELECT id, user_id, item_id, message, date, status " +
+                    "FROM Comments " +
+                    "WHERE user_id = ?";
+    private static final String DELETE_COMMENT =
+            "DELETE FROM Comments " +
+                    "WHERE id=?";
+    private static final String CREATE_COMMENT =
+            "INSERT INTO Comments(user_id, item_id, message, date, status) " +
+                    "VALUES(?,?,?,?,?)";
+    private static final String UPDATE_COMMENT =
+            "UPDATE Comments SET user_id=?, item_id=?, message=?, date=?, status=? " +
+                    "WHERE id=?";
+    private static final String COUNT_COMMENT =
+            "SELECT COUNT(id) " +
+                    "FROM Comments " +
+                    "WHERE item_id = ? AND status = ?";
 
     private Connection connection;
 

@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap-datetimepicker.min.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?ver=17" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?ver=18" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap-theme.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/card-form.css" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

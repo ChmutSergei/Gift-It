@@ -11,15 +11,32 @@ import java.util.Optional;
 
 public class CartDaoImpl implements CartDao {
 
-    private static final String SELECT_ALL_CARTS = "SELECT id, user_id, item_id, order_id, count FROM Carts";
-    private static final String SELECT_ALL_CARTS_ON_USER_ID = "SELECT id, user_id, item_id, order_id, count FROM Carts " +
-            "WHERE user_id = ? AND order_id IS NULL";
-    private static final String SELECT_CART_BY_ID = "SELECT id, user_id, item_id, order_id, count FROM Carts WHERE id = ?";
-    private static final String DELETE_CART = "DELETE FROM Carts WHERE id = ?";
-    private static final String DELETE_ALL_CART_BY_USER_ID = "DELETE FROM Carts WHERE user_id = ?";
-    private static final String CREATE_CART = "INSERT INTO Carts(user_id, item_id, count) VALUES(?,?,?)";
-    private static final String UPDATE_CART = "UPDATE Carts SET user_id=?, item_id=?, order_id=? count=? WHERE id = ?";
-    private static final String UPDATE_CART_SET_ORDER_ID = "UPDATE Carts SET order_id=? WHERE id = ?";
+    private static final String SELECT_ALL_CARTS =
+            "SELECT id, user_id, item_id, order_id, count " +
+                    "FROM Carts";
+    private static final String SELECT_ALL_CARTS_ON_USER_ID =
+            "SELECT id, user_id, item_id, order_id, count " +
+                    "FROM Carts " +
+                    "WHERE user_id = ? AND order_id IS NULL";
+    private static final String SELECT_CART_BY_ID =
+            "SELECT id, user_id, item_id, order_id, count " +
+                    "FROM Carts " +
+                    "WHERE id = ?";
+    private static final String DELETE_CART =
+            "DELETE FROM Carts " +
+                    "WHERE id = ?";
+    private static final String DELETE_ALL_CART_BY_USER_ID =
+            "DELETE FROM Carts " +
+                    "WHERE user_id = ?";
+    private static final String CREATE_CART =
+            "INSERT INTO Carts(user_id, item_id, count) " +
+                    "VALUES(?,?,?)";
+    private static final String UPDATE_CART =
+            "UPDATE Carts SET user_id=?, item_id=?, order_id=? count=? " +
+                    "WHERE id = ?";
+    private static final String UPDATE_CART_SET_ORDER_ID =
+            "UPDATE Carts SET order_id=? " +
+                    "WHERE id = ?";
 
     private Connection connection;
 
@@ -200,7 +217,7 @@ public class CartDaoImpl implements CartDao {
             statement.setLong(1, orderId);
             int rows = statement.executeUpdate();
             if (rows == 1) {
-               result = true;
+                result = true;
             }
         } catch (SQLException exception) {
             throw new DaoException("Error with update cart - set order id", exception);

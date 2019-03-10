@@ -16,23 +16,43 @@ import java.util.Optional;
 
 public class ItemDaoImpl implements ItemDao {
 
-    private static final String SELECT_ALL_ITEMS = "SELECT id, name, type, description, active, cost, image FROM Items " +
-            "ORDER BY id DESC LIMIT ? OFFSET ?";
-    private static final String SELECT_ITEM_BY_ID = "SELECT id, name, type, description, active, cost, image FROM Items " +
-            "WHERE id = ?";
-    private static final String SELECT_ITEM_BY_COMMENT_ID = "SELECT i.id, i.name FROM Items i " +
-            "JOIN Comments c on i.id = c.item_id WHERE c.id = ?";
-    private static final String SELECT_PAID_ITEMS = "SELECT i.id, i.name, i.type, i.description, i.active, " +
-            "i.cost, i.image FROM orders o join carts c on o.id = c.order_id join items i on c.item_id = i.id " +
-            "WHERE (o.status = ? OR o.status = ?) AND o.user_id = ?";
-    private static final String SELECT_ITEMS_FOR_ORDER = "SELECT i.id, i.name, i.type, i.description, i.active, " +
-            "i.cost, c.count FROM orders o join carts c on o.id = c.order_id join items i on c.item_id = i.id " +
-            "WHERE o.status = ? AND o.id = ?";
-    private static final String DELETE_ITEM = "DELETE FROM Items WHERE id=?";
-    private static final String CREATE_ITEM = "INSERT INTO Items(name, type, description, active, cost, image) " +
-            "VALUES(?,?,?,?,?,?)";
-    private static final String UPDATE_ITEM = "UPDATE Items SET name=?, type=?, description=?, active=?, cost=?, image=? " +
-            "WHERE id=?";
+    private static final String SELECT_ALL_ITEMS =
+            "SELECT id, name, type, description, active, cost, image " +
+                    "FROM Items " +
+                    "ORDER BY id DESC LIMIT ? OFFSET ?";
+    private static final String SELECT_ITEM_BY_ID =
+            "SELECT id, name, type, description, active, cost, image " +
+                    "FROM Items " +
+                    "WHERE id = ?";
+    private static final String SELECT_ITEM_BY_COMMENT_ID =
+            "SELECT i.id, i.name " +
+                    "FROM Items i " +
+                    "JOIN Comments c on i.id = c.item_id " +
+                    "WHERE c.id = ?";
+    private static final String SELECT_PAID_ITEMS =
+            "SELECT i.id, i.name, i.type, i.description, i.active, i.cost, i.image " +
+                    "FROM Orders o " +
+                    "JOIN Carts c on o.id = c.order_id " +
+                    "JOIN Items i on c.item_id = i.id " +
+                    "WHERE (o.status = ? OR o.status = ?) AND o.user_id = ?";
+    private static final String SELECT_ITEMS_FOR_ORDER =
+            "SELECT i.id, i.name, i.type, i.description, i.active, i.cost, c.count " +
+                    "FROM Orders o " +
+                    "JOIN Carts c on o.id = c.order_id " +
+                    "JOIN Items i on c.item_id = i.id " +
+                    "WHERE o.status = ? AND o.id = ?";
+    private static final String COUNT_ITEM =
+            "SELECT count(*) " +
+                    "FROM Items";
+    private static final String DELETE_ITEM =
+            "DELETE FROM Items " +
+                    "WHERE id=?";
+    private static final String CREATE_ITEM =
+            "INSERT INTO Items(name, type, description, active, cost, image) " +
+                    "VALUES(?,?,?,?,?,?)";
+    private static final String UPDATE_ITEM =
+            "UPDATE Items SET name=?, type=?, description=?, active=?, cost=?, image=? " +
+                    "WHERE id=?";
 
     private Connection connection;
 
@@ -163,6 +183,26 @@ public class ItemDaoImpl implements ItemDao {
             close(statement);
         }
         return items;
+    }
+
+    @Override
+    public int countAllItem() throws DaoException {
+        int count = 0;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(COUNT_ITEM);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } catch (SQLException exception) {
+            throw new DaoException("Error with get item by id", exception);
+        } finally {
+            close(resultSet);
+            close(statement);
+        }
+        return count;
     }
 
     private Item makeFromResultSet(ResultSet resultSet, String filePath) throws SQLException, IOException {

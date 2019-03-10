@@ -46,12 +46,24 @@
                                     <input type="text" size="2" name="countItem" value="1" id="count"/>
                                     <input type="button" value="+" id="plus"/>
                                 </div>
-                                <div id="addCart" class="col-sm-7">
-                                    <c:set var="submit"><fmt:message key="item.preview.submit"
-                                                                     bundle="${i18n}"/></c:set>
-                                    <input onclick="sendItem()" type="button" class="btn btn-primary col-xs-12"
-                                           value="${submit}"/>
-                                </div>
+                                <c:choose>
+                                    <c:when test="${not empty sessionScope.user}">
+                                        <div id="addCart" class="col-sm-7">
+                                            <c:set var="submit"><fmt:message key="item.preview.submit"
+                                                                             bundle="${i18n}"/></c:set>
+                                            <input onclick="sendItem()" type="button" class="btn btn-primary col-xs-12"
+                                                   value="${submit}"/>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="col-sm-7">
+                                            <c:set var="submit"><fmt:message key="item.preview.submit"
+                                                                             bundle="${i18n}"/></c:set>
+                                            <a href="${pageContext.request.contextPath}/controller?command=sign_up">
+                                                <input type="button" class="btn btn-primary col-xs-12" value="${submit}"/></a>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                                 <br/>
                             </div>
                         </form>

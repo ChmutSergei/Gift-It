@@ -38,14 +38,10 @@ public class BitmapDaoImpl implements BitmapDao {
         try {
             statement = connection.prepareStatement(SELECT_BITMAP);
             resultSet = statement.executeQuery();
-            int sizeArray = 0;
             while (resultSet.next()) {
                 Bitmap bitmap = makeFromResultSet(resultSet);
                 result.add(bitmap);
-                sizeArray = bitmap.getData().length;
             }
-            Bitmap bitmapAllCriteria = createBitmapAllCriteria(sizeArray);
-            result.add(bitmapAllCriteria);
         } catch (SQLException exception) {
             throw new DaoException("Error with find all bitmaps", exception);
         } finally {
@@ -53,17 +49,6 @@ public class BitmapDaoImpl implements BitmapDao {
             close(statement);
         }
         return result;
-    }
-
-    private Bitmap createBitmapAllCriteria(int sizeArray) {
-        int[] data = new int[sizeArray];
-        for (int i = 0; i < sizeArray; i++) {
-            data[i] = 1;
-        }
-        Bitmap bitmapAllCriteria = new Bitmap();
-        bitmapAllCriteria.setName(ALL_PARAMETER_NAME);
-        bitmapAllCriteria.setData(data);
-        return bitmapAllCriteria;
     }
 
     @Override

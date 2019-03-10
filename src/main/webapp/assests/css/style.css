@@ -31,7 +31,9 @@
     background-color: #318f8e ;
     outline: 0 !important;
 }
-
+.noLink {
+    pointer-events: none;
+}
 body {
     font-family: 'OpenSans-Regular' !important;
 }

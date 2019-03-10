@@ -12,19 +12,30 @@ import java.util.Optional;
 
 public class QuestionDaoImpl implements QuestionDao {
 
-    private static final String SELECT_ALL_QUESTIONS = "SELECT id, user_id, request, response, " +
-            "request_date, response_date FROM Questions";
-    private static final String SELECT_UNANSWERED_QUESTIONS = "SELECT id, user_id, request, response, " +
-            "request_date, response_date FROM Questions WHERE response IS NULL";
-    private static final String SELECT_QUESTION_BY_ID = "SELECT id, user_id, request, response, " +
-            "request_date, response_date FROM Questions WHERE id = ?";
-    private static final String SELECT_QUESTION_BY_USER_ID = "SELECT id, user_id, request, response," +
-            " request_date, response_date FROM Questions WHERE user_id = ?";
-    private static final String DELETE_QUESTION = "DELETE FROM Questions WHERE id=?";
-    private static final String CREATE_QUESTION = "INSERT INTO Questions(user_id, request, response, " +
-            "request_date, response_date) VALUES(?,?,?,?,?)";
-    private static final String UPDATE_QUESTION = "UPDATE Questions SET user_id=?, request=?, response=?, " +
-            "request_date=?, response_date=? WHERE id=?";
+    private static final String SELECT_ALL_QUESTIONS =
+            "SELECT id, user_id, request, response, request_date, response_date " +
+                    "FROM Questions";
+    private static final String SELECT_UNANSWERED_QUESTIONS =
+            "SELECT id, user_id, request, response, request_date, response_date " +
+                    "FROM Questions " +
+                    "WHERE response IS NULL";
+    private static final String SELECT_QUESTION_BY_ID =
+            "SELECT id, user_id, request, response, request_date, response_date " +
+                    "FROM Questions " +
+                    "WHERE id = ?";
+    private static final String SELECT_QUESTION_BY_USER_ID =
+            "SELECT id, user_id, request, response, request_date, response_date " +
+                    "FROM Questions " +
+                    "WHERE user_id = ?";
+    private static final String DELETE_QUESTION =
+            "DELETE FROM Questions " +
+                    "WHERE id=?";
+    private static final String CREATE_QUESTION =
+            "INSERT INTO Questions(user_id, request, response, request_date, response_date) " +
+                    "VALUES(?,?,?,?,?)";
+    private static final String UPDATE_QUESTION =
+            "UPDATE Questions SET user_id=?, request=?, response=?, request_date=?, response_date=? " +
+                    "WHERE id=?";
 
     private Connection connection;
     public Connection getConnection() {

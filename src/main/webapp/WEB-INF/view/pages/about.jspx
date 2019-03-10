@@ -73,7 +73,7 @@
                     <div class="row col-xs-8 col-xs-offset-2 ">
                         <p><fmt:message key="about.registeruser" bundle="${i18n}"/></p>
                     </div>
-                    <a href="${pageContext.request.contextPath}/controller?command=signup" type="button" class="btn btn-primary">
+                    <a href="${pageContext.request.contextPath}/controller?command=sign_up" type="button" class="btn btn-primary">
                         <fmt:message key="about.registerbtn" bundle="${i18n}"/></a>
                 </c:otherwise>
             </c:choose>

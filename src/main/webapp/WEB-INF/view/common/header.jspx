@@ -40,15 +40,15 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav col-xs-5">
                     <c:set var="navName">
-                        <fmt:message key="nav.home" bundle="${i18n}"/>
+                        <fmt:message key="nav.main" bundle="${i18n}"/>
                     </c:set>
                     <c:choose>
-                        <c:when test="${sessionScope.title eq 'home'}">
+                        <c:when test="${sessionScope.title eq 'main'}">
                             <li class="active"><a href="#">${navName}</a></li>
                         </c:when>
                         <c:otherwise>
                             <li>
-                                <a href="${pageContext.request.contextPath}/controller?command=home">${navName}</a>
+                                <a href="${pageContext.request.contextPath}/controller?command=main">${navName}</a>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -139,11 +139,18 @@
                         </c:otherwise>
                     </c:choose>
                     <c:if test="${empty sessionScope.user}">
-                        <li>
-                            <a href="${pageContext.request.contextPath}/controller?command=signup">
-                                <fmt:message key="nav.signup" bundle="${i18n}"/>
-                            </a>
-                        </li>
+                        <c:choose>
+                            <c:when test="${sessionScope.title eq 'sign_up'}">
+                                <li class="active"><a href="#"><fmt:message key="nav.signup" bundle="${i18n}"/></a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/controller?command=sign_up">
+                                        <fmt:message key="nav.signup" bundle="${i18n}"/>
+                                    </a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
                     </c:if>
                     <c:if test="${not empty sessionScope.user}">
                         <li>
@@ -153,12 +160,19 @@
                         </li>
                     </c:if>
                     <c:if test="${empty sessionScope.user}">
-                        <li>
-                            <a style="margin-right: 5px;" href="${pageContext.request.contextPath}/controller?command=signin"><span
-                                    class="glyphicon glyphicon-log-in"/>
-                                <fmt:message key="nav.signin" bundle="${i18n}"/>
-                            </a>
-                        </li>
+                        <c:choose>
+                            <c:when test="${sessionScope.title eq 'sign_in'}">
+                                <li class="active"><a href="#"><fmt:message key="nav.signin" bundle="${i18n}"/></a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li>
+                                    <a style="margin-right: 5px;" href="${pageContext.request.contextPath}/controller?command=sign_in"><span
+                                            class="glyphicon glyphicon-log-in"/>
+                                        <fmt:message key="nav.signin" bundle="${i18n}"/>
+                                    </a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
                     </c:if>
                 </ul>
             </div>

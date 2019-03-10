@@ -5,12 +5,7 @@ import by.chmut.giftit.dao.DaoException;
 import by.chmut.giftit.dao.DaoFactory;
 import by.chmut.giftit.dao.TransactionManager;
 import by.chmut.giftit.entity.Bitmap;
-import by.chmut.giftit.entity.Cart;
 import by.chmut.giftit.entity.Item;
-import by.chmut.giftit.entity.User;
-import by.chmut.giftit.service.ServiceException;
-import by.chmut.giftit.service.UserService;
-import by.chmut.giftit.service.impl.UserServiceImpl;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,10 +60,12 @@ public class AjaxController extends HttpServlet {
                 break;
             case SEARCH_FILTER:
                 int countItems = commandManager.countItemsOnFilter(request, bitmapStorage);
+                request.getSession().setAttribute(COUNT_ITEM_AFTER_SEARCH_PARAMETER_NAME, countItems);
+                request.getSession().setAttribute(NUMBER_PAGE_PARAMETER_NAME, DEFAULT_NUMBER_PAGE);
                 response.getWriter().write(new Gson().toJson(countItems));
                 break;
             case RESET_FILTER:
-                resetFilter(request, response);
+                resetFilter(request);
                 break;
             case ADD_TO_CART: // TODO check User exist
                 addToCart(request);
@@ -125,8 +122,22 @@ public class AjaxController extends HttpServlet {
         session.setAttribute(CART_COMMAND_FLAG_PARAMETER_NAME, ADD_CART_COMMAND);
     }
 
-    private void resetFilter(HttpServletRequest request, HttpServletResponse response) {
-
+    private void resetFilter(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        commandManager.setCheckedBitmaps(new ArrayList<>());
+        int countAllItems = bitmapStorage.get(LOW_PARAMETER_NAME).getData().length;
+        session.setAttribute(COUNT_ITEM_AFTER_SEARCH_PARAMETER_NAME, countAllItems);
+        session.setAttribute(PRICE_CRITERIA_PARAMETER_NAME, ALL_PARAMETER_NAME);
+        session.setAttribute(PAGINATION_LIMIT_PARAMETER_NAME, DEFAULT_PAGINATION_LIMIT);
+        session.setAttribute(NUMBER_PAGE_PARAMETER_NAME, DEFAULT_NUMBER_PAGE);
+        session.removeAttribute(RESULT_OF_SEARCH_ITEMS_PARAMETER_NAME);
+        session.removeAttribute(CUP_PARAMETER_NAME);
+        session.removeAttribute(SHIRT_PARAMETER_NAME);
+        session.removeAttribute(PLATE_PARAMETER_NAME);
+        session.removeAttribute(PILLOW_PARAMETER_NAME);
+        session.removeAttribute(PUZZLE_PARAMETER_NAME);
+        session.removeAttribute(MOUSE_PAD_PARAMETER_NAME);
+        session.removeAttribute(TOWEL_PARAMETER_NAME);
     }
 
     private enum AjaxCommand {

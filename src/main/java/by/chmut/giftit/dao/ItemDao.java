@@ -16,4 +16,6 @@ public interface ItemDao extends Dao<Long, Item> {//TODO  про одно наз
     Optional<Item> find(long commentId) throws DaoException;
 
     List<Item> findForOrder(long orderId) throws DaoException;
+
+    int countAllItem() throws DaoException;
 }

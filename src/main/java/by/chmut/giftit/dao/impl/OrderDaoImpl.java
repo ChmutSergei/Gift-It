@@ -12,18 +12,29 @@ import java.util.Optional;
 
 public class OrderDaoImpl implements OrderDao {
 
-    private static final String SELECT_ALL_ORDERS = "SELECT id, user_id, details, status, " +
-            "init_date, issue_date FROM Orders";
-    private static final String SELECT_PAID_ORDERS = "SELECT id, user_id, details, status, " +
-            "init_date, issue_date FROM Orders WHERE status = 'PAID'";
-    private static final String SELECT_ORDER_BY_ID = "SELECT id, user_id, details, status, " +
-            "init_date, issue_date FROM Orders WHERE id = ?";
-    private static final String DELETE_ORDER = "DELETE FROM Orders WHERE id=?";
-    private static final String CREATE_ORDER = "INSERT INTO Orders(user_id, details, status, " +
-            "init_date, issue_date) VALUES(?,?,?,?,?)";
-    private static final String UPDATE_ORDER = "UPDATE Orders SET user_id=?, details=?, status=?, " +
-            "init_date=?, issue_date=? WHERE id=?";
-    private static final String UPDATE_ORDER_SET_PAID_STATUS = "UPDATE Orders SET status=? WHERE id= ?";
+    private static final String SELECT_ALL_ORDERS =
+            "SELECT id, user_id, details, status, init_date, issue_date " +
+                    "FROM Orders";
+    private static final String SELECT_ORDERS_BY_STATUS =
+            "SELECT id, user_id, details, status, init_date, issue_date " +
+                    "FROM Orders " +
+                    "WHERE status = ?";
+    private static final String SELECT_ORDER_BY_ID =
+            "SELECT id, user_id, details, status, init_date, issue_date " +
+                    "FROM Orders " +
+                    "WHERE id = ?";
+    private static final String DELETE_ORDER =
+            "DELETE FROM Orders " +
+                    "WHERE id=?";
+    private static final String CREATE_ORDER =
+            "INSERT INTO Orders(user_id, details, status, init_date, issue_date) " +
+                    "VALUES(?,?,?,?,?)";
+    private static final String UPDATE_ORDER =
+            "UPDATE Orders SET user_id=?, details=?, status=?, init_date=?, issue_date=? " +
+                    "WHERE id=?";
+    private static final String UPDATE_ORDER_SET_PAID_STATUS =
+            "UPDATE Orders SET status=? " +
+                    "WHERE id= ?";
 
     private Connection connection;
     public Connection getConnection() {
@@ -170,7 +181,8 @@ public class OrderDaoImpl implements OrderDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connection.prepareStatement(SELECT_PAID_ORDERS);
+            statement = connection.prepareStatement(SELECT_ORDERS_BY_STATUS);
+            statement.setString(1, Order.OrderStatus.PAID.name());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Order order = makeFromResultSet(resultSet);

@@ -63,7 +63,7 @@
             </div>
         </c:if>
         <div id="button-try" class="container">
-            <a href="${pageContext.request.contextPath}/controller?command=home"
+            <a href="${pageContext.request.contextPath}/controller?command=main"
                class="btn btn-primary" role="button">Try again</a>
         </div>
     </div>

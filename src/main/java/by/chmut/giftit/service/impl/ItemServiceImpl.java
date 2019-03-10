@@ -145,31 +145,30 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void updateItemFilter(List<Bitmap> bitmaps, Item item) {
-        String parameterPrice = selectOnValue(item.getPrice());
+        List<String> possibleCriteriaPrice = selectOnPrice(item.getPrice());
         for (Bitmap bitmap : bitmaps) {
             int[] data = bitmap.getData();
             int[] newData = new int[data.length + 1];
             System.arraycopy(data, 0, newData, 0, data.length);
-            if (bitmap.getName().equals(parameterPrice) || bitmap.getName().equals(item.getType())) {
+            if (bitmap.getName().equals(item.getType()) || possibleCriteriaPrice.contains(bitmap.getName())) {
                 newData[newData.length - 1] = 1;
             }
             bitmap.setData(newData);
         }
     }
 
-    private String selectOnValue(BigDecimal price) {
+    private List<String> selectOnPrice(BigDecimal price) {
+        List<String> criteriaPrice = new ArrayList<>();
         if (price.compareTo(LOW_BORDER_PRICE) <= 0) {
-            return LOW_PARAMETER_NAME;
-        } else {
-            if (price.compareTo(MEDIUM_BORDER_PRICE) <= 0) {
-                return MEDIUM_PARAMETER_NAME;
-            } else {
-                if (price.compareTo(HIGH_BORDER_PRICE) <= 0) {
-                    return HIGH_PARAMETER_NAME;
-                }
-            }
+            criteriaPrice.add(LOW_PARAMETER_NAME);
         }
-        return null; // never
+        if (price.compareTo(MEDIUM_BORDER_PRICE) <= 0) {
+            criteriaPrice.add(MEDIUM_PARAMETER_NAME);
+        }
+        if (price.compareTo(HIGH_BORDER_PRICE) <= 0) {
+            criteriaPrice.add(HIGH_PARAMETER_NAME);
+        }
+        return criteriaPrice;
     }
 
     @Override

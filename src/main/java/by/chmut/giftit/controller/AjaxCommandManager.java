@@ -10,10 +10,7 @@ import com.google.gson.Gson;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static by.chmut.giftit.constant.AttributeName.*;
 
@@ -23,14 +20,15 @@ class AjaxCommandManager {
     private Bitmap bitmapPrice;
     private List<Bitmap> checkedBitmaps = new ArrayList<>();
 
+    void setCheckedBitmaps(List<Bitmap> checkedBitmaps) {
+        this.checkedBitmaps = checkedBitmaps;
+    }
+
     int countItemsOnFilter(HttpServletRequest request, Map<String, Bitmap> bitmapStorage) {
         String criteriaPrice = request.getParameter(PRICE_PARAMETER_NAME);
-        if (criteriaPrice == null) {
-            bitmapPrice = bitmapStorage.get(ALL_PARAMETER_NAME);
-        } else {
-            bitmapPrice = bitmapStorage.get(criteriaPrice);
-            request.getSession().setAttribute(PRICE_CRITERIA_PARAMETER_NAME, criteriaPrice);
-        }
+        bitmapPrice = bitmapStorage.get(criteriaPrice);
+        request.getSession().setAttribute(PRICE_CRITERIA_PARAMETER_NAME,
+                criteriaPrice != null ? criteriaPrice : ALL_PARAMETER_NAME);
         String criteriaType = request.getParameter(TYPE_PARAMETER_NAME);
         if (criteriaType != null) {
             Bitmap bitmap = bitmapStorage.get(criteriaType);
@@ -46,39 +44,26 @@ class AjaxCommandManager {
                     break;
             }
         }
-        List<Integer> itemsId = Collections.emptyList();
-        if (!checkedBitmaps.isEmpty()) {
-            itemsId = doFilter();
-        }
+        int countAllItems = bitmapStorage.get(LOW_PARAMETER_NAME).getData().length;
+        int[] filterForAllItem = checkedBitmaps.isEmpty() ? Arrays.stream(new int[countAllItems]).map(i -> i = 1).toArray() : null;
+        List<Integer> itemsId = doFilter(filterForAllItem);
+        int count = itemsId.size();
         request.getSession().setAttribute(RESULT_OF_SEARCH_ITEMS_PARAMETER_NAME, itemsId);
-        return itemsId.size();
+        return count;
     }
 
 
-    void updateUserData(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String newPhone = request.getParameter(PHONE_PARAMETER_NAME);
-        String newAddress = request.getParameter(ADDRESS_PARAMETER_NAME);
-        User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
-        user.setPhone(newPhone);
-        user.setAddress(newAddress);
-        boolean result = ajaxService.updateUserData(user);
-        UserData data = new UserData();
-        data.address = newAddress;
-        if (result) {
-            data.phone = newPhone;
-        } else {
-            data.phone = "ERROR";
-        }
-        response.getWriter().write(new Gson().toJson(data));
-    }
-
-    private List<Integer> doFilter() {
+    private List<Integer> doFilter(int[] resultFilter) {
         List<Integer> result = new ArrayList<>();
-        int[] resultFilter = checkedBitmaps.get(0).getData();
-        for (int i = 1; i < checkedBitmaps.size(); i++) {
-            resultFilter = bitwiseOrForTwoArray(resultFilter, checkedBitmaps.get(i).getData());
+        if (resultFilter == null) {
+            resultFilter = checkedBitmaps.get(0).getData();
+            for (int i = 1; i < checkedBitmaps.size(); i++) {
+                resultFilter = bitwiseOrForTwoArray(resultFilter, checkedBitmaps.get(i).getData());
+            }
         }
-        resultFilter = bitwiseAndForTwoArray(resultFilter, bitmapPrice.getData());
+        if (bitmapPrice != null) {
+            resultFilter = bitwiseAndForTwoArray(resultFilter, bitmapPrice.getData());
+        }
         for (int i = 0; i < resultFilter.length; i++) {
             if (resultFilter[i] > 0) {
                 result.add(i + 1);
@@ -101,6 +86,23 @@ class AjaxCommandManager {
             result[i] = first[i] & second[i];
         }
         return result;
+    }
+
+    void updateUserData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String newPhone = request.getParameter(PHONE_PARAMETER_NAME);
+        String newAddress = request.getParameter(ADDRESS_PARAMETER_NAME);
+        User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
+        user.setPhone(newPhone);
+        user.setAddress(newAddress);
+        boolean result = ajaxService.updateUserData(user);
+        UserData data = new UserData();
+        data.address = newAddress;
+        if (result) {
+            data.phone = newPhone;
+        } else {
+            data.phone = "ERROR";
+        }
+        response.getWriter().write(new Gson().toJson(data));
     }
 
     void checkUsernameOnExist(HttpServletRequest request, HttpServletResponse response) throws IOException {

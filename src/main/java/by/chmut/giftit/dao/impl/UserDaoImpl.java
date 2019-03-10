@@ -12,22 +12,38 @@ import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
 
-    private static final String SELECT_ALL_USERS = "SELECT id, username, password, first_name, last_name, email, " +
-            "phone, address, account, init_date, blocked_until, role FROM Users";
-    private static final String SELECT_USER_BY_USERNAME = "SELECT id, username, password, first_name, last_name, " +
-            "email, phone, address, account, init_date, blocked_until, role FROM Users WHERE username = ?";
-    private static final String SELECT_USER_BY_PART_OF_USERNAME = "SELECT id, username, password, first_name, last_name, " +
-            "email, phone, address, account, init_date, blocked_until, role FROM Users WHERE username LIKE ?";
-    private static final String SELECT_USER_BY_INIT_DATE = "SELECT id, username, password, first_name, last_name, " +
-            "email, phone, address, account, init_date, blocked_until, role FROM Users WHERE init_date >= ?";
-    private static final String SELECT_USER_BY_ID = "SELECT id, username, password, first_name, last_name, " +
-            "email, phone, address, account, init_date, blocked_until, role FROM Users WHERE id = ?";
-    private static final String DELETE_USER = "DELETE FROM Users WHERE id=?";
-    private static final String CREATE_USER = "INSERT INTO Users(username, password, first_name, last_name, email, " +
-            "phone, address, account, init_date, blocked_until, role) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
-    private static final String UPDATE_USER = "UPDATE Users SET username=?, password=?, first_name=?, last_name=?, " +
-            "email=?, phone=?, address=?, account=?, init_date=?, blocked_until=?, role=? WHERE id=?";
-    private static final String UPDATE_USER_BLOCK_FOR_DAYS = "UPDATE Users SET blocked_until=? WHERE id=?";
+    private static final String SELECT_ALL_USERS =
+            "SELECT id, username, password, first_name, last_name, email, phone, address, account, init_date, blocked_until, role " +
+                    "FROM Users";
+    private static final String SELECT_USER_BY_USERNAME =
+            "SELECT id, username, password, first_name, last_name, email, phone, address, account, init_date, blocked_until, role " +
+                    "FROM Users " +
+                    "WHERE username = ?";
+    private static final String SELECT_USER_BY_PART_OF_USERNAME =
+            "SELECT id, username, password, first_name, last_name, email, phone, address, account, init_date, blocked_until, role " +
+                    "FROM Users " +
+                    "WHERE username LIKE ?";
+    private static final String SELECT_USER_BY_INIT_DATE =
+            "SELECT id, username, password, first_name, last_name, email, phone, address, account, init_date, blocked_until, role " +
+                    "FROM Users " +
+                    "WHERE init_date >= ?";
+    private static final String SELECT_USER_BY_ID =
+            "SELECT id, username, password, first_name, last_name, email, phone, address, account, init_date, blocked_until, role " +
+                    "FROM Users " +
+                    "WHERE id = ?";
+    private static final String DELETE_USER =
+            "DELETE FROM Users " +
+                    "WHERE id=?";
+    private static final String CREATE_USER =
+            "INSERT INTO Users(username, password, first_name, last_name, email, phone, address, account, init_date, blocked_until, role) " +
+                    "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String UPDATE_USER =
+            "UPDATE Users SET username=?, password=?, first_name=?, last_name=?, email=?, phone=?, address=?, account=?, " +
+                    "init_date=?, blocked_until=?, role=? " +
+                    "WHERE id=?";
+    private static final String UPDATE_USER_BLOCK_FOR_DAYS =
+            "UPDATE Users SET blocked_until=? " +
+                    "WHERE id=?";
 
 
     private Connection connection;

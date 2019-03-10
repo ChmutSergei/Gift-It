@@ -6,7 +6,7 @@
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="i18n.messages" var="i18n"/>
     <div class="panel panel-body" style="margin-left: unset;margin-right: unset;margin-top: -48px;">
-        <form class="form-horizontal" action="${pageContext.request.contextPath}/controller?command=home"
+        <form class="form-horizontal" action="${pageContext.request.contextPath}/controller?command=main"
               method="post"/>
         <div class="row text-center" style="font-size: 20px;">
             <div class="col-xs-5">
@@ -23,7 +23,7 @@
             </div>
             <c:set var="btReset"><fmt:message bundle="${i18n}" key="additem.reset"/></c:set>
             <div class="col-xs-2">
-                <button id="reset" type="reset" class="btn btn-primary btn-block">
+                <button id="reset" type="button" class="btn btn-primary btn-block">
                     ${btReset}
                 </button>
             </div>
@@ -136,12 +136,12 @@
                     <c:when test="${sessionScope.criteriaPrice eq 'low'}">
                         <label class="radio-inline"><input class="itemprice" type="radio" value="low" name="price"
                                                            checked=""/>
-                            &amp;lt 50
+                            &amp;lt 30
                         </label>
                     </c:when>
                     <c:otherwise>
                         <label class="radio-inline"><input class="itemprice" type="radio" value="low" name="price"/>
-                            &amp;lt 50
+                            &amp;lt 30
                         </label>
                     </c:otherwise>
                 </c:choose>
@@ -149,12 +149,12 @@
                     <c:when test="${sessionScope.criteriaPrice eq 'medium'}">
                         <label class="radio-inline"><input class="itemprice" type="radio" value="medium" name="price"
                                                            checked=""/>
-                            &amp;lt 100
+                            &amp;lt 60
                         </label>
                     </c:when>
                     <c:otherwise>
                         <label class="radio-inline"><input class="itemprice" type="radio" value="medium" name="price"/>
-                            &amp;lt 100
+                            &amp;lt 60
                         </label>
                     </c:otherwise>
                 </c:choose>
@@ -162,12 +162,12 @@
                     <c:when test="${sessionScope.criteriaPrice eq 'high'}">
                         <label class="radio-inline"><input class="itemprice" type="radio" value="high" name="price"
                                                            checked=""/>
-                            &amp;lt 150
+                            &amp;lt 100
                         </label>
                     </c:when>
                     <c:otherwise>
                         <label class="radio-inline"><input class="itemprice" type="radio" value="high" name="price"/>
-                            &amp;lt 150
+                            &amp;lt 100
                         </label>
                     </c:otherwise>
                 </c:choose>
@@ -175,35 +175,63 @@
         </div>
     </div>
     <div class="container">
-        <div id="items" class="row">
-            <c:forEach var="item" items="${sessionScope.result}">
-                <div class="col-sm-3">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">${item.itemName}</div>
-                        <div class="panel-body"><img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
-                                                     name="${item.itemId}" class="img-responsive" style="width:100%"
-                                                     alt="Image" onclick="sendItemId($(this))"/></div>
-                        <div class="panel-footer">
-                            <p>${item.description}</p>
-                            <h3><fmt:setLocale value="ru-RU"/>
-                                <fmt:formatNumber value="${item.price}" type="currency"/><br/>
-                                <fmt:setLocale value="${sessionScope.locale}"/></h3>
-                            <c:if test="${sessionScope.user.role eq 'ADMIN'}" >
-                                <p style="color: crimson">ACTIVE: ${item.active}</p>
-                                <button id="forAdmin" name="${item.itemId}" class="btn btn-default" onclick="sendItemId($(this))" >
-                                    <fmt:message key="main.sendId" bundle="${i18n}"/></button>
-                            </c:if>
-                            <c:set var="cart"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
-                            <a id="comment" class="forSend" name="${item.itemId}" onclick="sendItemId($(this))">Comments
-                                <span class="badge">${sessionScope.countComments.get(item.itemId)}</span></a>
-                            <a class="forSend" onclick="sendItemId($(this))" data-toggle="tooltip"
-                               name="${item.itemId}" title="${cart}"><span class="glyphicon glyphicon-shopping-cart"
-                                                                           style="font-size: 30px;margin-left: 15px"/></a>
+        <c:choose>
+            <c:when test="${not empty sessionScope.result}">
+                <!-- pagination-->
+                <c:set var="maxNumPage" value="${sessionScope.countSearch/sessionScope.limit - 1}"/>
+                <c:if test="${maxNumPage > 0}">
+                    <c:set var="path" value="${pageContext.request.contextPath}/controller?command=main"/>
+                    <ul class="pagination">
+                        <li class="previous"><a href="${path}&amp;page=previous">Previous</a></li>
+                        <c:forEach begin="0" end="${maxNumPage}" varStatus="loop">
+                            <li about="${loop.index}" id="p${loop.index}">
+                                <a href="${path}&amp;page=${loop.index}">${loop.index + 1}</a>
+                            </li>
+                        </c:forEach>
+                        <li class="next"><a href="${path}&amp;page=next">Next</a></li>
+                    </ul>
+                </c:if>
+                <c:set var="currentPage" value="${sessionScope.page}"/>
+
+                <div id="items" class="row">
+                    <c:forEach var="item" items="${sessionScope.result}">
+                        <div class="col-sm-3">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">${item.itemName}</div>
+                                <div class="panel-body"><img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
+                                                             name="${item.itemId}" class="img-responsive"
+                                                             style="width:100%"
+                                                             alt="Image" onclick="sendItemId($(this))"/></div>
+                                <div class="panel-footer">
+                                    <p>${item.description}</p>
+                                    <h3><fmt:setLocale value="ru-RU"/>
+                                        <fmt:formatNumber value="${item.price}" type="currency"/><br/>
+                                        <fmt:setLocale value="${sessionScope.locale}"/></h3>
+                                    <c:if test="${sessionScope.user.role eq 'ADMIN'}">
+                                        <p style="color: crimson">ACTIVE: ${item.active}</p>
+                                        <button id="forAdmin" name="${item.itemId}" class="btn btn-default"
+                                                onclick="sendItemId($(this))">
+                                            <fmt:message key="main.sendId" bundle="${i18n}"/></button>
+                                    </c:if>
+                                    <c:set var="cart"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
+                                    <a id="comment" class="forSend" name="${item.itemId}" onclick="sendItemId($(this))">Comments
+                                        <span class="badge">${sessionScope.countComments.get(item.itemId)}</span></a>
+                                    <a class="forSend" onclick="sendItemId($(this))" data-toggle="tooltip"
+                                       name="${item.itemId}" title="${cart}"><span
+                                            class="glyphicon glyphicon-shopping-cart"
+                                            style="font-size: 30px;margin-left: 15px"/></a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </c:forEach>
                 </div>
-            </c:forEach>
-        </div>
+            </c:when>
+            <c:otherwise>
+                <div class="col-xs-offset-2">
+                    <p><fmt:message key="main.notfound" bundle="${i18n}"/></p>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 
     <script>
@@ -214,9 +242,29 @@
             $('.itemprice').click(function () {
                 addPriceForSearch($(this));
             });
+            setClassOnPagination();
         });
-        $('.img-responsive').css( 'cursor', 'pointer' );
-        $('.forSend').css( 'cursor', 'pointer' );
+
+        function setClassOnPagination() {
+            var number = Math.round('${maxNumPage}');
+            var page = $('#p${currentPage}');
+            var about = page.attr('about');
+            page.addClass('active');
+            var first = $('#p0').attr('about');
+            var last = $('#p' + number).attr('about');
+            if (about == first) {
+                $('.previous').addClass('disabled');
+                $('.previous').addClass('noLink');
+            }
+            if (about == last) {
+                $('.next').addClass('disabled');
+                $('.next').addClass('noLink');
+            }
+        }
+
+        $('.img-responsive').css('cursor', 'pointer');
+        $('.forSend').css('cursor', 'pointer');
+
         function addTypeForSearch(element) {
             var type = $(element).attr('name');
             var action = 'OFF';
@@ -276,6 +324,22 @@
                 } else {
                     location.href = contextUrl + '/controller?command=preview_item' + cursor;
                 }
+            }).fail(function (data) {
+                if (console &amp;&amp; console.log) {
+                    console.log("Error data:", data);
+                }
+            })
+        }
+
+        reset.onclick = function () {
+            var contextUrl = '${pageContext.request.contextPath}';
+            var command = 'RESET_FILTER';
+            $.ajax({
+                type: 'POST',
+                data: {command: command},
+                url: contextUrl + '/ajax'
+            }).done(function () {
+                location.href = contextUrl + '/controller?command=main';
             }).fail(function (data) {
                 if (console &amp;&amp; console.log) {
                     console.log("Error data:", data);

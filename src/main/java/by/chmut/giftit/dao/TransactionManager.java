@@ -27,10 +27,10 @@ public class TransactionManager {
 
     public void endTransaction(Dao dao) throws DaoException {
         try {
-            if (connection != null) {
-                connection.commit();
-                connection.setAutoCommit(true);
-            }
+//            if (connection != null) {
+            connection.commit();
+            connection.setAutoCommit(true);
+//            }
         } catch (SQLException exception) {
             rollback();
             throw new DaoException("Error when try to finish transaction", exception);
