@@ -1,4 +1,4 @@
-package by.chmut.giftit.connectionpool;
+package by.chmut.giftit.pool;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

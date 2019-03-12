@@ -13,10 +13,10 @@ import java.util.Optional;
 public interface UserService {
 
     Optional<User> find(String username) throws ServiceException;
+
     Optional<User> find(long userId) throws ServiceException;
-    Optional<User> find(Cookie cookie) throws ServiceException;
+
     User create(Map<String, String> parameters) throws ServiceException;
-    boolean validateUser(User user, String password);
 
     List<User> searchUserByParams(Map<String, String> parametersSearch) throws ServiceException;
 
@@ -26,5 +26,4 @@ public interface UserService {
 
     Map<Long, User> findByComment(List<Comment> comments) throws ServiceException;
 
-//    Cookie addRememberMe(User user) throws ServiceException;
 }

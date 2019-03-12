@@ -37,11 +37,6 @@ public class UserServiceImpl implements UserService {
     private TransactionManager manager = new TransactionManager();
 
     @Override
-    public boolean validateUser(User user, String password) {
-        return PasswordValidator.validateUser(user, password);
-    }
-
-    @Override
     public List<User> searchUserByParams(Map<String, String> parametersSearch) throws ServiceException {
         List<User> users;
         String searchType = parametersSearch.get(USER_SEARCH_TYPE_PARAMETER_NAME);
@@ -201,11 +196,6 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(exception);
         }
         return user;
-    }
-
-    @Override
-    public Optional<User> find(Cookie cookie) throws ServiceException {
-        return Optional.empty();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package by.chmut.giftit.listener;
 
-import by.chmut.giftit.connectionpool.ConnectionPool;
 import by.chmut.giftit.dao.DaoException;
 import by.chmut.giftit.dao.DaoFactory;
 import by.chmut.giftit.dao.ItemDao;
@@ -38,12 +37,6 @@ public class HttpSessionListenerImpl implements HttpSessionListener {
         } catch (DaoException exception) {
             logger.error("Error when try to count all item in catalog");
         }
-
-//        try {
-//            ConnectionPool.getInstance();
-//        } catch (DaoException exception) {
-//            logger.error("Error when try to init connection pool");
-//        }
     }
 
     @Override

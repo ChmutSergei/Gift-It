@@ -22,7 +22,7 @@ public class QuestionServiceImpl implements QuestionService {
     private TransactionManager manager = new TransactionManager();
 
     @Override
-    public List<Question> find(long userId) throws ServiceException {
+    public List<Question> findByUserId(long userId) throws ServiceException {
         List<Question> questions;
         try {
             manager.beginTransaction(questionDao);

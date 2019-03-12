@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.regex.Pattern;
 
-//TODO
 class XssRequestWrapper extends HttpServletRequestWrapper {
     private static Pattern[] patterns = new Pattern[]{
             // Script fragments

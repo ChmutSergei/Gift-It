@@ -20,5 +20,5 @@ CREATE TABLE Orders(id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT,
   FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE  CASCADE  ON UPDATE CASCADE);
 INSERT INTO Users(username, password, first_name, last_name, email, phone, address, account, init_date,
                   blocked_until, role)
-VALUES ('chmut','1234','Sergei', 'Chmut', 'chmuts@tut.by', '+375296242715','Minsk, Mihanovichi, Magistralnaya 21-8',
+VALUES ('admin','1234','Sergei', 'Chmut', 'chmut@tut.by', '+375296242715','Minsk, Mihanovichi, Magistralnaya 21-8',
   0,'2019-01-10','2019-01-10','ADMIN');

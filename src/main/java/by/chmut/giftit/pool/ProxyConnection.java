@@ -1,4 +1,4 @@
-package by.chmut.giftit.connectionpool;
+package by.chmut.giftit.pool;
 
 import by.chmut.giftit.dao.DaoException;
 import org.apache.logging.log4j.LogManager;

@@ -6,11 +6,7 @@
     <fmt:setBundle basename="i18n.messages" var="i18n"/>
     <!-- message-->
     <c:choose>
-        <c:when test="${not empty sessionScope.message}">
-            <c:set var="infomessage"><fmt:message key="${sessionScope.message}" bundle="${i18n}"/></c:set>
-            <strong>${infomessage}</strong>
-        </c:when>
-        <c:otherwise>
+        <c:when test="${not empty sessionScope.carts}">
             <div class="container">
                 <div class="text-left">
                     <h2><fmt:message bundle="${i18n}" key="cart.cart"/></h2>
@@ -99,6 +95,10 @@
                     </form>
                 </div>
             </div>
+        </c:when>
+        <c:otherwise>
+            <c:set var="infomessage"><fmt:message key="cart.emptyCart" bundle="${i18n}"/></c:set>
+            <strong>${infomessage}</strong>
         </c:otherwise>
     </c:choose>
 

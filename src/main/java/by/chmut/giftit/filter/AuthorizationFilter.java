@@ -8,57 +8,60 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.*;
 
-import static by.chmut.giftit.command.CommandType.SIGN_IN;
-import static by.chmut.giftit.command.CommandType.SIGN_UP;
-import static by.chmut.giftit.constant.AttributeName.COMMAND_PARAMETER_NAME;
-import static by.chmut.giftit.constant.AttributeName.USER_PARAMETER_NAME;
-import static by.chmut.giftit.entity.User.Role.GUEST;
+import static by.chmut.giftit.command.CommandType.*;
+import static by.chmut.giftit.command.CommandType.MODERATOR;
+import static by.chmut.giftit.constant.AttributeName.*;
+import static by.chmut.giftit.entity.User.Role.*;
 
 public class AuthorizationFilter implements Filter {
 
-    private static final String MAIN_PART_PATH = "/controller?command=main";
-    private static final String SIGN_UP_PART_PATH = "/controller?command=sign_up";
+    private static final String ERROR_PART_PATH = "/controller?command=error";
 
-    private User.Role role;
+    private final Set<CommandType> availableCommandForGuest = new HashSet<>(Arrays.asList(
+            MAIN, ERROR, SIGN_IN, SIGN_UP, LOGIN, PREVIEW_ITEM, ABOUT, REGISTRATION));
+
+    private final Set<CommandType> availableCommandForUser = new HashSet<>(Arrays.asList(
+            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART,PAYMENT, CHECK_PAYMENT, ABOUT));
+
+    private final Set<CommandType> availableCommandForDesigner = new HashSet<>(Arrays.asList(
+            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, CREATE_ITEM, ADD_ITEM));
+
+    private final Set<CommandType> availableCommandForModerator = new HashSet<>(Arrays.asList(
+            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, MODERATOR, MODERATE));
+
+    private final Set<CommandType> availableCommandForAdmin = new HashSet<>(Arrays.asList(
+            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, ADMINISTRATION,
+            SEARCH_USER, USER_PROCESSING, GIVE_ANSWER));
+
+    private final Map<User.Role, Set<CommandType>> accessControlMap = new HashMap<>();
 
     @Override
     public void init(FilterConfig filterConfig) {
+        accessControlMap.put(GUEST, availableCommandForGuest);
+        accessControlMap.put(USER, availableCommandForUser);
+        accessControlMap.put(DESIGNER, availableCommandForDesigner);
+        accessControlMap.put(User.Role.MODERATOR, availableCommandForModerator);
+        accessControlMap.put(ADMIN, availableCommandForAdmin);
     }
 
-    /**
-     * список страниц что нужно будет закрыть -
-     * Account
-     * Cart
-     * EmptyCart
-     * Administration
-     * AddItem - страница для designer
-     * Processing User
-     * Moderator
-     * Payment
-     * идея создать список доступных страниц для каждой роли и проверять на contains в switch
-     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) servletRequest;
-        HttpServletResponse res = (HttpServletResponse) servletResponse;
-        String commandParameter = req.getParameter(COMMAND_PARAMETER_NAME);
-        CommandType type = CommandType.chooseType(commandParameter);
-        String contextPath = req.getContextPath();
-        HttpSession session = req.getSession();
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        String commandParameter = request.getParameter(COMMAND_PARAMETER_NAME);
+        CommandType command = CommandType.chooseType(commandParameter);
+        String contextPath = request.getContextPath();
+        HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER_PARAMETER_NAME);
-
-
-        role = (user != null) ? user.getRole() : GUEST; // делаем Map с ключами role
-
-        if ((SIGN_IN.equals(type) || SIGN_UP.equals(type)) && user != null) {
-            res.sendRedirect(contextPath + MAIN_PART_PATH);
+        User.Role role = (user != null) ? user.getRole() : GUEST;
+        Set<CommandType> accessControl = accessControlMap.get(role);
+        if (!accessControl.contains(command)) {
+            request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, ACCESS_DENIED);
+            response.sendRedirect(contextPath + ERROR_PART_PATH);
             return;
         }
-//        if (PREVIEW_ITEM.equals(type) && (user == null)) {
-//            res.sendRedirect(contextPath + SIGN_UP_PART_PATH);
-//            return;
-//        }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
@@ -66,12 +69,3 @@ public class AuthorizationFilter implements Filter {
     public void destroy() {
     }
 }
-
-//            if (user == null)  {
-//                session.setAttribute("errorMsg", "accessLog");
-//                res.sendRedirect(contextPath + "/controller?command=add_account");
-//                return;
-//            }
-//            if (!user.getRole().equals("admin") & ADMIN.equals(type)) {
-//            res.sendRedirect(contextPath + MAIN_PART_PATH);
-//                return;

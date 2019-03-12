@@ -42,9 +42,7 @@ public class AttributeName {
     public static final String UPLOAD_FILE_ATTRIBUTE_NAME = "filePath";
     public static final String UPLOAD_FILENAME_ATTRIBUTE_NAME = "fileName";
     public static final String EXCEPTION_PARAMETER_NAME = "exception";
-    public static final String BITMAPS_PARAMETER_NAME = "bitmaps";
     public static final String RESULT_OF_SEARCH_ITEMS_PARAMETER_NAME = "resultSearch";
-    public static final String PAGINATION_OFFSET_PARAMETER_NAME = "offset";
     public static final String PAGINATION_LIMIT_PARAMETER_NAME = "limit";
     public static final String PRICE_CRITERIA_PARAMETER_NAME = "criteriaPrice";
     public static final String ENABLE_CHECKBOX = "ON";
@@ -103,11 +101,11 @@ public class AttributeName {
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
     public static final String MESSAGE_NOT_FOUND_ID_KEY = "error.notFoundId";
-    public static final String MESSAGE_CART_EMPTY_KEY = "cart.emptyCart";
     public static final String MESSAGE_ADMIN_ORDERS_ERROR_KEY = "admin.error.orders";
     public static final String MESSAGE_NOT_FOUND_USERS_KEY = "user.not.found";
     public static final String MESSAGE_WRONG_DATA_KEY = "admin.answer.error";
     public static final String MESSAGE_PAYMENT_FAILED_KEY = "payment.failed";
+    public static final String ACCESS_DENIED = "Access Denied";
 
     public static final String ADD_CART_COMMAND = "ADD_ITEM";
     public static final String DELETE_CART_COMMAND = "DELETE_ITEM";
@@ -128,6 +126,5 @@ public class AttributeName {
     public static final String DATE_TIME_FORMAT = "dd.MM.yyyy";
     public static final String PREVIOUS_PAGE = "previous";
     public static final String NEXT_PAGE = "next";
-
 
 }

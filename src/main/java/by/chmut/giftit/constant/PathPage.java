@@ -19,10 +19,8 @@ public class PathPage {
     public static final String MODERATE_COMMENT_PAGE = "pages/moderate_comment.jspx";
     public static final String PAYMENT_PAGE = "pages/payment.jspx";
     public static final String PREFIX = "/controller?command=";
-    public static final String ERROR = "/controller?command=error";
 
     public static final String ERROR_PATH = "error";
     public static final String SIGN_IN_PATH = "sign_in";
-    public static final String SIGN_UP_PATH = "sign_up";
     public static final String MAIN_PATH = "main";
 }

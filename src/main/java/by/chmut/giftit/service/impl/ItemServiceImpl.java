@@ -26,7 +26,7 @@ public class ItemServiceImpl implements ItemService {
     private TransactionManager manager = new TransactionManager();
 
     @Override
-    public List<Item> findItemsOnId(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException {
+    public List<Item> findByIdWithLimit(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException {
         if (itemId.isEmpty()) {
             return Collections.emptyList();
         }
@@ -55,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> findAll(String pathForTempFiles, int limit, int offset) throws ServiceException {
+    public List<Item> findAllWithLimit(String pathForTempFiles, int limit, int offset) throws ServiceException {
         List<Item> result;
         try { manager.beginTransaction(itemDao);
             result = itemDao.findAll(pathForTempFiles, limit, offset);

@@ -1,9 +1,10 @@
-package by.chmut.giftit.connectionpool;
+package by.chmut.giftit.pool;
 
 import by.chmut.giftit.dao.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -113,13 +114,14 @@ public class ConnectionPool {
     }
 
     private void deregisterDrivers() {
-        Arrays.stream(new Enumeration[]{DriverManager.getDrivers()})
-                .forEach(driver -> {
-                    try {
-                        DriverManager.deregisterDriver((Driver) driver);
-                    } catch (SQLException exception) {
-                        logger.error("Error deregister driver: " + driver, exception);
-                    }
-                });
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            Driver driver = drivers.nextElement();
+            try {
+                DriverManager.deregisterDriver(driver);
+            } catch (SQLException exception) {
+                logger.error("Error deregister driver: " + driver, exception);
+            }
+        }
     }
 }

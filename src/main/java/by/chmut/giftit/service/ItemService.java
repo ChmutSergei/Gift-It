@@ -12,15 +12,11 @@ public interface ItemService {
 
     Optional<Item> find(Long id, String pathForFile) throws ServiceException;
 
-    Item update(Item item) throws ServiceException;
-
-    boolean delete(Serializable id) throws ServiceException;
-
     Item create(Map<String, Object> itemParameters) throws ServiceException;
 
-    List<Item> findItemsOnId(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException;
+    List<Item> findByIdWithLimit(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException;
 
-    List<Item> findAll(String pathForTempFiles, int limit, int offset) throws ServiceException;
+    List<Item> findAllWithLimit(String pathForTempFiles, int limit, int offset) throws ServiceException;
 
     List<Item> findPaidItems(long userId, String filePath) throws ServiceException;
 

@@ -53,9 +53,7 @@ public class CartCommand implements Command {
                 router.setRedirectPath(ERROR_PATH);
             }
         }
-        if (cartList.isEmpty()) {
-            request.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_CART_EMPTY_KEY);
-        } else {
+        if (!cartList.isEmpty()) {
             BigDecimal total = calculateTotal();
             request.getSession().setAttribute(TOTAL_PARAMETER_NAME, total);
             request.getSession().setAttribute(CART_PARAMETER_NAME, cartList);

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface CommentService {
 
-    List<Comment> find(long userId) throws ServiceException;
+    List<Comment> findByUserId(long userId) throws ServiceException;
 
     List<Comment> findCommentToModerate() throws ServiceException;
 

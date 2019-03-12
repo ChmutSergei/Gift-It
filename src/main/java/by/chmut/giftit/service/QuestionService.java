@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface QuestionService {
 
-    List<Question> find(long userId) throws ServiceException;
+    List<Question> findByUserId(long userId) throws ServiceException;
 
     List<Question> findActualQuestion() throws ServiceException;
 

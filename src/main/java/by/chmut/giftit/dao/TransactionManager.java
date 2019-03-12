@@ -1,6 +1,6 @@
 package by.chmut.giftit.dao;
 
-import by.chmut.giftit.connectionpool.ConnectionPool;
+import by.chmut.giftit.pool.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.SQLException;

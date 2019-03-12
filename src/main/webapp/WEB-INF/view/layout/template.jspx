@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?ver=18" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap-theme.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/card-form.css" type="text/css">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/assests/img/title.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/assests/js/moment-with-locales.min.js"></script>
@@ -25,8 +26,6 @@
         <title>
             <fmt:message bundle="${i18n}" key="${sessionScope.title}"/>
         </title>
-        <!--Include users tag  FOR TASK !!! -->
-        <!--<mytag:icon file="page_title.ico" />-->
 
     </head>
     <body>

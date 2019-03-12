@@ -23,7 +23,7 @@ public class CommentServiceImpl implements CommentService {
     private TransactionManager manager = new TransactionManager();
 
     @Override
-    public List<Comment> find(long userId) throws ServiceException {
+    public List<Comment> findByUserId(long userId) throws ServiceException {
         List<Comment> comments;
         try {
             manager.beginTransaction(commentDao);

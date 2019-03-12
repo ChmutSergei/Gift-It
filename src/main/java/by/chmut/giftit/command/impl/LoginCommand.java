@@ -8,6 +8,7 @@ import by.chmut.giftit.service.CartService;
 import by.chmut.giftit.service.ServiceException;
 import by.chmut.giftit.service.ServiceFactory;
 import by.chmut.giftit.service.UserService;
+import by.chmut.giftit.validator.PasswordValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +40,7 @@ public class LoginCommand implements Command {
         try {
             user = service.find(username);
             if (user.isPresent()) {
-                userValid = service.validateUser(user.get(), password);
+                userValid = PasswordValidator.validateUser(user.get(), password);
             }
         } catch (ServiceException exception) {
             logger.error("Error when try to find User", exception);

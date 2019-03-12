@@ -35,7 +35,7 @@ public class MainCommand implements Command {
         List<Item> results = Collections.emptyList();
         if (itemIdList != null) {
             try {
-                results = service.findItemsOnId(itemIdList, limit, offset, pathForTempFiles);
+                results = service.findByIdWithLimit(itemIdList, limit, offset, pathForTempFiles);
             } catch (ServiceException exception) {
                 logger.error("Error when find Item on filter", exception);
                 request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
@@ -43,7 +43,7 @@ public class MainCommand implements Command {
             }
         } else {
             try {
-                results = service.findAll(pathForTempFiles, limit, offset);
+                results = service.findAllWithLimit(pathForTempFiles, limit, offset);
             } catch (ServiceException exception) {
                 logger.error("Error when find all Item", exception);
                 request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
