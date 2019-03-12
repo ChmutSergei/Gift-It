@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -58,7 +57,7 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> findAllWithLimit(String pathForTempFiles, int limit, int offset) throws ServiceException {
         List<Item> result;
         try { manager.beginTransaction(itemDao);
-            result = itemDao.findAll(pathForTempFiles, limit, offset);
+            result = itemDao.findAllWithLimit(pathForTempFiles, limit, offset);
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {
             try {
@@ -193,11 +192,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Comment> findCommentOnItem(long id, Comment.CommentStatus status) throws ServiceException {
+    public List<Comment> findCommentOnItem(long itemId, Comment.CommentStatus status) throws ServiceException {
         List<Comment> comment;
         try {
             manager.beginTransaction(itemDao);
-            comment = commentDao.findByItemId(id, status);
+            comment = commentDao.findByItemId(itemId, status);
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {
             try {
@@ -216,7 +215,7 @@ public class ItemServiceImpl implements ItemService {
         try {
             manager.beginTransaction(itemDao);
             for (Comment comment:comments) {
-                Optional<Item> optionalItem = itemDao.find(comment.getCommentId());
+                Optional<Item> optionalItem = itemDao.findByCommentId(comment.getCommentId());
                 optionalItem.ifPresent(item -> items.put(comment.getCommentId(), item));
             }
             manager.endTransaction(itemDao);
@@ -229,15 +228,5 @@ public class ItemServiceImpl implements ItemService {
             throw new ServiceException(exception);
         }
         return items;
-    }
-
-    @Override
-    public Item update(Item item) throws ServiceException {
-        return null;
-    }
-
-    @Override
-    public boolean delete(Serializable id) throws ServiceException {
-        return false;
     }
 }

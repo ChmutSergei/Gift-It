@@ -9,10 +9,10 @@
     <uri>http://chmut.by/gift-it/ns/tags</uri>
     <tag>
         <name>hello</name>
-        <tag-class>by.chmut.giftit.tag.HelloTag</tag-class>
+        <tag-class>by.chmut.giftit.tag.StatusTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
-            <name>role</name>
+            <name>user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

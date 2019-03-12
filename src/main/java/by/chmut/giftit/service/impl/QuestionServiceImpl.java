@@ -26,7 +26,7 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questions;
         try {
             manager.beginTransaction(questionDao);
-            questions = questionDao.find(userId);
+            questions = questionDao.findByUserId(userId);
             manager.endTransaction(questionDao);
         } catch (DaoException exception) {
             try {

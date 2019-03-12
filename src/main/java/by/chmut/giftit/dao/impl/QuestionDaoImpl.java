@@ -176,7 +176,7 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
     @Override
-    public List<Question> find(long userId) throws DaoException {
+    public List<Question> findByUserId(long userId) throws DaoException {
         List<Question> questions = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet resultSet = null;

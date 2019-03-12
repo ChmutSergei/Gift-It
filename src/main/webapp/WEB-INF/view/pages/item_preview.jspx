@@ -2,6 +2,8 @@
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns="http://www.w3.org/1999/xhtml" version="2.0">
+    <c:if test="${not empty sessionScope.user}"><c:set var="existUser" value="true" /></c:if>
+    <script>var exist = '${existUser}';</script>
     <div class="container">
         <fmt:setLocale value="${sessionScope.locale}"/>
         <fmt:setBundle basename="i18n.messages" var="i18n"/>
@@ -70,30 +72,9 @@
                     </div>
                     <br/>
                     <div class="row col-sm-10 col-sm-offset-1">
-                        <p>
-                            Цена указана за кружку с печатью вашей картинки на заказ.
-                            Дизайн кружки на заказ. Надписи. Дизайнерские картинки.
-                            Разработка дизайнерских макетов по пожеланиям клиента.
-                            Цена дизайна зависит от сложности. От 1 руб и выше. Посчитает дизайнер, когда вышлите ваши пожелания.
-                        </p><br/>
-                        <p>
-                            Без предоплаты розничные заказы. Заказ можно сделать через сайт или почтовый ящик.
-                            Фото можно прикрепить на сайте или выслать нам на почтовый ящик
-                        </p><br/>
-                        <p>
-                            Выполнение заказа от 1ч до 24ч - зависит от ваших пожеланий
-                            У нас печать на кружки высшего сорта - ультробелые. Можно мыть
-                            Срочность без доплаты. Кружка 330 мл. Материал - керамика.
-                        </p><br/>
-                        <p>
-                            Кружки с фотопечатью - это веселый, интересный и запоминающийся подарок.
-                            Чашку с фото можно подарить любому человеку, особенно если вы придумали оригинальный принт на кружку для человека,
-                            которому предназначен сувенир.
-                            Беля кружка с фотографией также отличный презент сотрудникам на работе, детям в школе и детском саду.
-                        </p><br/>
-                        <p>
-                            Если вы сами будете делать макет. Параметры максимально запечатки кружки: высота 9 см, ширина 20 см, разрешение 300 дпи.
-                            Максимальная запечатка не обязательна. </p>
+                        <p><fmt:message key="item.aboutorder" bundle="${i18n}" /></p><br/>
+                        <p><fmt:message key="item.aboutorder2" bundle="${i18n}" /></p><br/>
+                        <p><fmt:message key="item.about.cups" bundle="${i18n}" /></p>
                     </div>
                 </div>
                 <br/>
@@ -143,72 +124,9 @@
             </c:otherwise>
         </c:choose>
     </div>
-    <c:if test="${not empty sessionScope.user}"><c:set var="existUser" value="true" /></c:if>
 
-
-    <script>
-        $(document).ready(function () {
-            var count = 1;
-            var countEl = document.getElementById("count");
-            $('#moins').click(function () {
-                if (count > 1) {
-                    count--;
-                    countEl.value = count;
-                }
-            });
-            $('#plus').click(function () {
-                count++;
-                countEl.value = count;
-            });
-        });
-
-        function sendItem() {
-            var count = document.getElementById("count").value;
-            var command = 'ADD_TO_CART';
-            $.ajax({
-                type: 'POST',
-                data: {command: command, count: count},
-                url: contextUrl + '/ajax'
-            }).done(function () {
-                location.href = contextUrl + '/controller?command=cart';
-            }).fail(function (data) {
-                if (console &amp;&amp; console.log) {
-                    console.log("Error data:", data);
-                }
-            })
-        }
-        function sendComment() {
-            var form = $('#form')[0];
-            var comment = document.getElementById("dcomment").value;
-            if (form.checkValidity()) {
-                var command = 'ADD_COMMENT';
-                $.ajax({
-                    type: 'POST',
-                    data: {command: command, comment: comment},
-                    url: contextUrl + '/ajax'
-                }).done(function (data) {
-                    if (data == 'true') {
-                        document.getElementById("success").style.display = "block";
-                        document.getElementById("input").style.display = "none";
-                    }
-                }).fail(function (data) {
-                    if (console &amp;&amp; console.log) {
-                        console.log("Error data:", data);
-                    }
-                })
-            } else {
-                form.reportValidity();
-            }
-        }
-        function addComment() {
-            var exist = "${existUser}";
-            if (exist) {
-                document.getElementById("input").style.display = "block";
-            } else {
-                document.getElementById("error").style.display = "block";
-            }
-
-        }
-    </script>
+    <![CDATA[
+    <script src="${pageContext.request.contextPath}/assests/js/item_preview.js"></script>
+    ]]>
 
 </jsp:root>

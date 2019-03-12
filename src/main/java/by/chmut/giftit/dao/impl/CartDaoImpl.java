@@ -122,7 +122,7 @@ public class CartDaoImpl implements CartDao {
     }
 
     @Override
-    public boolean deleteAll(long userId) throws DaoException {
+    public boolean deleteAllByUserId(long userId) throws DaoException {
         PreparedStatement statement = null;
         int result;
         try {
@@ -186,7 +186,7 @@ public class CartDaoImpl implements CartDao {
     }
 
     @Override
-    public List<Cart> findAll(long userId) throws DaoException {
+    public List<Cart> findAllByUserId(long userId) throws DaoException {
         List<Cart> carts = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet resultSet = null;

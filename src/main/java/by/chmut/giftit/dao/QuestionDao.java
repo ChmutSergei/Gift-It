@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface QuestionDao extends Dao<Long, Question> {
 
-    List<Question> find(long userId) throws DaoException;
+    List<Question> findByUserId(long userId) throws DaoException;
 
     List<Question> findUnanswered() throws DaoException;
 

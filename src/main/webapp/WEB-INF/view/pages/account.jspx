@@ -99,7 +99,7 @@
                                                    pattern="^.{10,80}$" title="${messagecomment}" required=""/>
                                         </div>
                                     </div>
-                                    <c:set var="ermessage"><fmt:message key="account.update" bundle="${i18n}"/></c:set>-->
+                                    <c:set var="ermessage"><fmt:message key="account.update" bundle="${i18n}"/></c:set>
                                     <div id="message" class="alert alert-warning col-xs-6 left-arrow"
                                          style="display: none">
                                         <strong>${ermessage}</strong>
@@ -162,6 +162,7 @@
                             <th class="col-xs-2"><fmt:message bundle="${i18n}" key="cart.name"/></th>
                             <th class="col-xs-1"><fmt:message bundle="${i18n}" key="account.message"/></th>
                             <th class="col-xs-2"><fmt:message bundle="${i18n}" key="account.date"/></th>
+                            <th class="col-xs-2"><fmt:message bundle="${i18n}" key="admin.orders.status"/></th>
                             <th class="col-xs-1"></th>
                         </tr>
                         </thead>
@@ -173,6 +174,7 @@
                                                         onclick="sendItemId($(this))" href="#">${item.itemName}</a></td>
                                 <td class="col-xs-1">${comment.message}</td>
                                 <td class="col-xs-2">${comment.date}</td>
+                                <td class="col-xs-2">${comment.commentStatus}</td>
                                 <td class="col-xs-1"><a><span about="${comment.commentId}" onclick="sendId($(this))"
                                                               class="glyphicon glyphicon-trash"/></a>
                                     <i id="d${comment.commentId}" style="display: none;color: coral;">
@@ -213,144 +215,8 @@
         </div>
     </div>
 
-    <script>
-
-        $(document).ready(function () {
-            eOpen();sClose();cClose();qClose();eAdd();
-            $('#edit').click(function () {
-                eOpen();sClose();cClose();qClose();
-                eAdd();sRem();cRem();qRem();
-            });
-            $('#story').click(function () {
-                eClose();sOpen();cClose();qClose();
-                eRem();sAdd();cRem();qRem();
-            });
-            $('#comments').click(function () {
-                eClose();sClose();cOpen();qClose();
-                eRem();sRem();cAdd();qRem();
-            });
-            $('#questions').click(function () {
-                eClose();sClose();cClose();qOpen();
-                eRem();sRem();cRem();qAdd();
-            });
-        });
-        function eAdd() {
-            $('#edit').addClass('active');
-        }
-        function eRem() {
-            $('#edit').removeClass('active');
-        }
-        function sAdd() {
-            $('#story').addClass('active');
-        }
-        function sRem() {
-            $('#story').removeClass('active');
-        }
-        function cAdd() {
-            $('#comments').addClass('active');
-        }
-        function cRem() {
-            $('#comments').removeClass('active');
-        }
-        function qAdd() {
-            $('#questions').addClass('active');
-        }
-        function qRem() {
-            $('#questions').removeClass('active');
-        }
-        check.onclick = function () {
-            var form = $('#form')[0];
-            if (form.checkValidity()) {
-                var phone = $('#phoneNumber')[0].value;
-                var address = $('#address')[0].value;
-                var contextUrl = '${pageContext.request.contextPath}';
-                var command = 'UPDATE_USER_ADDRESS_PHONE';
-                $.ajax({
-                    type: 'POST',
-                    data: {command: command, address: address, phone: phone},
-                    url: contextUrl + '/ajax'
-                }).done(function (data) {
-                    var resp = JSON.parse(data);
-                    if (resp.phone != 'ERROR') {
-                        var newPhone = resp.phone;
-                        var newAddress = resp.address;
-                        $('#phoneArea').text(newPhone);
-                        $('#addressArea').text(newAddress);
-                    } else {
-                        $('#message')[0].style.display = "block";
-                    }
-                }).fail(function (data) {
-                    if (console &amp;&amp; console.log) {
-                        console.log("Error data:", data);
-                    }
-                })
-
-            } else {
-                form.reportValidity();
-            }
-        };
-        $('body').click(function () {
-            $('#message')[0].style.display = "none";
-        });
-        function eClose() {
-            $('.edit')[0].style.display = "none";
-        }
-        function eOpen() {
-            $('.edit')[0].style.display = "block";
-        }
-        function sClose() {
-            $('.story')[0].style.display = "none";
-        }
-        function sOpen() {
-            $('.story')[0].style.display = "block";
-        }
-        function cClose() {
-            $('.comments')[0].style.display = "none";
-        }
-        function cOpen() {
-            $('.comments')[0].style.display = "block";
-        }
-        function qClose() {
-            $('.questions')[0].style.display = "none";
-        }
-        function qOpen() {
-            $('.questions')[0].style.display = "block";
-        }
-        function sendItemId(element) {
-            var itemId = $(element).attr('name');
-            var contextUrl = '${pageContext.request.contextPath}';
-            var command = 'SET_ITEM_ID';
-            $.ajax({
-                type: 'POST',
-                data: {command: command, itemId: itemId},
-                url: contextUrl + '/ajax'
-            }).done(function (data) {
-                if (data == 'true') {
-                    location.href = contextUrl + '/controller?command=preview_item';
-                }
-            }).fail(function (data) {
-                if (console &amp;&amp; console.log) {
-                    console.log("Error data:", data);
-                }
-            })
-        }
-        function sendId(element) {
-            var commentId = $(element).attr('about');
-            var command = 'DELETE_COMMENT';
-            $.ajax({
-                type: 'POST',
-                data: {command: command, commentId: commentId},
-                url: contextUrl + '/ajax'
-            }).done(function (data) {
-                if (data == 'true') {
-                    $('#d' + commentId)[0].style.display = "block";
-                }
-            }).fail(function (data) {
-                if (console &amp;&amp; console.log) {
-                    console.log("Error data:", data);
-                }
-            })
-        }
-    </script>
+    <![CDATA[
+    <script src="${pageContext.request.contextPath}/assests/js/account.js"></script>
+    ]]>
 
 </jsp:root>

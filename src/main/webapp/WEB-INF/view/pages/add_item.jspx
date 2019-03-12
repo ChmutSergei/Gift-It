@@ -121,19 +121,8 @@
 
     </div>
 
-    <script>
-        upload.onclick = function () {
-            var data = new FormData($('#upload-form')[0]);
-            var contextUrl = '${pageContext.request.contextPath}';
-            $.ajax({
-                type: 'POST',
-                data: data,
-                url: contextUrl + '/upload',
-                cache: false,
-                contentType: false,
-                processData: false
-            });
-        }
-    </script>
+    <![CDATA[
+    <script src="${pageContext.request.contextPath}/assests/js/add_item.js"></script>
+    ]]>
 
 </jsp:root>

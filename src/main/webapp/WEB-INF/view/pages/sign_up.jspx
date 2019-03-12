@@ -5,6 +5,8 @@
     <div class="container" style="background-color:#e6f7d9;padding-top: -20px;">
         <fmt:setLocale value="${sessionScope.locale}"/>
         <fmt:setBundle basename="i18n.messages" var="i18n"/>
+        <c:set var="dontMatch"><fmt:message key="signup.confirm" bundle="${i18n}"/></c:set>
+        <script>var messageDontMatch = '${dontMatch}';</script>
         <fieldset id="contact" class="container">
             <h2><fmt:message bundle="${i18n}" key="contact.registration"/></h2>
             <h6><fmt:message bundle="${i18n}" key="contact.info"/></h6>
@@ -132,60 +134,9 @@
                 </fieldset>
             </form>
         </fieldset>
-
     </div>
-    <c:set var="dontMatch"><fmt:message key="signup.confirm" bundle="${i18n}"/></c:set>
-    <c:set var="exist" value="${sessionScope.exist}"/>
-    <script>
-        $(function () {
-            $('form').keydown(function (event) {
-                if (event.keyCode == 13) {
-                    event.preventDefault();
-                    return false;
-                }
-            });
-        });
 
-        var password = document.getElementById("inputPassword")
-            , confirmPassword = document.getElementById("confirmPassword");
-        var messageDontMatch = '${dontMatch}';
-        function validatePassword(){
-            if(password.value != confirmPassword.value) {
-                confirmPassword.setCustomValidity(messageDontMatch);
-            } else {
-                confirmPassword.setCustomValidity('');
-            }
-        }
-
-        password.onchange = validatePassword;
-        confirmPassword.onkeyup = validatePassword;
-
-        check.onclick = function () {
-            var username = $('#login')[0].value;
-            var contextUrl = '${pageContext.request.contextPath}';
-            var submit = $('#check2')[0];
-            var command = 'CHECK_USERNAME';
-            $.ajax({
-                type: 'POST',
-                data: {command: command, username:username},
-                url: contextUrl + '/ajax'
-            }).done(function (data) {
-                if (data != 'true') {
-                    submit.click();
-                    return;
-                }
-                $('#message')[0].style.display="block";
-            }).fail(function (data) {
-                if (console &amp;&amp; console.log) {
-                    console.log("Error data:", data);
-                }
-            })
-        };
-
-        login.onclick = function () {
-            $('#message')[0].style.display="none";
-        }
-
-    </script>
-
+    <![CDATA[
+    <script src="${pageContext.request.contextPath}/assests/js/sign_up.js"></script>
+    ]]>
 </jsp:root>

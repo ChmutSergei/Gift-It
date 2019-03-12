@@ -102,22 +102,8 @@
         </c:otherwise>
     </c:choose>
 
-    <script>
-        function sendCartId(element) {
-            var cartId = $(element).attr('about');
-            var command = 'DELETE_FROM_CART';
-            $.ajax({
-                type: 'POST',
-                data: {command: command, cartId: cartId},
-                url: contextUrl + '/ajax'
-            }).done(function () {
-                location.href = contextUrl + '/controller?command=cart';
-            }).fail(function (data) {
-                if (console &amp;&amp; console.log) {
-                    console.log("Error data:", data);
-                }
-            })
-        }
-    </script>
+    <![CDATA[
+    <script src="${pageContext.request.contextPath}/assests/js/cart.js"></script>
+    ]]>
 
 </jsp:root>

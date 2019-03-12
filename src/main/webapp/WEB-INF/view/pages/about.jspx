@@ -6,31 +6,20 @@
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="i18n.messages" var="i18n"/>
     <div class="container">
-        <p>Лучший магазин подарков GIFT-IT.BY предоставляет широчайший выбор подарочной и сувенирной продукции.
-            Великолепный подарок или сюрприз - это правильное соотношение трех показателей:
-            качественное содержание,
-            надежное исполнение
-            своевременная доставка.
-            Своим клиентам магазин подарков дает уникальную возможность запечатлеть собственный дизайн на любой подарочной или сувенирной продукции.
-            Квалифицированный персонал поможет в доработке нюансов персонифицированного дизайна заказчика.
-            Высокая точность в исполнении заказов любого объёма, а также изготовление срочных заказов без доплаты за скорость - весомые плюсы,
-            которые характеризуют GIFT-IT.BY - лучший магазин подарков.
-            Доставка продукции в любую точку города Минска или Беларуси в кротчайшие сроки возможна даже при малых заказах,
-            этим магазин подарков подкупает не только индивидуальных клиентов, но и корпоративных заказчиков.
-            Конкурентные и лояльные цены на качественную подарочную и сувенирную продукцию, которую изготавливают и
-            доставляют точно в сроки - вот неоспоримые преимущества, благодаря которым GIFT-IT.BY стал лучшим магазином подарков и сувениров в Минске.</p>
+        <p><fmt:message key="about.aboutus" bundle="${i18n}"/></p>
 
         <div class="row">
             <h4><fmt:message key="contact.contact" bundle="${i18n}"/><span class="toggle"/></h4>
             <div class="footer-col-content">
                 <div class="store_info">
                     <p class="st_inf1"><span class="glyphicon glyphicon-home"
-                                             style="margin-right: 10px"/> ул. Очень хорошая 1. Минск</p>
+                                             style="margin-right: 10px"/><fmt:message key="about.adr" bundle="${i18n}"/></p>
                     <p><span class="glyphicon glyphicon-phone-alt"
                              style="margin-right: 10px"/> + 375 29 61111111 + 375 29 31231234</p>
                     <p class="st_inf3">
+                        <c:set var="send"><fmt:message key="about.send" bundle="${i18n}"/></c:set>
                         <span class="glyphicon glyphicon-envelope" style="margin-right: 10px"/>Email:
-                        <a href="mailto:question@giftit.by" target="_blank" title="Высылайте ваши вопросы и заказы"
+                        <a href="mailto:question@giftit.by" target="_blank" title=""
                            id="copy_email">question@giftit.by</a>
                     </p>
                 </div>
@@ -90,34 +79,8 @@
         </div>
     </div>
 
-    <script>
-        function sendMessage() {
-            var form = $('#form')[0];
-            if (form.checkValidity()) {
-                var question = $('#question')[0].value;
-                var contextUrl = '${pageContext.request.contextPath}';
-                var command = 'ACCEPT_QUESTION';
-                $.ajax({
-                    type: 'POST',
-                    data: {command: command, question: question},
-                    url: contextUrl + '/ajax'
-                }).done(function (data) {
-                    if (data == 'true') {
-                        $('#message')[0].style.display = "block";
-                    } else {
-                        $('#ermessage')[0].style.display = "block";
-                    }
-                    $('#post')[0].style.display = "none";
-                }).fail(function (data) {
-                    if (console &amp;&amp; console.log) {
-                        console.log("Error data:", data);
-                    }
-                })
-            } else {
-                form.reportValidity();
-            }
-        }
-    </script>
-
+    <![CDATA[
+    <script src="${pageContext.request.contextPath}/assests/js/about.js"></script>
+    ]]>
 
 </jsp:root>

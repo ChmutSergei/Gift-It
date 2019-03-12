@@ -92,7 +92,7 @@
                     </div>
                 </div>
 
-                <p class="examples-note">Here are some dummy credit card numbers and CVV codes so you can test out the form:</p>
+                <p class="examples-note"><fmt:message key="payment.keygen" bundle="${i18n}" /></p>
 
                 <div class="examples">
                     <div class="table-responsive">
@@ -126,6 +126,5 @@
                 </div>
             </c:otherwise>
         </c:choose>
-
     </div>
 </jsp:root>

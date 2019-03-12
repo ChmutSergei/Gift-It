@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap-datetimepicker.min.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?ver=18" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?ver=19" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap-theme.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/card-form.css" type="text/css">
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/assests/img/title.png" />
@@ -31,13 +31,11 @@
     <body>
         <jsp:directive.include file="../common/header.jspx"/>
         <div id="main" class="jumbotron">
-            <!--<div class="container text-center" style="background-color:#e6f7d9;">-->
             <c:url var="bodyUrl" value="../pages/main.jspx"/>
             <c:if test="${not empty sessionScope.pagePath}">
                 <c:url var="bodyUrl" value="../${sessionScope.pagePath}"/>
             </c:if>
             <jsp:include page="${bodyUrl}"/>
-            <!--</div>-->
         </div>
         <jsp:directive.include file="../common/footer.jspx"/>
     </body>

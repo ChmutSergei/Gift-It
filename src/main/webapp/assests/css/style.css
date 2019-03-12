@@ -10,6 +10,11 @@
 #main {
     background-color:#e6f7d9;
 }
+#status {
+    color: blue;
+    font-size: 20px;
+    margin-bottom: unset;
+}
 #signin, #preview,#choosePhoto {
     padding: 40px;
     padding-top: 0;

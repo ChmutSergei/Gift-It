@@ -65,7 +65,7 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public List<Item> findAll(String filePath, int limit, int offset) throws DaoException {
+    public List<Item> findAllWithLimit(String filePath, int limit, int offset) throws DaoException {
         List<Item> items = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -133,7 +133,7 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public Optional<Item> find(long commentId) throws DaoException {
+    public Optional<Item> findByCommentId(long commentId) throws DaoException {
         Item item = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;

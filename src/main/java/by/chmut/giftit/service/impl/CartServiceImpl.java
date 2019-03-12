@@ -27,7 +27,7 @@ public class CartServiceImpl implements CartService {
         List<Cart> carts;
         try {
             manager.beginTransaction(cartDao);
-            carts = cartDao.findAll(userId);
+            carts = cartDao.findAllByUserId(userId);
             manager.endTransaction(cartDao);
         } catch (DaoException exception) {
             try {
@@ -120,7 +120,7 @@ public class CartServiceImpl implements CartService {
         boolean result;
         try {
             manager.beginTransaction(cartDao);
-            result = cartDao.deleteAll(userId);
+            result = cartDao.deleteAllByUserId(userId);
             manager.endTransaction(cartDao);
         } catch (DaoException exception) {
             throw new ServiceException(exception);

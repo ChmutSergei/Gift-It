@@ -7,5 +7,6 @@ import java.util.List;
 public interface OrderDao extends Dao<Long, Order> {
 
     List<Order> findPaidOrder() throws DaoException;
+
     boolean setPaidStatus(long orderId) throws DaoException;
 }

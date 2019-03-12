@@ -1,7 +1,7 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
-          version="2.0">
+          version="2.0" xmlns:custom="http://chmut.by/gift-it/ns/tags">
     <div id="hello" class="jumbotron">
         <div class="container">
             <div class="row text-center">
@@ -10,20 +10,20 @@
                          class="img-logo" style="width:100%" alt="Image"/>
                 </div>
                 <c:if test="${not empty sessionScope.user}">
-                <div class="col-xs-2 col-xs-offset-2 align-bottom">
-                    <div class="row">
-                        <p id="userhi" style="font-size: 25px;color: lightseagreen; margin-bottom: unset" class="text"><fmt:message key="nav.hello"
-                                                                 bundle="${i18n}"/>, ${sessionScope.user.firstName}!</p>
-                    </div><!-- TODO  make user Tag-->
-                    <div class="row"><p style="color: blue;font-size: 20px;margin-bottom: unset">${sessionScope.user.role}</p></div>
-                    <div class="row"><c:set var="cart"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
+                    <div class="col-xs-2 col-xs-offset-2 align-bottom">
+                        <div class="row">
+                            <p style="color: blue;font-size: 20px;margin-bottom: unset">
+                                <custom:hello user="${sessionScope.user}"/>
+                            </p>
+                        </div>
+                        <div class="row"><c:set var="cart"><fmt:message key="nav.cart" bundle="${i18n}"/></c:set>
                             <a href="${pageContext.request.contextPath}/controller?command=cart"
                                data-toggle="tooltip" title="${cart}">
                                 <span class="glyphicon glyphicon-shopping-cart" style="font-size: 50px;color: black"/>
                                 <span style="color: crimson">${sessionScope.countInCart}</span>
                             </a>
+                        </div>
                     </div>
-                </div>
                 </c:if>
             </div>
         </div>
@@ -94,7 +94,8 @@
                     <c:if test="${sessionScope.user.role eq 'DESIGNER'}">
                         <c:choose>
                             <c:when test="${sessionScope.title eq 'create_item'}">
-                                <li class="active"><a href="#"><fmt:message key="create_item" bundle="${i18n}"/></a></li>
+                                <li class="active"><a href="#"><fmt:message key="create_item" bundle="${i18n}"/></a>
+                                </li>
                             </c:when>
                             <c:otherwise>
                                 <li>
@@ -154,8 +155,10 @@
                     </c:if>
                     <c:if test="${not empty sessionScope.user}">
                         <li>
-                            <a style="margin-right: 5px;" href="${pageContext.request.contextPath}/controller?command=logout"><span
-                                    class="glyphicon glyphicon-log-out"/><fmt:message key="nav.signout" bundle="${i18n}"/>
+                            <a style="margin-right: 5px;"
+                               href="${pageContext.request.contextPath}/controller?command=logout"><span
+                                    class="glyphicon glyphicon-log-out"/><fmt:message key="nav.signout"
+                                                                                      bundle="${i18n}"/>
                             </a>
                         </li>
                     </c:if>
@@ -166,7 +169,8 @@
                             </c:when>
                             <c:otherwise>
                                 <li>
-                                    <a style="margin-right: 5px;" href="${pageContext.request.contextPath}/controller?command=sign_in"><span
+                                    <a style="margin-right: 5px;"
+                                       href="${pageContext.request.contextPath}/controller?command=sign_in"><span
                                             class="glyphicon glyphicon-log-in"/>
                                         <fmt:message key="nav.signin" bundle="${i18n}"/>
                                     </a>
