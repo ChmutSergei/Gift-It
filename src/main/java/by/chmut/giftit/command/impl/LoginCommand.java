@@ -8,7 +8,7 @@ import by.chmut.giftit.service.CartService;
 import by.chmut.giftit.service.ServiceException;
 import by.chmut.giftit.service.ServiceFactory;
 import by.chmut.giftit.service.UserService;
-import by.chmut.giftit.validator.PasswordValidator;
+import by.chmut.giftit.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,8 +31,7 @@ public class LoginCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
-        String previousPage = (String) request.getSession().getAttribute(PREVIOUS_PAGE_PARAMETER_NAME);
-        router.setRedirectPath(previousPage);
+        router.setRedirectPath(MAIN_PATH);
         String username = request.getParameter(USERNAME_PARAMETER_NAME);
         String password = request.getParameter(PASSWORD_PARAMETER_NAME);
         Optional<User> user = Optional.empty();
@@ -40,7 +39,7 @@ public class LoginCommand implements Command {
         try {
             user = service.find(username);
             if (user.isPresent()) {
-                userValid = PasswordValidator.validateUser(user.get(), password);
+                userValid = UserValidator.validatePassword(user.get(), password);
             }
         } catch (ServiceException exception) {
             logger.error("Error when try to find User", exception);
@@ -61,7 +60,7 @@ public class LoginCommand implements Command {
     private BigDecimal calculateCountItemsInCart(long userId) {
         List<Cart> carts = Collections.emptyList();
         try {
-            carts = cartService.getCart(userId);
+            carts = cartService.findCartByUserId(userId);
         } catch (ServiceException exception) {
             logger.error("Error with set count items in the users cart");
         }

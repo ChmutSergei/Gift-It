@@ -27,16 +27,16 @@ public class AdminCommand implements Command {
         List<Order> orders;
         try {
             orders = orderService.findPaidOrder();
-            Map<Long, User> userForOrders = orderService.findUserForOrders(orders);
-            Map<Long, List<Item>> itemForOrders = orderService.findItemForOrders(orders);
-            Item item = findCheckedItem(request).get();
-            List<Question> unansweredQuestion = questionService.findActualQuestion();
-            List<Question> allQuestion = questionService.findAllQuestion();
             request.getSession().setAttribute(ORDERS_PARAMETER_NAME, orders);
+            Map<Long, User> userForOrders = orderService.findUserForOrders(orders);
             request.getSession().setAttribute(USERS_FOR_ORDERS_PARAMETER_NAME, userForOrders);
+            Map<Long, List<Item>> itemForOrders = orderService.findItemForOrders(orders);
             request.getSession().setAttribute(ITEMS_FOR_ORDERS_PARAMETER_NAME, itemForOrders);
+            Item item = findCheckedItem(request).get();
             request.getSession().setAttribute(ITEM_PARAMETER_NAME, item);
+            List<Question> unansweredQuestion = questionService.findActualQuestion();
             request.getSession().setAttribute(UNANSWERED_QUESTIONS_PARAMETER_NAME, unansweredQuestion);
+            List<Question> allQuestion = questionService.findAllQuestion();
             request.getSession().setAttribute(QUESTIONS_PARAMETER_NAME, allQuestion);
         } catch (ServiceException exception) {
             request.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_ADMIN_ORDERS_ERROR_KEY);

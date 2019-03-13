@@ -35,7 +35,7 @@ public class CartCommand implements Command {
         router.setPagePath(CART_PAGE);
         user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
         try {
-            cartList = service.getCart(user.getUserId());
+            cartList = service.findCartByUserId(user.getUserId());
             items = service.getItemsForCart(cartList, request.getServletContext().getRealPath(""));
             checkItemsOnActive();
         } catch (ServiceException exception) {
@@ -56,9 +56,9 @@ public class CartCommand implements Command {
         if (!cartList.isEmpty()) {
             BigDecimal total = calculateTotal();
             request.getSession().setAttribute(TOTAL_PARAMETER_NAME, total);
-            request.getSession().setAttribute(CART_PARAMETER_NAME, cartList);
             request.getSession().setAttribute(ITEMS_FOR_CART_PARAMETER_NAME, items);
         }
+        request.getSession().setAttribute(CART_PARAMETER_NAME, cartList);
         return router;
     }
 

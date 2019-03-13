@@ -33,7 +33,6 @@ function addTypeForSearch(element) {
         action = 'ON';
     }
     var command = 'SEARCH_FILTER';
-    var textButton = '${btText}:';
     $.ajax({
         type: 'POST',
         data: {command: command, type: type, actionType: action},
@@ -50,7 +49,6 @@ function addTypeForSearch(element) {
 function addPriceForSearch(element) {
     var price = $(element).attr('value');
     var command = 'SEARCH_FILTER';
-    var textButton = '${btText}:';
     $.ajax({
         type: 'POST',
         data: {command: command, price: price},
@@ -90,7 +88,6 @@ function sendItemId(element) {
 }
 
 reset.onclick = function () {
-    var contextUrl = '${pageContext.request.contextPath}';
     var command = 'RESET_FILTER';
     $.ajax({
         type: 'POST',

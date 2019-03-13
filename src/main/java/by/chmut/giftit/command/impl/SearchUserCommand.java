@@ -30,11 +30,7 @@ public class SearchUserCommand implements Command {
         Router router = new Router();
         router.setPagePath(USER_PROCESSING_PAGE);
         if (request.getSession().getAttribute(SHOW_RESULT_PARAMETER_NAME) == null) {
-            Map<String, String> parametersSearch = new HashMap<>();
-            parametersSearch.put(USER_SEARCH_TYPE_PARAMETER_NAME, request.getParameter(USER_SEARCH_TYPE_PARAMETER_NAME));
-            parametersSearch.put(USER_ID_PARAMETER_NAME, request.getParameter(USER_ID_PARAMETER_NAME));
-            parametersSearch.put(USERNAME_PARAMETER_NAME, request.getParameter(USERNAME_PARAMETER_NAME));
-            parametersSearch.put(INIT_DATE_PARAMETER_NAME, request.getParameter(INIT_DATE_PARAMETER_NAME));
+            Map<String, String> parametersSearch = setParameters(request);
             try {
                 List<User> users = service.searchUserByParams(parametersSearch);
                 if (users.isEmpty()) {
@@ -54,5 +50,14 @@ public class SearchUserCommand implements Command {
             request.getSession().removeAttribute(SHOW_RESULT_PARAMETER_NAME);
         }
         return router;
+    }
+
+    private Map<String, String> setParameters(HttpServletRequest request) {
+        Map<String, String> parametersSearch = new HashMap<>();
+        parametersSearch.put(USER_SEARCH_TYPE_PARAMETER_NAME, request.getParameter(USER_SEARCH_TYPE_PARAMETER_NAME));
+        parametersSearch.put(USER_ID_PARAMETER_NAME, request.getParameter(USER_ID_PARAMETER_NAME));
+        parametersSearch.put(USERNAME_PARAMETER_NAME, request.getParameter(USERNAME_PARAMETER_NAME));
+        parametersSearch.put(INIT_DATE_PARAMETER_NAME, request.getParameter(INIT_DATE_PARAMETER_NAME));
+        return parametersSearch;
     }
 }

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface CartService {
 
-    List<Cart> getCart(long userId) throws ServiceException;
+    List<Cart> findCartByUserId(long userId) throws ServiceException;
 
     Optional<Cart> findCart(long cartId) throws ServiceException;
 

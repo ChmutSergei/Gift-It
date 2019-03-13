@@ -40,7 +40,7 @@ public class PreviewItemCommand implements Command {
             if (item.isPresent()){
                 request.getSession().setAttribute(ITEM_PARAMETER_NAME, item.get());
             } else {
-                request.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_NOT_FOUND_ID_KEY); // TODO заменить сообщение
+                request.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_NOT_FOUND_ID_KEY);
             }
             List<Comment> comments = itemService.findCommentOnItem(id, Comment.CommentStatus.ACTIVE);
             request.getSession().setAttribute(COMMENTS_PARAMETER_NAME, comments);

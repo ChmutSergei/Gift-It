@@ -67,10 +67,10 @@ public class AjaxController extends HttpServlet {
             case RESET_FILTER:
                 resetFilter(request);
                 break;
-            case ADD_TO_CART: // TODO check User exist
+            case ADD_TO_CART:
                 addToCart(request);
                 break;
-            case DELETE_FROM_CART: // TODO check User exist?
+            case DELETE_FROM_CART:
                 deleteFromCart(request);
                 break;
             case UPDATE_USER_ADDRESS_PHONE:

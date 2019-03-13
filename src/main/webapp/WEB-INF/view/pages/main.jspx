@@ -13,6 +13,7 @@
                 <fmt:message bundle="${i18n}" key="main.bar.type"/>
             </div>
             <c:set var="btText"><fmt:message bundle="${i18n}" key="additem.search"/></c:set>
+            <script>var textButton = '${btText}:';</script>
             <div class="col-xs-2">
                 <button id="search" type="submit" class="btn btn-primary btn-block">
                     ${btText}
@@ -178,9 +179,10 @@
         <c:choose>
             <c:when test="${not empty sessionScope.result}">
                 <!-- pagination-->
-                <c:set var="maxNumPage" value="${sessionScope.countSearch/sessionScope.limit - 1}"/>
+                <c:set var="maxNumPage" value="${sessionScope.countSearch/sessionScope.limit}"/>
+                <c:set var="currentPage" value="${sessionScope.page}"/>
                 <script>var number = Math.round('${maxNumPage}');var currentPage = '${currentPage}';</script>
-                <c:if test="${maxNumPage > 0}">
+                <c:if test="${maxNumPage > 1}">
                     <c:set var="path" value="${pageContext.request.contextPath}/controller?command=main"/>
                     <ul class="pagination">
                         <li class="previous"><a href="${path}&amp;page=previous">Previous</a></li>
@@ -192,11 +194,10 @@
                         <li class="next"><a href="${path}&amp;page=next">Next</a></li>
                     </ul>
                 </c:if>
-                <c:set var="currentPage" value="${sessionScope.page}"/>
 
                 <div id="items" class="row">
                     <c:forEach var="item" items="${sessionScope.result}">
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" style="height: 500px;">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">${item.itemName}</div>
                                 <div class="panel-body"><img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
@@ -236,7 +237,7 @@
     </div>
 
     <![CDATA[
-    <script src="${pageContext.request.contextPath}/assests/js/main.js"></script>
+    <script src="${pageContext.request.contextPath}/assests/js/main.js?ver=1"></script>
     ]]>
 
 </jsp:root>

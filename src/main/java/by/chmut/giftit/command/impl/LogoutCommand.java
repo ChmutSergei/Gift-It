@@ -12,7 +12,7 @@ public class LogoutCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        request.getSession().removeAttribute(USER_PARAMETER_NAME);
+        request.getSession().invalidate();
         Router router = new Router();
         router.setRedirectPath(MAIN_PATH); // TODO добавить ликвидацию сессии
         return router;

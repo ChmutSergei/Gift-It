@@ -56,7 +56,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> findAllWithLimit(String pathForTempFiles, int limit, int offset) throws ServiceException {
         List<Item> result;
-        try { manager.beginTransaction(itemDao);
+        try {
+            manager.beginTransaction(itemDao);
             result = itemDao.findAllWithLimit(pathForTempFiles, limit, offset);
             manager.endTransaction(itemDao);
         } catch (DaoException exception) {
@@ -112,9 +113,7 @@ public class ItemServiceImpl implements ItemService {
         try {
             manager.beginTransaction(itemDao, bitmapDao);
             List<Bitmap> bitmaps = bitmapDao.findAll();
-            if (item.getPrice() == null) {
-                updateItemFilter(bitmaps, item);
-            }
+            updateItemFilter(bitmaps, item);
             item = itemDao.create(item);
             for (Bitmap bitmap : bitmaps) {
                 bitmapDao.update(bitmap);
@@ -157,6 +156,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private List<String> selectOnPrice(BigDecimal price) {
+        price = price != null ? price : BigDecimal.ZERO;
         List<String> criteriaPrice = new ArrayList<>();
         if (price.compareTo(LOW_BORDER_PRICE) <= 0) {
             criteriaPrice.add(LOW_PARAMETER_NAME);
@@ -214,7 +214,7 @@ public class ItemServiceImpl implements ItemService {
         Map<Long, Item> items = new HashMap<>();
         try {
             manager.beginTransaction(itemDao);
-            for (Comment comment:comments) {
+            for (Comment comment : comments) {
                 Optional<Item> optionalItem = itemDao.findByCommentId(comment.getCommentId());
                 optionalItem.ifPresent(item -> items.put(comment.getCommentId(), item));
             }

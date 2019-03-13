@@ -85,7 +85,7 @@ public class MainCommand implements Command {
     private int parse(String newPage, int currentPage, int limit, HttpServletRequest request) {
         int numberPage;
         int countItems = (int) request.getSession().getAttribute(COUNT_ITEM_AFTER_SEARCH_PARAMETER_NAME);
-        int countPages = countItems / limit - 1;
+        int countPages = countItems / limit;
         switch (newPage) {
             case PREVIOUS_PAGE:
                 numberPage = currentPage - 1 >= 0 ? currentPage - 1 : 0;

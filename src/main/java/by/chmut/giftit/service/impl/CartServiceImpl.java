@@ -23,7 +23,7 @@ public class CartServiceImpl implements CartService {
     private TransactionManager manager = new TransactionManager();
 
     @Override
-    public List<Cart> getCart(long userId) throws ServiceException {
+    public List<Cart> findCartByUserId(long userId) throws ServiceException {
         List<Cart> carts;
         try {
             manager.beginTransaction(cartDao);
