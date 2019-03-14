@@ -39,7 +39,7 @@ public class AjaxController extends HttpServlet {
         try {
             manager.beginTransaction(bitmapDao);
             bitmaps = bitmapDao.findAll();
-            manager.endTransaction(bitmapDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             logger.error("Error when try to set bitmaps from database", exception);
         }
