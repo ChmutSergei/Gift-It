@@ -2,7 +2,7 @@
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns="http://www.w3.org/1999/xhtml" version="2.0">
-    <c:if test="${not empty sessionScope.user}"><c:set var="existUser" value="true" /></c:if>
+    <c:if test="${not empty sessionScope.user}"><c:set var="existUser" value="true"/></c:if>
     <script>var exist = '${existUser}';</script>
     <div class="container">
         <fmt:setLocale value="${sessionScope.locale}"/>
@@ -62,7 +62,8 @@
                                             <c:set var="submit"><fmt:message key="item.preview.submit"
                                                                              bundle="${i18n}"/></c:set>
                                             <a href="${pageContext.request.contextPath}/controller?command=sign_up">
-                                                <input type="button" class="btn btn-primary col-xs-12" value="${submit}"/></a>
+                                                <input type="button" class="btn btn-primary col-xs-12"
+                                                       value="${submit}"/></a>
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
@@ -72,9 +73,8 @@
                     </div>
                     <br/>
                     <div class="row col-sm-10 col-sm-offset-1">
-                        <p><fmt:message key="item.aboutorder" bundle="${i18n}" /></p><br/>
-                        <p><fmt:message key="item.aboutorder2" bundle="${i18n}" /></p><br/>
-                        <p><fmt:message key="item.about.cups" bundle="${i18n}" /></p>
+                        <p><fmt:message key="item.aboutorder" bundle="${i18n}"/></p><br/>
+                        <p><fmt:message key="item.aboutorder2" bundle="${i18n}"/></p><br/>
                     </div>
                 </div>
                 <br/>
@@ -102,16 +102,24 @@
                             <fmt:message key="item.preview.addCombtn" bundle="${i18n}"/></button>
                     </div>
                     <br/>
+                    <script>var blocked = false;</script>
+                    <c:if test="${sessionScope.user.blockedUntil > sessionScope.dateNow}">
+                        <script>blocked = true;</script>
+                    </c:if>
+                    <div id="block" class="row text-center" style="display: none">
+                        <h3><fmt:message key="account.blocked" bundle="${i18n}"/>${sessionScope.user.blockedUntil}</h3>
+                    </div>
                     <form id="form" class="form-horizontal">
-                    <div id="input" class="form-group has-feedback" style="display: none">
+                        <div id="input" class="form-group has-feedback" style="display: none">
                             <c:set var="mesComment"><fmt:message key="item.preview.comment" bundle="${i18n}"/></c:set>
-                            <c:set var="messagecomment"><fmt:message key="item.preview.comtitle" bundle="${i18n}"/></c:set>
+                            <c:set var="messagecomment"><fmt:message key="item.preview.comtitle"
+                                                                     bundle="${i18n}"/></c:set>
                             <input type="text" class="form-control" pattern="^.{3,250}$"
-                                      id="dcomment" placeholder="${mesComment}" title="${messagecomment}"/>
+                                   id="dcomment" placeholder="${mesComment}" title="${messagecomment}"/>
                             <br/>
                             <button id="send" onclick="sendComment()">
                                 <fmt:message key="item.preview.send" bundle="${i18n}"/></button>
-                    </div>
+                        </div>
                     </form>
                     <br/>
                     <div id="error" class="row" style="display: none">
@@ -126,7 +134,7 @@
     </div>
 
     <![CDATA[
-    <script src="${pageContext.request.contextPath}/assests/js/item_preview.js"></script>
+    <script src="${pageContext.request.contextPath}/assests/js/item_preview.js?ver=9"></script>
     ]]>
 
 </jsp:root>

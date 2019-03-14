@@ -202,6 +202,7 @@
                                 <div class="panel-heading">${item.itemName}</div>
                                 <div class="panel-body"><img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
                                                              name="${item.itemId}" class="img-responsive"
+                                                             onerror = "this.style.display = 'none'"
                                                              style="width:100%"
                                                              alt="Image" onclick="sendItemId($(this))"/></div>
                                 <div class="panel-footer">

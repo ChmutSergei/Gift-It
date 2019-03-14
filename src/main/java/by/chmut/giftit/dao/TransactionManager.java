@@ -25,7 +25,7 @@ public class TransactionManager {
         }
     }
 
-    public void endTransaction(Dao dao) throws DaoException {
+    public void endTransaction() throws DaoException {
         try {
             if (connection != null) {
                 connection.commit();

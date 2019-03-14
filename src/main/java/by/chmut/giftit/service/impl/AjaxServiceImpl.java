@@ -31,7 +31,7 @@ public class AjaxServiceImpl implements AjaxService {
         try {
             manager.beginTransaction(userDao);
             userDao.update(user);
-            manager.endTransaction(userDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             logger.error("Error when try to update user phone and address");
             try {
@@ -50,7 +50,7 @@ public class AjaxServiceImpl implements AjaxService {
         try {
             manager.beginTransaction(commentDao);
             result = commentDao.delete(commentId);
-            manager.endTransaction(commentDao);
+            manager.endTransaction();
         } catch (DaoException e) {
             logger.error("Error when try to delete comment");
             try {
@@ -75,7 +75,7 @@ public class AjaxServiceImpl implements AjaxService {
         try {
             manager.beginTransaction(commentDao);
             comment = commentDao.create(comment);
-            manager.endTransaction(commentDao);
+            manager.endTransaction();
             if (comment.getCommentId() == 0) {
                 result = false;
             }
@@ -104,7 +104,7 @@ public class AjaxServiceImpl implements AjaxService {
             item.setActive(!status);
             manager.beginTransaction(itemDao);
             itemDao.update(item);
-            manager.endTransaction(itemDao);
+            manager.endTransaction();
         } catch (DaoException e) {
             logger.error("Error when try to change status");
             try {
@@ -127,7 +127,7 @@ public class AjaxServiceImpl implements AjaxService {
             question.setRequest(message);
             manager.beginTransaction(questionDao);
             questionDao.create(question);
-            manager.endTransaction(questionDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             logger.error("Error when try to accept question");
             try {
@@ -168,7 +168,7 @@ public class AjaxServiceImpl implements AjaxService {
             } else {
                 result = false;
             }
-            manager.endTransaction(commentDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             logger.error("Error when try to accept comment");
             try {

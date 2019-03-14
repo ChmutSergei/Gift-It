@@ -41,7 +41,7 @@ public class ItemServiceImpl implements ItemService {
                 Optional<Item> item = itemDao.find((long) itemId.get(i), pathForTempFiles);
                 item.ifPresent(result::add);
             }
-            manager.endTransaction(itemDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -59,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
         try {
             manager.beginTransaction(itemDao);
             result = itemDao.findAllWithLimit(pathForTempFiles, limit, offset);
-            manager.endTransaction(itemDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -77,7 +77,7 @@ public class ItemServiceImpl implements ItemService {
         try {
             manager.beginTransaction(itemDao);
             items = itemDao.findPaidItems(userId, filePath);
-            manager.endTransaction(itemDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -95,7 +95,7 @@ public class ItemServiceImpl implements ItemService {
         try {
             manager.beginTransaction(itemDao);
             item = itemDao.find(id, pathForFile);
-            manager.endTransaction(itemDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -118,7 +118,7 @@ public class ItemServiceImpl implements ItemService {
             for (Bitmap bitmap : bitmaps) {
                 bitmapDao.update(bitmap);
             }
-            manager.endTransaction(itemDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -179,7 +179,7 @@ public class ItemServiceImpl implements ItemService {
                 int count = commentDao.countCommentForItem(item.getItemId());
                 result.put(item.getItemId(), count);
             }
-            manager.endTransaction(commentDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -197,7 +197,7 @@ public class ItemServiceImpl implements ItemService {
         try {
             manager.beginTransaction(itemDao);
             comment = commentDao.findByItemId(itemId, status);
-            manager.endTransaction(itemDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -218,7 +218,7 @@ public class ItemServiceImpl implements ItemService {
                 Optional<Item> optionalItem = itemDao.findByCommentId(comment.getCommentId());
                 optionalItem.ifPresent(item -> items.put(comment.getCommentId(), item));
             }
-            manager.endTransaction(itemDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();

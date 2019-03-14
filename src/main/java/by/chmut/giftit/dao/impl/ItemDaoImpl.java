@@ -5,10 +5,7 @@ import by.chmut.giftit.dao.ItemDao;
 import by.chmut.giftit.entity.Item;
 import by.chmut.giftit.entity.Order;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +48,7 @@ public class ItemDaoImpl implements ItemDao {
             "INSERT INTO Items(name, type, description, active, cost, image) " +
                     "VALUES(?,?,?,?,?,?)";
     private static final String UPDATE_ITEM =
-            "UPDATE Items SET name=?, type=?, description=?, active=?, cost=?, image=? " +
+            "UPDATE Items SET name=?, type=?, description=?, active=?, cost=? " +
                     "WHERE id=?";
 
     private Connection connection;
@@ -214,11 +211,13 @@ public class ItemDaoImpl implements ItemDao {
         item.setActive(resultSet.getBoolean(5));
         item.setPrice(resultSet.getBigDecimal(6));
         byte[] imageBlob = resultSet.getBytes(7);
-        File image = new File(filePath + item.getItemId() + ".jpg");
-        FileOutputStream fileOutputStream = new FileOutputStream(image);
-        fileOutputStream.write(imageBlob);
-        fileOutputStream.close();
-        item.setImage(image);
+        if (imageBlob != null) {
+            File image = new File(filePath + item.getItemId() + ".jpg");
+            FileOutputStream fileOutputStream = new FileOutputStream(image);
+            fileOutputStream.write(imageBlob);
+            fileOutputStream.close();
+            item.setImage(image);
+        }
         return item;
     }
 
@@ -276,21 +275,19 @@ public class ItemDaoImpl implements ItemDao {
     @Override
     public Item update(Item item) throws DaoException {
         PreparedStatement statement = null;
-        File image = item.getImage();
-        try (FileInputStream fis = new FileInputStream(image)) {
+        try {
             statement = connection.prepareStatement(UPDATE_ITEM);
-            statement.setLong(7, item.getItemId());
+            statement.setLong(6, item.getItemId());
             statement.setString(1, item.getItemName());
             statement.setString(2, item.getType());
             statement.setString(3, item.getDescription());
             statement.setBoolean(4, item.isActive());
             statement.setBigDecimal(5, item.getPrice());
-            statement.setBinaryStream(6, fis, (int) image.length());
             int result = statement.executeUpdate();
             if (result != 1) {
                 throw new DaoException("Error with update item");
             }
-        } catch (IOException | SQLException exception) {
+        } catch (SQLException exception) {
             throw new DaoException("Error with update item", exception);
         } finally {
             close(statement);

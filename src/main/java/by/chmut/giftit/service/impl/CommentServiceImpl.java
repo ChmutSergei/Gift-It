@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
         try {
             manager.beginTransaction(commentDao);
             comments = commentDao.findByUserId(userId);
-            manager.endTransaction(commentDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -46,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
         try {
             manager.beginTransaction(commentDao);
             comments = commentDao.findToModerate();
-            manager.endTransaction(commentDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -76,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
                 User user = users.get(id);
                 result = userDao.blockForDays(user.getUserId(), countDayForBlock);
             }
-            manager.endTransaction(commentDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();

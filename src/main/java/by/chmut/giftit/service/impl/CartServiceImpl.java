@@ -28,7 +28,7 @@ public class CartServiceImpl implements CartService {
         try {
             manager.beginTransaction(cartDao);
             carts = cartDao.findAllByUserId(userId);
-            manager.endTransaction(cartDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -46,7 +46,7 @@ public class CartServiceImpl implements CartService {
         try {
             manager.beginTransaction(cartDao);
             cart = cartDao.findEntity(cartId);
-            manager.endTransaction(cartDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -67,7 +67,7 @@ public class CartServiceImpl implements CartService {
                 Optional<Item> optionalItem = itemDao.find(cart.getItemId(), pathForFile);
                 optionalItem.ifPresent(item -> items.put(cart.getCartId(), item));
             }
-            manager.endTransaction(itemDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -85,7 +85,7 @@ public class CartServiceImpl implements CartService {
         try {
             manager.beginTransaction(cartDao);
             cartDao.create(cart);
-            manager.endTransaction(cartDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -103,7 +103,7 @@ public class CartServiceImpl implements CartService {
         try {
             manager.beginTransaction(cartDao);
             result = cartDao.delete(cartId);
-            manager.endTransaction(cartDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -121,7 +121,7 @@ public class CartServiceImpl implements CartService {
         try {
             manager.beginTransaction(cartDao);
             result = cartDao.deleteAllByUserId(userId);
-            manager.endTransaction(cartDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             throw new ServiceException(exception);
         }

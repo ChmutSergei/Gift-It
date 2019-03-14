@@ -155,6 +155,11 @@
             <!-- comments section  -->
             <div class="col-sm-9 comments">
                 <h3><fmt:message key="account.commentsi" bundle="${i18n}"/></h3>
+                <c:if test="${sessionScope.user.blockedUntil > sessionScope.dateNow}" >
+                    <div class="row text-center">
+                        <h3><fmt:message key="account.blocked" bundle="${i18n}"/>${sessionScope.user.blockedUntil}</h3>
+                    </div>
+                </c:if>
                 <div class="row text-center">
                     <table class="table table-bordered">
                         <thead>

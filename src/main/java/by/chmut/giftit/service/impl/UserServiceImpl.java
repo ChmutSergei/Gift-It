@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         try {
             manager.beginTransaction(userDao);
             users = searchUsers(searchType, parametersSearch);
-            manager.endTransaction(userDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
                     result = true;
                 }
             }
-            manager.endTransaction(userDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
                 Optional<User> optionalUser = userDao.findEntity(user.getUserId());
                 actualUsers.add(optionalUser.get());
             }
-            manager.endTransaction(userDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             exception.printStackTrace();
         }
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
                 Optional<User> optionalUser = userDao.findEntity(userId);
                 optionalUser.ifPresent(user -> users.put(comment.getCommentId(), user));
             }
-            manager.endTransaction(userDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -160,7 +160,7 @@ public class UserServiceImpl implements UserService {
         try {
             manager.beginTransaction(userDao);
             user = userDao.findEntity(userId);
-            manager.endTransaction(userDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
         try {
             manager.beginTransaction(userDao);
             user = userDao.findByUsername(username);
-            manager.endTransaction(userDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
         try {
             manager.beginTransaction(userDao);
             newUser = userDao.create(newUser);
-            manager.endTransaction(userDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();

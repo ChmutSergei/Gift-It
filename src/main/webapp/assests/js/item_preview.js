@@ -53,7 +53,11 @@ function sendComment() {
 }
 function addComment() {
     if (exist) {
-        document.getElementById("input").style.display = "block";
+        if (blocked) {
+            document.getElementById("block").style.display = "block";
+        } else {
+            document.getElementById("input").style.display = "block";
+        }
     } else {
         document.getElementById("error").style.display = "block";
     }

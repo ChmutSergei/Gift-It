@@ -98,12 +98,12 @@ public class AttributeName {
     public static final String PAYMENT_SUCCESS_PARAMETER_NAME = "payment";
     public static final String COUNT_ITEM_AFTER_SEARCH_PARAMETER_NAME = "countSearch";
     public static final String NUMBER_PAGE_PARAMETER_NAME = "page";
+    public static final String DATE_NOW_PARAMETER_NAME = "dateNow";
 
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
     public static final String MESSAGE_NOT_FOUND_ID_KEY = "error.notFoundId";
     public static final String MESSAGE_ADMIN_ORDERS_ERROR_KEY = "admin.error.orders";
     public static final String MESSAGE_NOT_FOUND_USERS_KEY = "user.not.found";
-    public static final String MESSAGE_WRONG_DATA_KEY = "admin.answer.error";
     public static final String MESSAGE_PAYMENT_FAILED_KEY = "payment.failed";
     public static final String ACCESS_DENIED = "Access Denied";
 

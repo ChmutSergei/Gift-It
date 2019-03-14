@@ -90,7 +90,9 @@ Use cases:
    
    Run script file **giftit.sql** from directory _Giftit/src/main/resources/_
   to roll the database.
+  This script will **not add an image of the items**, so they **will not be displayed when the application is running**. 
   
+  The remaining functions will not be affected.
 
   ### Prerequisites
   
@@ -111,8 +113,9 @@ Use cases:
  | ROLE_ADMIN |acceptance / processing of new orders, Appointment of Experts, Designers and Moderato, consideration of applications for adding goods to the rang, manage all users, answers to users' questions|
  
 For ADMIN role use USERNAME "admin" PASSWORD "1"
-For DESIGNER role use USERNAME "jane" PASSWORD "1"
+For DESIGNER role use USERNAME "des" PASSWORD "1"
 For MODERATOR role use USERNAME "moder" PASSWORD "1"
+And also Users : USERNAME "user1" PASSWORD "1", USERNAME "user2" PASSWORD "1", USERNAME "user3" PASSWORD "1"
 
 
  ### Installing
@@ -132,5 +135,13 @@ For MODERATOR role use USERNAME "moder" PASSWORD "1"
  
  # Screenshots
  
- 
+ ![sc1](https://user-images.githubusercontent.com/42671888/54277330-9c3f7880-45a0-11e9-9373-f28de770aca7.JPG)
+ ![sc2](https://user-images.githubusercontent.com/42671888/54277361-afeadf00-45a0-11e9-92a8-741c073b54aa.JPG)
+ ![sc3](https://user-images.githubusercontent.com/42671888/54277377-bb3e0a80-45a0-11e9-845d-d52dd5b56998.JPG)
+ ![sc4](https://user-images.githubusercontent.com/42671888/54277407-d577e880-45a0-11e9-9652-c4e9a495ce61.JPG)
+![sc5](https://user-images.githubusercontent.com/42671888/54277425-ddd02380-45a0-11e9-9fcc-e7e1feafda5f.JPG)
+![sc6](https://user-images.githubusercontent.com/42671888/54277434-e6285e80-45a0-11e9-9d4e-9ce02e5e6a95.JPG)
+![sc7](https://user-images.githubusercontent.com/42671888/54277440-ede80300-45a0-11e9-87fc-6e91bcac4304.JPG)
+![sc8](https://user-images.githubusercontent.com/42671888/54277445-f50f1100-45a0-11e9-9380-ef7a5b1c2f8b.JPG)
+
  

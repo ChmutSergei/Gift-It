@@ -27,7 +27,7 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             manager.beginTransaction(questionDao);
             questions = questionDao.findByUserId(userId);
-            manager.endTransaction(questionDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -45,7 +45,7 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             manager.beginTransaction(questionDao);
             questions = questionDao.findUnanswered();
-            manager.endTransaction(questionDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -67,7 +67,7 @@ public class QuestionServiceImpl implements QuestionService {
             question.setResponse(answer);
             question.setResponseDate(LocalDate.now());
             result = questionDao.update(question);
-            manager.endTransaction(questionDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -85,7 +85,7 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             manager.beginTransaction(questionDao);
             questions = questionDao.findAll();
-            manager.endTransaction(questionDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();

@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             manager.beginTransaction(orderDao);
             paidOrders = orderDao.findPaidOrder();
-            manager.endTransaction(orderDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
                 Optional<User> optionalUser = userDao.findEntity(order.getUserId());
                 optionalUser.ifPresent(user -> users.put(order.getOrderId(), user));
             }
-            manager.endTransaction(userDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -76,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
                 List<Item> results = itemDao.findForOrder(order.getOrderId());
                 items.put(order.getOrderId(), results);
             }
-            manager.endTransaction(itemDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();
@@ -98,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
                 result = orderDao.setPaidStatus(order.getOrderId());
             }
             if (result) {
-                manager.endTransaction(orderDao);
+                manager.endTransaction();
             } else {
                 manager.rollback();
             }
@@ -127,7 +127,7 @@ public class OrderServiceImpl implements OrderService {
             for (Cart cart : carts) {
                 cartDao.setOrderId(cart.getCartId(), orderId);
             }
-            manager.endTransaction(orderDao);
+            manager.endTransaction();
         } catch (DaoException exception) {
             try {
                 manager.rollback();

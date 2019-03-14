@@ -1,5 +1,6 @@
 CREATE DATABASE Giftit;
 USE Giftit;
+CREATE TABLE Bitmaps(criteria_key VARCHAR(20) PRIMARY KEY, data BLOB);
 CREATE TABLE Users(id BIGINT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(50), password VARCHAR(60),
                    first_name VARCHAR(50), last_name VARCHAR(50), email VARCHAR(50), phone VARCHAR(20), address VARCHAR(80),
                    account DECIMAL(10,2), init_date DATE, blocked_until DATE, role VARCHAR(10));
@@ -153,4 +154,15 @@ INSERT INTO Questions(user_id, request, response, request_date, response_date) V
  'Вы можете указать его в примечании к заказу', '2019-03-01', '2019-03-02');
 INSERT INTO Questions(user_id, request, response, request_date, response_date) VALUES (6, 'Наверное это глупый вопрос?',
  'Ну, если вам так кажется, то да', '2019-03-01', '2019-03-02');
+INSERT INTO Bitmaps (criteria_key, data) VALUES ('cup', '[0,1,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]');
+INSERT INTO Bitmaps (criteria_key, data) VALUES ('high', '[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1]');
+INSERT INTO Bitmaps (criteria_key, data) VALUES ('low', '[0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,1,0,0,1]');
+INSERT INTO Bitmaps (criteria_key, data) VALUES ('medium', '[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,0,1,1,1,1,1]');
+INSERT INTO Bitmaps (criteria_key, data) VALUES ('mousePad', '[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]');
+INSERT INTO Bitmaps (criteria_key, data) VALUES ('pillow', '[1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]');
+INSERT INTO Bitmaps (criteria_key, data) VALUES ('plate', '[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0]');
+INSERT INTO Bitmaps (criteria_key, data) VALUES ('puzzle', '[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0]');
+INSERT INTO Bitmaps (criteria_key, data) VALUES ('shirt', '[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0]');
+INSERT INTO Bitmaps (criteria_key, data) VALUES ('towel', '[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0]');
+
 
