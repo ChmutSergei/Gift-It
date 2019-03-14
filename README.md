@@ -113,8 +113,11 @@ Use cases:
  | ROLE_ADMIN |acceptance / processing of new orders, Appointment of Experts, Designers and Moderato, consideration of applications for adding goods to the rang, manage all users, answers to users' questions|
  
 For ADMIN role use USERNAME "admin" PASSWORD "1"
+
 For DESIGNER role use USERNAME "des" PASSWORD "1"
+
 For MODERATOR role use USERNAME "moder" PASSWORD "1"
+
 And also Users : USERNAME "user1" PASSWORD "1", USERNAME "user2" PASSWORD "1", USERNAME "user3" PASSWORD "1"
 
 
