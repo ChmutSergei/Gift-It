@@ -126,5 +126,7 @@ public class AttributeName {
     public static final String DATE_TIME_FORMAT = "dd.MM.yyyy";
     public static final String PREVIOUS_PAGE = "previous";
     public static final String NEXT_PAGE = "next";
+    public static final String DEFAULT_ITEM_PATH = "/item/";
+    public static final String DEFAULT_UPLOAD_PATH = "/upload/";
 
 }

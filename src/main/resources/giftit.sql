@@ -12,13 +12,13 @@ CREATE TABLE Questions(id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT, req
 CREATE TABLE Comments(id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT, item_id BIGINT,
                       message VARCHAR(255), date DATE, status VARCHAR(8), FOREIGN KEY (user_id) REFERENCES Users(id),
   FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE  CASCADE  ON UPDATE CASCADE);
+CREATE TABLE Orders(id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT,
+                    details VARCHAR(255), status VARCHAR(20), init_date DATE, issue_date DATE,
+  FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE  CASCADE  ON UPDATE CASCADE);
 CREATE TABLE Carts(id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT, item_id BIGINT, order_id BIGINT, count DECIMAL,
   FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE  CASCADE  ON UPDATE CASCADE,
   FOREIGN KEY (order_id) REFERENCES Orders(id) ON DELETE  CASCADE  ON UPDATE CASCADE,
   FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE  CASCADE  ON UPDATE CASCADE);
-CREATE TABLE Orders(id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT,
-                    details VARCHAR(255), status VARCHAR(20), init_date DATE, issue_date DATE,
-  FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE  CASCADE  ON UPDATE CASCADE);
 INSERT INTO Users(username, password, first_name, last_name, email, phone, address, account, init_date,
                   blocked_until, role)
 VALUES ('admin','$2a$10$L90aFEyIXHLFEQv0.QWo9.rzePZWi6g8TW4MhhVLCFhEkQHuXl.Hi','Sergei', 'Chmut', 'chmut@tut.by',
@@ -51,6 +51,8 @@ INSERT INTO Items(name, type, description, active, cost)
 VALUES ('Тарелка с фото','plate','У нас печать на тарелки Можно мыть Дизайнер поможет с дизайном',true, 35);
 INSERT INTO Items(name, type, description, active, cost)
 VALUES ('Кружка с Вашим фото','cup','Белая кружка (сорт премиум) с фото на заказ',true, 7.9);
+INSERT INTO Items(name, type, description, active, cost)
+VALUES ('Кружка цветная','cup','Кружка цветная внутри с цветной ручкой',true, 8.9);
 INSERT INTO Items(name, type, description, active, cost)
 VALUES ('Кружка хамелеон с фото','cup','Волшебные кружки, которые меняют цвет от горячей воды.',true, 14.4);
 INSERT INTO Items(name, type, description, active, cost)

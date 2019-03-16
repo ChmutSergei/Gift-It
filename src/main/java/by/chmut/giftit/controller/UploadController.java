@@ -36,11 +36,10 @@ public class UploadController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        req.getSession().setAttribute(MESSAGE_PARAMETER_NAME, "");
         DiskFileItemFactory factory = new DiskFileItemFactory();
         factory.setRepository(new File(System.getProperty(TMPDIR)));
         ServletFileUpload upload = new ServletFileUpload(factory);
-        String uploadPath = req.getServletContext().getRealPath("/upload/");
+        String uploadPath = req.getServletContext().getRealPath(DEFAULT_UPLOAD_PATH);
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdir();

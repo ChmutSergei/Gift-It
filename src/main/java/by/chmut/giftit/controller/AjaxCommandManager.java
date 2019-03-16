@@ -130,7 +130,7 @@ class AjaxCommandManager {
     void changeItemStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String stringId = request.getParameter(ITEM_ID_PARAMETER_NAME);
         long itemId = Long.parseLong(stringId);
-        boolean result = ajaxService.changeItemStatus(itemId, request.getServletContext().getRealPath(""));
+        boolean result = ajaxService.changeItemStatus(itemId, request.getServletContext().getRealPath(DEFAULT_ITEM_PATH));
         response.getWriter().write((new Gson()).toJson(result));
     }
 

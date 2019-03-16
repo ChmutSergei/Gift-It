@@ -36,7 +36,7 @@ public class PreviewItemCommand implements Command {
         }
         long id = Long.parseLong(itemId);
         try {
-            Optional<Item> item = itemService.find(id, request.getServletContext().getRealPath(""));
+            Optional<Item> item = itemService.find(id, request.getServletContext().getRealPath(DEFAULT_ITEM_PATH));
             if (item.isPresent()){
                 request.getSession().setAttribute(ITEM_PARAMETER_NAME, item.get());
             } else {

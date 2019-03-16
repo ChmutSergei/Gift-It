@@ -30,7 +30,7 @@ public class AccountCommand implements Command {
         router.setPagePath(ACCOUNT_PAGE);
         User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
         try {
-            List<Item> paidItems = itemService.findPaidItems(user.getUserId(), request.getServletContext().getRealPath(""));
+            List<Item> paidItems = itemService.findPaidItems(user.getUserId(), request.getServletContext().getRealPath(DEFAULT_ITEM_PATH));
             request.getSession().setAttribute(PAID_ITEMS_PARAMETER_NAME, paidItems);
             List<Comment> comments = commentService.findByUserId(user.getUserId());
             request.getSession().setAttribute(COMMENTS_PARAMETER_NAME, comments);

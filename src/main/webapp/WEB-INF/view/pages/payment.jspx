@@ -1,24 +1,26 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
-          xmlns="http://www.w3.org/1999/xhtml" version="2.0">
+          xmlns="http://www.w3.org/1999/xhtml" version="2.0" xmlns:custom="http://chmut.by/gift-it/ns/tags">
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="i18n.messages" var="i18n"/>
-    <div class="container col-xs-12" style="background-color:#e6f7d9; height: 1000px;">
+    <div class="container col-xs-12" style="background-color:#e6f7d9; height: 1300px;">
         <c:choose>
             <c:when test="${not empty sessionScope.payment}">
                 <h2><strong><fmt:message bundle="${i18n}" key="payment.success"/></strong>></h2>
             </c:when>
             <c:otherwise>
-                <div class="col-xs-7 col-xs-offset-3">
-                    <h2><fmt:message bundle="${i18n}" key="payment.start"/></h2>
-                    <c:if test="${not empty sessionScope.totalSum}">
-                        <p><fmt:message bundle="${i18n}" key="payment.totalSum"/>
-                            <fmt:setLocale value="ru-RU"/>
-                            <fmt:formatNumber value="${sessionScope.total}" type="currency"/><br/>
-                            <fmt:setLocale value="${sessionScope.locale}"/></p>
-                    </c:if>
-                    <p><fmt:message bundle="${i18n}" key="payment.info"/></p>
+                <div class="row">
+                    <div class="col-xs-7 col-xs-offset-3">
+                        <h2><fmt:message bundle="${i18n}" key="payment.start"/></h2>
+                        <c:if test="${not empty sessionScope.total}">
+                            <p>
+                                <fmt:message bundle="${i18n}" key="payment.totalSum"/>
+                                <custom:formatPriceBE price="${sessionScope.total}"/>
+                            </p>
+                        </c:if>
+                        <p><fmt:message bundle="${i18n}" key="payment.info"/></p>
+                    </div>
                 </div>
                 <!--Payment form-->
                 <div class="creditCardForm">
@@ -92,7 +94,7 @@
                     </div>
                 </div>
 
-                <p class="examples-note"><fmt:message key="payment.keygen" bundle="${i18n}" /></p>
+                <p class="examples-note"><fmt:message key="payment.keygen" bundle="${i18n}"/></p>
 
                 <div class="examples">
                     <div class="table-responsive">

@@ -17,4 +17,14 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <name>formatPriceBE</name>
+        <tag-class>by.chmut.giftit.tag.FormatTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>price</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>

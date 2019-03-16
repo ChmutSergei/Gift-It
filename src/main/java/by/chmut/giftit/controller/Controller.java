@@ -2,6 +2,7 @@ package by.chmut.giftit.controller;
 
 import by.chmut.giftit.command.CommandType;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

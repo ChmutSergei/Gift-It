@@ -31,7 +31,7 @@ public class MainCommand implements Command {
         int limit = setLimit(request);
         int currentPage = setCurrentPage(request, limit);
         int offset = limit * currentPage;
-        String pathForTempFiles = request.getServletContext().getRealPath("");
+        String pathForTempFiles = request.getServletContext().getRealPath(DEFAULT_ITEM_PATH);
         List<Item> results = Collections.emptyList();
         if (itemIdList != null) {
             try {

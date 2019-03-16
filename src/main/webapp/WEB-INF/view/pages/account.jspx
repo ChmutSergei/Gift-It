@@ -138,7 +138,7 @@
                         <c:forEach var="item" items="${sessionScope.paidItems}">
                             <tr>
                                 <td class="col-xs-2">
-                                    <img src="${pageContext.request.contextPath}/${item.itemId}.jpg"
+                                    <img src="${pageContext.request.contextPath}/item/${item.itemId}.jpg"
                                          name="${item.itemId}" onclick="sendItemId($(this))" class="img-responsive"
                                          style="width:60px;" alt="Image"/></td>
                                 <td class="col-xs-1">${item.itemName}</td>
@@ -221,7 +221,7 @@
     </div>
 
     <![CDATA[
-    <script src="${pageContext.request.contextPath}/assests/js/account.js"></script>
+    <script src="${pageContext.request.contextPath}/assests/js/account.js?ver=1"></script>
     ]]>
 
 </jsp:root>

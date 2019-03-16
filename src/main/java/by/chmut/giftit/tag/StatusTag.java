@@ -19,8 +19,8 @@ public class StatusTag extends TagSupport {
         try {
             pageContext.getOut().write("<hr/>" + "<p id=status>" + user.getRole() +
                     " : " + user.getUsername() + "</p>" + "<hr/>");
-        } catch (IOException e) {
-            throw new JspException(e.getMessage());
+        } catch (IOException exception) {
+            throw new JspException(exception.getMessage());
         }
         return SKIP_BODY;
     }

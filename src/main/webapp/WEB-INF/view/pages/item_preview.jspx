@@ -1,7 +1,7 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
-          xmlns="http://www.w3.org/1999/xhtml" version="2.0">
+          xmlns="http://www.w3.org/1999/xhtml" version="2.0" xmlns:custom="http://chmut.by/gift-it/ns/tags">
     <c:if test="${not empty sessionScope.user}"><c:set var="existUser" value="true"/></c:if>
     <script>var exist = '${existUser}';</script>
     <div class="container">
@@ -19,7 +19,7 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <img src="${pageContext.request.contextPath}/${sessionScope.item.itemId}.jpg"
+                            <img src="${pageContext.request.contextPath}/item/${sessionScope.item.itemId}.jpg"
                                  class="img-responsive"
                                  style="width:80%;padding-top:20px;"
                                  alt="Image"/>
@@ -29,9 +29,7 @@
                                 <h2>${sessionScope.item.itemName}</h2>
                                 <br/>
                                 <h3>
-                                    <fmt:setLocale value="ru-RU"/>
-                                    <fmt:formatNumber value="${sessionScope.item.price}" type="currency"/><br/>
-                                    <fmt:setLocale value="${sessionScope.locale}"/>
+                                    <custom:formatPriceBE price="${sessionScope.item.price}" />
                                 </h3><br/>
                                 <h4>${sessionScope.item.description}</h4>
                                 <p><fmt:message bundle="${i18n}" key="item.preview.printmessage"/></p><br/>

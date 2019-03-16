@@ -50,6 +50,6 @@ public class AdminCommand implements Command {
         if (stringItemId != null) {
             itemId = Long.parseLong(stringItemId);
         }
-        return itemService.find(itemId, request.getServletContext().getRealPath(""));
+        return itemService.find(itemId, request.getServletContext().getRealPath(DEFAULT_ITEM_PATH));
     }
 }
