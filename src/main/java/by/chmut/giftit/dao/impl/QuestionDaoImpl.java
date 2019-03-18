@@ -93,7 +93,7 @@ public class QuestionDaoImpl implements QuestionDao {
         question.setUserId(resultSet.getLong(2));
         question.setRequest(resultSet.getString(3));
         question.setResponse(resultSet.getString(4));
-        question.setRequestDate(resultSet.getDate(5).toLocalDate()); //TODO защитить все даты в табл от Null
+        question.setRequestDate(resultSet.getDate(5).toLocalDate());
         Date responseDate = resultSet.getDate(6);
         if (responseDate != null) {
             question.setResponseDate(responseDate.toLocalDate());

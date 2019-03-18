@@ -25,4 +25,6 @@ public interface ItemService {
     List<Comment> findCommentOnItem(long id, Comment.CommentStatus status) throws ServiceException;
 
     Map<Long, Item> findByComment(List<Comment> comments) throws ServiceException;
+
+    int countAllItem() throws ServiceException;
 }

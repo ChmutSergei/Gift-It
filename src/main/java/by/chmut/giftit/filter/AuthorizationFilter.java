@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.util.*;
 
 import static by.chmut.giftit.command.CommandType.*;
-import static by.chmut.giftit.command.CommandType.MODERATOR;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.entity.User.Role.*;
+import static by.chmut.giftit.entity.User.Role.MODERATOR;
 
 public class AuthorizationFilter implements Filter {
 
@@ -29,7 +29,7 @@ public class AuthorizationFilter implements Filter {
             MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, CREATE_ITEM, ADD_ITEM));
 
     private final Set<CommandType> availableCommandForModerator = new HashSet<>(Arrays.asList(
-            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, MODERATOR, MODERATE));
+            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, CommandType.MODERATOR, MODERATE));
 
     private final Set<CommandType> availableCommandForAdmin = new HashSet<>(Arrays.asList(
             MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, ADMINISTRATION,
@@ -42,7 +42,7 @@ public class AuthorizationFilter implements Filter {
         accessControlMap.put(GUEST, availableCommandForGuest);
         accessControlMap.put(USER, availableCommandForUser);
         accessControlMap.put(DESIGNER, availableCommandForDesigner);
-        accessControlMap.put(User.Role.MODERATOR, availableCommandForModerator);
+        accessControlMap.put(MODERATOR, availableCommandForModerator);
         accessControlMap.put(ADMIN, availableCommandForAdmin);
     }
 

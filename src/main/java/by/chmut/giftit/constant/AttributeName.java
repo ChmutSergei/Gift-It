@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class AttributeName {
 
-    private AttributeName() {
+    private AttributeName() {// TODO Добавить комментарии
     }
     public static final String COMMAND_PARAMETER_NAME = "command";
     public static final String CUP_PARAMETER_NAME = "cup";

@@ -43,6 +43,8 @@ public class MainCommand implements Command {
             }
         } else {
             try {
+                int countItem = service.countAllItem();
+                request.getSession().setAttribute(COUNT_ITEM_AFTER_SEARCH_PARAMETER_NAME, countItem);
                 results = service.findAllWithLimit(pathForTempFiles, limit, offset);
             } catch (ServiceException exception) {
                 logger.error("Error when find all Item", exception);

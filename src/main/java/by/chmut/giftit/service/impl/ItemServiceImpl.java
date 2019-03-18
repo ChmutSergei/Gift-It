@@ -9,8 +9,11 @@ import by.chmut.giftit.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 
 import static by.chmut.giftit.constant.AttributeName.*;
@@ -228,5 +231,23 @@ public class ItemServiceImpl implements ItemService {
             throw new ServiceException(exception);
         }
         return items;
+    }
+
+    @Override
+    public int countAllItem() throws ServiceException {
+        int result;
+        try {
+            manager.beginTransaction(itemDao);
+            result = itemDao.countAllItem();
+            manager.endTransaction();
+        } catch (DaoException exception) {
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            throw new ServiceException(exception);
+        }
+        return result;
     }
 }

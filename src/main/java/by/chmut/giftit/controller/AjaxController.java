@@ -48,7 +48,7 @@ public class AjaxController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String type = request.getParameter(COMMAND_PARAMETER_NAME);
         AjaxCommand command = AjaxCommand.valueOf(type);
         switch (command) {
@@ -65,13 +65,13 @@ public class AjaxController extends HttpServlet {
                 response.getWriter().write(new Gson().toJson(countItems));
                 break;
             case RESET_FILTER:
-                resetFilter(request);
+                commandManager.resetFilter(request, bitmapStorage);
                 break;
             case ADD_TO_CART:
-                addToCart(request);
+                commandManager.addToCart(request);
                 break;
             case DELETE_FROM_CART:
-                deleteFromCart(request);
+                commandManager.deleteFromCart(request);
                 break;
             case UPDATE_USER_ADDRESS_PHONE:
                 commandManager.updateUserData(request,response);
@@ -92,52 +92,6 @@ public class AjaxController extends HttpServlet {
                 commandManager.acceptComment(request, response);
                 break;
         }
-    }
-
-    private void deleteFromCart(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        int cartId = Integer.parseInt(request.getParameter(CART_ID_PARAMETER_NAME));
-        session.setAttribute(CART_ID_PARAMETER_NAME, cartId);
-        session.setAttribute(CART_COMMAND_FLAG_PARAMETER_NAME, DELETE_CART_COMMAND);
-    }
-
-    private void addToCart(HttpServletRequest request) {
-        String stringCount = request.getParameter(COUNT_ITEM_PARAMETER_NAME);
-        int intCount = (stringCount != null) ? Integer.parseInt(stringCount) : 1;
-        BigDecimal count;
-        if (intCount < 1) {
-            count = BigDecimal.ONE;
-        } else if (intCount > MAX_COUNT_FOR_ITEM_TO_CART){
-            count = new BigDecimal(MAX_COUNT_FOR_ITEM_TO_CART);
-        } else {
-            count = new BigDecimal(intCount);
-        }
-        HttpSession session = request.getSession();
-        BigDecimal countInCart = (BigDecimal) session.getAttribute(COUNT_IN_CART_PARAMETER_NAME);
-        countInCart = countInCart.add(count);
-        Item item = (Item) session.getAttribute(ITEM_PARAMETER_NAME);
-        session.setAttribute(ITEM_TO_ADD_PARAMETER_NAME, item);
-        session.setAttribute(COUNT_ITEM_PARAMETER_NAME, count);
-        session.setAttribute(COUNT_IN_CART_PARAMETER_NAME, countInCart);
-        session.setAttribute(CART_COMMAND_FLAG_PARAMETER_NAME, ADD_CART_COMMAND);
-    }
-
-    private void resetFilter(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        commandManager.setCheckedBitmaps(new ArrayList<>());
-        int countAllItems = bitmapStorage.get(LOW_PARAMETER_NAME).getData().length;
-        session.setAttribute(COUNT_ITEM_AFTER_SEARCH_PARAMETER_NAME, countAllItems);
-        session.setAttribute(PRICE_CRITERIA_PARAMETER_NAME, ALL_PARAMETER_NAME);
-        session.setAttribute(PAGINATION_LIMIT_PARAMETER_NAME, DEFAULT_PAGINATION_LIMIT);
-        session.setAttribute(NUMBER_PAGE_PARAMETER_NAME, DEFAULT_NUMBER_PAGE);
-        session.removeAttribute(RESULT_OF_SEARCH_ITEMS_PARAMETER_NAME);
-        session.removeAttribute(CUP_PARAMETER_NAME);
-        session.removeAttribute(SHIRT_PARAMETER_NAME);
-        session.removeAttribute(PLATE_PARAMETER_NAME);
-        session.removeAttribute(PILLOW_PARAMETER_NAME);
-        session.removeAttribute(PUZZLE_PARAMETER_NAME);
-        session.removeAttribute(MOUSE_PAD_PARAMETER_NAME);
-        session.removeAttribute(TOWEL_PARAMETER_NAME);
     }
 
     private enum AjaxCommand {

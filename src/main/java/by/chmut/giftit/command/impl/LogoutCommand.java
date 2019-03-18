@@ -14,7 +14,7 @@ public class LogoutCommand implements Command {
     public Router execute(HttpServletRequest request) {
         request.getSession().invalidate();
         Router router = new Router();
-        router.setRedirectPath(MAIN_PATH); // TODO добавить ликвидацию сессии
+        router.setRedirectPath(MAIN_PATH);
         return router;
     }
 }
