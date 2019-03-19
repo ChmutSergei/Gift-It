@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -22,12 +21,32 @@ import java.util.Optional;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.*;
 
+/**
+ * The Login command class provides user login to the application.
+ *
+ * @author Sergei Chmut.
+ */
 public class LoginCommand implements Command {
 
+    /**
+     * The logger for logging possible errors.
+     */
     private static final Logger logger = LogManager.getLogger();
+    /**
+     * The User service to take advantage of business logic capabilities.
+     */
     private UserService service = ServiceFactory.getInstance().getUserService();
+    /**
+     * The Cart service to take advantage of business logic capabilities.
+     */
     private CartService cartService = ServiceFactory.getInstance().getCartService();
 
+    /**
+     * Execute router.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the router object that contains page path for forward or redirect
+     */
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
@@ -57,6 +76,12 @@ public class LoginCommand implements Command {
         return router;
     }
 
+    /**
+     * Calculate count items in the cart.
+     *
+     * @param userId the user id
+     * @return the big decimal
+     */
     private BigDecimal calculateCountItemsInCart(long userId) {
         List<Cart> carts = Collections.emptyList();
         try {
@@ -65,7 +90,7 @@ public class LoginCommand implements Command {
             logger.error("Error with set count items in the users cart");
         }
         BigDecimal count = BigDecimal.ZERO;
-        for (Cart cart:carts) {
+        for (Cart cart : carts) {
             count = count.add(cart.getCount());
         }
         return count;

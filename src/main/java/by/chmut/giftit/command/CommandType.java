@@ -2,6 +2,12 @@ package by.chmut.giftit.command;
 
 import by.chmut.giftit.command.impl.*;
 
+/**
+ * The enum Command type contains possible commands to process from request.
+ * Each command contains a specific class that implements the interface command.
+ *
+ * @author Sergei Chmut.
+ */
 public enum CommandType {
 
     MAIN(new MainCommand()),
@@ -24,7 +30,7 @@ public enum CommandType {
     MODERATOR( new ModeratorCommand()),
     MODERATE( new ModerateCommand()),
     PAYMENT( new PaymentCommand()),
-    CHECK_PAYMENT( new CheckPaymentCommand()),
+    CHECK_PAYMENT( new MakePaymentCommand()),
     REGISTRATION(new RegistrationCommand());
 
     private Command command;
@@ -37,11 +43,18 @@ public enum CommandType {
         return command;
     }
 
-    public static CommandType chooseType(String commandParameter) {
-        if (!(commandParameter == null || commandParameter.isEmpty())) {
+    /**
+     * Choose type command by name.
+     * If missing command returns command ERROR.
+     *
+     * @param commandName the command parameter
+     * @return the command type
+     */
+    public static CommandType chooseType(String commandName) {
+        if (!(commandName == null || commandName.isEmpty())) {
             for (CommandType type : CommandType.values()) {
-                String commandName = type.name();
-                if (commandName.equalsIgnoreCase(commandParameter)) {
+                String command = type.name();
+                if (command.equalsIgnoreCase(commandName)) {
                     return type;
                 }
             }

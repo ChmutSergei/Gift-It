@@ -14,12 +14,32 @@ import static by.chmut.giftit.command.CommandType.ADMINISTRATION;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
+/**
+ * The Give answer command class provides to save the answer to the question.
+ *
+ * @author Sergei Chmut.
+ */
 public class GiveAnswerCommand implements Command {
 
+    /**
+     * The logger for logging possible errors.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The Question service to take advantage of business logic capabilities.
+     */
     private QuestionService service = ServiceFactory.getInstance().getQuestionService();
 
+    /**
+     * The method receives the answer from the request
+     * and sends it to the service level for saving to the database.
+     * If an error occurs while trying to save,
+     * return Router with Error page path.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the router object that contains page path for forward or redirect
+     */
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();

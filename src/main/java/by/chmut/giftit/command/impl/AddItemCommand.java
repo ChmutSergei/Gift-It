@@ -16,11 +16,34 @@ import static by.chmut.giftit.command.CommandType.CREATE_ITEM;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
+/**
+ * The Add item command class attempts to create a new Item
+ * and add it to the product catalog.
+ *
+ * @author Sergei Chmut.
+ */
 public class AddItemCommand implements Command {
 
+    /**
+     * The logger for logging possible errors.
+     */
     private static final Logger logger = LogManager.getLogger();
+    /**
+     * The Item service to take advantage of business logic capabilities.
+     */
     private ItemService service = ServiceFactory.getInstance().getItemService();
 
+    /**
+     * The method removes the passed parameters from the request
+     * and sends them to the service level to attempt to create a new product.
+     * If an error occurs during creation,
+     * return Router with Error page path for display it.
+     * Also if an error occurs during uploading image file for new item,
+     * it will cause redirect to the Error page.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the router object that contains page path for redirect
+     */
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
@@ -40,6 +63,12 @@ public class AddItemCommand implements Command {
         return router;
     }
 
+    /**
+     * Sets parameters from request.
+     *
+     * @param req the req
+     * @return the parameters from request
+     */
     private Map<String, Object> setParametersFromRequest(HttpServletRequest req) {
         Map<String, Object> result = new HashMap<>();
         result.put(ITEM_NAME_PARAMETER_NAME, req.getParameter(ITEM_NAME_PARAMETER_NAME));

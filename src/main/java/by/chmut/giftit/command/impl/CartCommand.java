@@ -12,23 +12,56 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.CART_PAGE;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
+/**
+ * The Cart command class provides management of a specific user's shopping cart
+ * and return Cart Page path for representation.
+ *
+ * @author Sergei Chmut.
+ */
 public class CartCommand implements Command {
-
+    /**
+     * The logger for logging possible errors.
+     */
     private static final Logger logger = LogManager.getLogger();
-
+    /**
+     * The current User - client.
+     */
     private User user;
+    /**
+     * The shopping cart for current user.
+     */
     private List<Cart> cartList;
+    /**
+     * The map of items used in the cart.
+     */
     private Map<Long, Item> items;
+    /**
+     * The Cart service to take advantage of business logic capabilities.
+     */
     private CartService service = ServiceFactory.getInstance().getCartService();
 
+    /**
+     * The method forms a cart of items for a specific user.
+     * There is a check on whether the items are still active (in stock).
+     * If the request contains a command to delete from the cart or add to the cart,
+     * the command is processed.
+     * The result is returned to the user in the view and the resulting amount
+     * is calculated for payment.
+     * If errors occur during the execution of the method,
+     * the method returns the Router with the Error page path.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the router object that contains page path for forward or redirect
+     */
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
@@ -62,9 +95,12 @@ public class CartCommand implements Command {
         return router;
     }
 
+    /**
+     * Checking items on active status and remove it from the cart if it's false.
+     */
     private void checkItemsOnActive() {
         for (Map.Entry entry : items.entrySet()) {
-            Item item = (Item)entry.getValue();
+            Item item = (Item) entry.getValue();
             if (!item.isActive()) {
                 for (int i = 0; i < cartList.size(); i++) {
                     if (cartList.get(i).getItemId() == item.getItemId()) {
@@ -75,6 +111,13 @@ public class CartCommand implements Command {
         }
     }
 
+    /**
+     * The method handles the addition or removal of items from the cart.
+     *
+     * @param modifyCommand the modify command - add or remove
+     * @param request the request object that is passed to the servlet
+     * @throws ServiceException if the attempt to add or remove the item could not be handled
+     */
     private void processCommand(String modifyCommand, HttpServletRequest request) throws ServiceException {
         switch (modifyCommand) {
             case ADD_CART_COMMAND:
@@ -99,10 +142,15 @@ public class CartCommand implements Command {
                 request.getSession().removeAttribute(CART_COMMAND_FLAG_PARAMETER_NAME);
                 break;
             default:
-                throw new ServiceException("Unsupported operation exception when modify cart");
+                throw new ServiceException("Impossible state: unsupported operation exception when modify cart");
         }
     }
 
+    /**
+     * Calculating total cart price.
+     *
+     * @return the total price
+     */
     private BigDecimal calculateTotal() {
         BigDecimal total = BigDecimal.ZERO;
         for (Cart cart : cartList) {

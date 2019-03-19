@@ -2,10 +2,18 @@ package by.chmut.giftit.constant;
 
 import java.math.BigDecimal;
 
+/**
+ * The Attribute name class contains parameter name constants used in the application.
+ *
+ * @author Sergei Chmut.
+ */
 public class AttributeName {
-
-    private AttributeName() {// TODO Добавить комментарии
+    /**
+     * Private constructor is forbidden to create objects of this class.
+     */
+    private AttributeName() {
     }
+    // This group - names of parameters from jsp pages
     public static final String COMMAND_PARAMETER_NAME = "command";
     public static final String CUP_PARAMETER_NAME = "cup";
     public static final String SHIRT_PARAMETER_NAME = "shirt";
@@ -99,20 +107,19 @@ public class AttributeName {
     public static final String COUNT_ITEM_AFTER_SEARCH_PARAMETER_NAME = "countSearch";
     public static final String NUMBER_PAGE_PARAMETER_NAME = "page";
     public static final String DATE_NOW_PARAMETER_NAME = "dateNow";
-
+    // This group - constant keys for messages bundle
     public static final String MESSAGE_LOGIN_FAILED_KEY = "error.loginFailed";
     public static final String MESSAGE_NOT_FOUND_ID_KEY = "error.notFoundId";
     public static final String MESSAGE_ADMIN_ORDERS_ERROR_KEY = "admin.error.orders";
     public static final String MESSAGE_NOT_FOUND_USERS_KEY = "user.not.found";
     public static final String MESSAGE_PAYMENT_FAILED_KEY = "payment.failed";
-    public static final String ACCESS_DENIED = "Access Denied";
-
+    // This group - the commands that we get from the request
     public static final String ADD_CART_COMMAND = "ADD_ITEM";
     public static final String DELETE_CART_COMMAND = "DELETE_ITEM";
     public static final String MODERATE_DELETE_COMMAND = "delete";
     public static final String MODERATE_DELETE_BLOCK_LOW_COMMAND = "deleteb7";
     public static final String MODERATE_DELETE_BLOCK_HIGH_COMMAND = "deleteb14";
-
+    // constants used in the application
     public static final BigDecimal LOW_BORDER_PRICE = new BigDecimal(30);
     public static final BigDecimal MEDIUM_BORDER_PRICE = new BigDecimal(60);
     public static final BigDecimal HIGH_BORDER_PRICE = new BigDecimal(100);

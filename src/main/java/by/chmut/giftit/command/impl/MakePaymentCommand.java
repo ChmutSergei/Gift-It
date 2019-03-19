@@ -22,17 +22,39 @@ import static by.chmut.giftit.command.CommandType.PAYMENT;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
-public class CheckPaymentCommand implements Command {
+/**
+ * The Make payment command class provides to make payment total cart price
+ * and return Payment Page path for representation.
+ *
+ * @author Sergei Chmut.
+ */
+public class MakePaymentCommand implements Command {
 
+    /**
+     * The logger for logging possible errors.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The Order service to take advantage of business logic capabilities.
+     */
     private OrderService service = ServiceFactory.getInstance().getOrderService();
 
+    /**
+     * The method saves the order based on the transferred data.
+     * Carries out an attempt to pay according to the transmitted data,
+     * in cases of success sets the status of the order - PAID and returns a successful response.
+     * In cases of failure or errors, returns Router with Error page path
+     * with the appropriate message.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the router object that contains page path for forward or redirect
+     */
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setRedirectPath(PAYMENT.name().toLowerCase());
-        Map<String, String> paymentParameters = setParameters(request);
+        Map<String, String> paymentParameters = getParameters(request);
         Order order = (Order) request.getSession().getAttribute(NEW_ORDER_PARAMETER_NAME);
         if (order == null) {
             try {
@@ -65,6 +87,14 @@ public class CheckPaymentCommand implements Command {
         return router;
     }
 
+    /**
+     * The method transfers data to the service level
+     * to create and save the order to the database.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the new order
+     * @throws ServiceException if the attempt to create order could not be handled
+     */
     private Order createNewOrder(HttpServletRequest request) throws ServiceException {
         User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
         List<Cart> carts = (List<Cart>) request.getSession().getAttribute(CART_PARAMETER_NAME);
@@ -73,7 +103,13 @@ public class CheckPaymentCommand implements Command {
         return order;
     }
 
-    private Map<String, String> setParameters(HttpServletRequest request) {
+    /**
+     * Return map of the transferring parameters from the request.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the map of parameters
+     */
+    private Map<String, String> getParameters(HttpServletRequest request) {
         Map<String, String> result = new HashMap<>();
         result.put(CARD_NAME_PARAMETER_NAME, request.getParameter(CARD_NAME_PARAMETER_NAME));
         result.put(CARD_CVC_PARAMETER_NAME, request.getParameter(CARD_CVC_PARAMETER_NAME));

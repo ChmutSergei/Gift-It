@@ -16,14 +16,41 @@ import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ACCOUNT_PAGE;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
+/**
+ * The Account command class sets the necessary data for the view
+ * and return Account Page path for representation.
+ * @author Sergei Chmut.
+ */
 public class AccountCommand implements Command {
 
+    /**
+     * The logger for logging possible errors.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The Item service to take advantage of business logic capabilities.
+     */
     private ItemService itemService = ServiceFactory.getInstance().getItemService();
+    /**
+     * The Comment service to take advantage of business logic capabilities.
+     */
     private CommentService commentService = ServiceFactory.getInstance().getCommentService();
+    /**
+     * The Question service to take advantage of business logic capabilities.
+     */
     private QuestionService questionService = ServiceFactory.getInstance().getQuestionService();
 
+    /**
+     * The method gets data about a specific user,
+     * what to provide access to them in the view.
+     * In case of success, returns the Router with Account Page path,
+     * in case of failure, saves the error information and
+     * returns the Router with redirect to the error page.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the router object that contains page path for forward or redirect
+     */
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();

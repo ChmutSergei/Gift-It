@@ -1,7 +1,14 @@
 package by.chmut.giftit.constant;
 
+/**
+ * The Path page class contains path of pages used in the application.
+ *
+ * @author Sergei Chmut.
+ */
 public class PathPage {
-
+    /**
+     * Private constructor is forbidden to create objects of this class.
+     */
     private PathPage() {}
 
     public static final String TEMPLATE_PAGE = "/WEB-INF/view/layout/template.jspx";

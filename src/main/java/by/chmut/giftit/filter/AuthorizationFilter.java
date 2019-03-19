@@ -17,13 +17,11 @@ import static by.chmut.giftit.entity.User.Role.MODERATOR;
 
 public class AuthorizationFilter implements Filter {
 
-    private static final String ERROR_PART_PATH = "/controller?command=error";
-
     private final Set<CommandType> availableCommandForGuest = new HashSet<>(Arrays.asList(
             MAIN, ERROR, SIGN_IN, SIGN_UP, LOGIN, PREVIEW_ITEM, ABOUT, REGISTRATION));
 
     private final Set<CommandType> availableCommandForUser = new HashSet<>(Arrays.asList(
-            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART,PAYMENT, CHECK_PAYMENT, ABOUT));
+            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT));
 
     private final Set<CommandType> availableCommandForDesigner = new HashSet<>(Arrays.asList(
             MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, CREATE_ITEM, ADD_ITEM));
@@ -52,14 +50,13 @@ public class AuthorizationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String commandParameter = request.getParameter(COMMAND_PARAMETER_NAME);
         CommandType command = CommandType.chooseType(commandParameter);
-        String contextPath = request.getContextPath();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER_PARAMETER_NAME);
         User.Role role = (user != null) ? user.getRole() : GUEST;
         Set<CommandType> accessControl = accessControlMap.get(role);
         if (!accessControl.contains(command)) {
-            request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, ACCESS_DENIED);
-            response.sendRedirect(contextPath + ERROR_PART_PATH);
+            response.setStatus(response.SC_FORBIDDEN);
+            response.sendError(response.SC_FORBIDDEN, "Access Denied - this is a prohibited action for this user");
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);

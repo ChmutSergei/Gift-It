@@ -26,7 +26,7 @@ class AjaxCommandManager {
         this.checkedBitmaps = checkedBitmaps;
     }
 
-    int countItemsOnFilter(HttpServletRequest request, Map<String, Bitmap> bitmapStorage) {
+    void countItemsOnFilter(HttpServletRequest request, HttpServletResponse response, Map<String, Bitmap> bitmapStorage) throws IOException {
         String criteriaPrice = request.getParameter(PRICE_PARAMETER_NAME);
         bitmapPrice = bitmapStorage.get(criteriaPrice);
         request.getSession().setAttribute(PRICE_CRITERIA_PARAMETER_NAME,
@@ -51,7 +51,9 @@ class AjaxCommandManager {
         List<Integer> itemsId = doFilter(filterForAllItem);
         int count = itemsId.size();
         request.getSession().setAttribute(RESULT_OF_SEARCH_ITEMS_PARAMETER_NAME, itemsId);
-        return count;
+        request.getSession().setAttribute(COUNT_ITEM_AFTER_SEARCH_PARAMETER_NAME, count);
+        request.getSession().setAttribute(NUMBER_PAGE_PARAMETER_NAME, DEFAULT_NUMBER_PAGE);
+        response.getWriter().write(new Gson().toJson(count));
     }
 
 

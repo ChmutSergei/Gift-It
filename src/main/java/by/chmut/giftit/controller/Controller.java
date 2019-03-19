@@ -2,7 +2,6 @@ package by.chmut.giftit.controller;
 
 import by.chmut.giftit.command.CommandType;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,16 +14,31 @@ import static by.chmut.giftit.command.CommandType.MAIN;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
+/**
+ * The Controller class accepts all user http requests sent by the GET and POST methods
+ * and processes them in the performRequest method.
+ *
+ * @author Sergei Chmut.
+ */
 @WebServlet(urlPatterns = "/controller")
 public class Controller extends HttpServlet {
 
     /**
-     * Method doGet ...
+     * Overridden doGet method processing requests sent by the GET method.
      *
-     * @param request  of type HttpServletRequest
-     * @param response of type HttpServletResponse
-     * @throws ServletException when
-     * @throws IOException      when
+     * @param request  an {@link HttpServletRequest} object that
+     *                  contains the request the client has made
+     *                  of the servlet
+     * @param response an {@link HttpServletResponse} object that
+     *                 contains the response the servlet sends
+     *                 to the client
+     *
+     * @exception IOException   if an input or output error is
+     *                              detected when the servlet handles
+     *                              the request
+     *
+     * @exception ServletException  if the request for the GET
+     *                                  could not be handled
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,12 +46,21 @@ public class Controller extends HttpServlet {
     }
 
     /**
-     * Method doPost ...
+     * Overridden doPost method processing requests sent by the POST method.
      *
-     * @param request  of type HttpServletRequest
-     * @param response of type HttpServletResponse
-     * @throws ServletException when
-     * @throws IOException      when
+     * @param request  an {@link HttpServletRequest} object that
+     *                  contains the request the client has made
+     *                  of the servlet
+     * @param response an {@link HttpServletResponse} object that
+     *                 contains the response the servlet sends
+     *                 to the client
+     *
+     * @exception IOException   if an input or output error is
+     *                              detected when the servlet handles
+     *                              the GET request
+     *
+     * @exception ServletException  if the request for the GET
+     *                                  could not be handled
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,12 +68,22 @@ public class Controller extends HttpServlet {
     }
 
     /**
-     * Method performRequest ...
+     * The method executes the command passed in the request,
+     * gets a Router and executes either FORWARD or REDIRECT.
      *
-     * @param request  of type HttpServletRequest
-     * @param response of type HttpServletResponse
-     * @throws ServletException when
-     * @throws IOException      when
+     * @param request  an {@link HttpServletRequest} object that
+     *                  contains the request the client has made
+     *                  of the servlet
+     * @param response an {@link HttpServletResponse} object that
+     *                 contains the response the servlet sends
+     *                 to the client
+     *
+     * @exception IOException   if an input or output error is
+     *                              detected when the servlet handles
+     *                              the POST request
+     *
+     * @exception ServletException  if the request for the POST
+     *                                  could not be handled
      */
     private void performRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String commandParameter = request.getParameter(COMMAND_PARAMETER_NAME);
@@ -69,6 +102,14 @@ public class Controller extends HttpServlet {
         }
     }
 
+    /**
+     * The method before executing FORWARD
+     * sets the required attributes to the session.
+     *
+     * @param request     the request object that is passed to the servlet
+     * @param router      the router object that contains page path when forward
+     * @param commandType the type of command for execute
+     */
     private void setAttributes(HttpServletRequest request, Router router, CommandType commandType) {
         HttpSession session = request.getSession();
         String title = (String) session.getAttribute(TITLE_ATTRIBUTE_NAME);

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CommentDaoImpl implements CommentDao { //TODO исправить выборку с учетом статуса
+public class CommentDaoImpl implements CommentDao {
 
     private static final String SELECT_ALL_COMMENTS =
             "SELECT id, user_id, item_id, message, date, status " +
