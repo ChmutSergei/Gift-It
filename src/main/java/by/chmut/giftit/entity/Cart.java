@@ -2,12 +2,33 @@ package by.chmut.giftit.entity;
 
 import java.math.BigDecimal;
 
+/**
+ * The Cart class ensures the preservation
+ * and transmission of user's cart in the system.
+ *
+ * @author Sergei Chmut.
+ */
 public class Cart extends Entity {
 
+    /**
+     * The Cart id.
+     */
     private long cartId;
+    /**
+     * The User id who owns the cart.
+     */
     private long userId;
+    /**
+     * The Item id contained in the cart.
+     */
     private long itemId;
+    /**
+     * The Order id to which the cart is attached.
+     */
     private long orderId;
+    /**
+     * The Count of this item in the cart.
+     */
     private BigDecimal count;
 
     public long getCartId() {
@@ -50,6 +71,16 @@ public class Cart extends Entity {
         this.count = count;
     }
 
+    /**
+     * Compares this cart to the specified object.
+     * The result is {@code true} if and only if the argument is not {@code null} and is a
+     * {@code Cart} object that represents the same fields as this
+     * object.
+     *
+     * @param object the object to compare
+     * @return {@code true} if the given object represents a {@code Cart}
+     * equivalent to this cart, {@code false} otherwise
+     */
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -72,6 +103,11 @@ public class Cart extends Entity {
         return true;
     }
 
+    /**
+     * Returns a hash code for this cart.
+     *
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
         int result = 31;
@@ -83,6 +119,11 @@ public class Cart extends Entity {
         return result;
     }
 
+    /**
+     * Returns cart representation as a string
+     *
+     * @return the string which contains values of cart's fields
+     */
     @Override
     public String toString() {
         return "Cart{" +

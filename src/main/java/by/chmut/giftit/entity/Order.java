@@ -2,13 +2,37 @@ package by.chmut.giftit.entity;
 
 import java.time.LocalDate;
 
+/**
+ * The Order class ensures the preservation
+ * and transmission of orders from users in the system.
+ *
+ * @author Sergei Chmut.
+ */
 public class Order extends Entity {
 
+    /**
+     * The Order id.
+     */
     private long orderId;
+    /**
+     * The User id.
+     */
     private long userId;
+    /**
+     * The Details of the order.
+     */
     private String details;
+    /**
+     * The Order status.
+     */
     private OrderStatus orderStatus;
+    /**
+     * The Init date - date when order created.
+     */
     private LocalDate initDate;
+    /**
+     * The Issue date - date when order is done.
+     */
     private LocalDate issueDate;
 
     public long getOrderId() {
@@ -59,6 +83,16 @@ public class Order extends Entity {
         this.issueDate = issueDate;
     }
 
+    /**
+     * Compares this order to the specified object.
+     * The result is {@code true} if and only if the argument is not {@code null} and is a
+     * {@code Order} object that represents the same fields as this
+     * object.
+     *
+     * @param object the object to compare
+     * @return {@code true} if the given object represents a {@code Order}
+     * equivalent to this order, {@code false} otherwise
+     */
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -96,6 +130,11 @@ public class Order extends Entity {
         return true;
     }
 
+    /**
+     * Returns a hash code for this order.
+     *
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
         int result = 31;
@@ -108,6 +147,11 @@ public class Order extends Entity {
         return result;
     }
 
+    /**
+     * Returns order representation as a string
+     *
+     * @return the string which contains values of order's fields
+     */
     @Override
     public String toString() {
         return "Order{" +
@@ -120,7 +164,23 @@ public class Order extends Entity {
                 '}';
     }
 
+    /**
+     * The enum Order status sets possible status for the order.
+     *
+     * @author Sergei Chmut.
+     */
     public enum OrderStatus {
-        NEW, PAID, DONE
+        /**
+         * New order status when order created.
+         */
+        NEW,
+        /**
+         * Paid order status when order paid.
+         */
+        PAID,
+        /**
+         * Done order status when order is done.
+         */
+        DONE
     }
 }

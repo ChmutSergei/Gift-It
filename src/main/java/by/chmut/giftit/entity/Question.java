@@ -2,13 +2,37 @@ package by.chmut.giftit.entity;
 
 import java.time.LocalDate;
 
+/**
+ * The Question class ensures the preservation
+ * and transmission of questions from users in the system.
+ *
+ * @author Sergei Chmut.
+ */
 public class Question extends Entity {
 
+    /**
+     * The Question id.
+     */
     private long questionId;
+    /**
+     * The User id.
+     */
     private long userId;
+    /**
+     * The Request contains user's question.
+     */
     private String request;
+    /**
+     * The Response contains admin's answer.
+     */
     private String response;
+    /**
+     * The Request date - date when user made request.
+     */
     private LocalDate requestDate;
+    /**
+     * The Response date - date when admin return response.
+     */
     private LocalDate responseDate;
 
     public long getQuestionId() {
@@ -59,6 +83,16 @@ public class Question extends Entity {
         this.responseDate = responseDate;
     }
 
+    /**
+     * Compares this question to the specified object.
+     * The result is {@code true} if and only if the argument is not {@code null} and is a
+     * {@code Question} object that represents the same fields as this
+     * object.
+     *
+     * @param object the object to compare
+     * @return {@code true} if the given object represents a {@code Question}
+     * equivalent to this question, {@code false} otherwise
+     */
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -100,6 +134,11 @@ public class Question extends Entity {
         return true;
     }
 
+    /**
+     * Returns a hash code for this question.
+     *
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
         int result = (int) (questionId ^ (questionId >>> 32));
@@ -111,6 +150,11 @@ public class Question extends Entity {
         return result;
     }
 
+    /**
+     * Returns question representation as a string
+     *
+     * @return the string which contains values of question's fields
+     */
     @Override
     public String toString() {
         return "Question{" +

@@ -9,16 +9,38 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * The Proxy connection class provides the implementation
+ * of the Proxy pattern to change the functionality of existing methods
+ * in the Connection class.
+ *
+ * @author Sergei Chmut.
+ */
 public class ProxyConnection implements Connection, Comparable<ProxyConnection> {
 
+    /**
+     * The logger for logging possible errors.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The Connection object which contains proxy class.
+     */
     private Connection connection;
 
+    /**
+     * Instantiates a new Proxy connection.
+     *
+     * @param connection connection object
+     */
     ProxyConnection(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * The close method is redefined in order not to close,
+     * but return the connection to the connection pool.
+     */
     @Override
     public void close() {
         try {
@@ -28,6 +50,11 @@ public class ProxyConnection implements Connection, Comparable<ProxyConnection> 
         }
     }
 
+    /**
+     * The method performs the really closing of the connection.
+     *
+     * @throws SQLException if the method close could not be handled
+     */
     void reallyClose() throws SQLException {
         connection.close();
     }

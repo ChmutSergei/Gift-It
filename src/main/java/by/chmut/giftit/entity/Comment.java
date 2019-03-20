@@ -2,13 +2,37 @@ package by.chmut.giftit.entity;
 
 import java.time.LocalDate;
 
+/**
+ * The Comment class ensures the preservation
+ * and transmission of user's comments in the system.
+ *
+ * @author Sergei Chmut.
+ */
 public class Comment extends Entity {
 
+    /**
+     * The Comment id.
+     */
     private long commentId;
+    /**
+     * The User id who made comment.
+     */
     private long userId;
+    /**
+     * The Item id for which the comment was made.
+     */
     private long itemId;
+    /**
+     * The Message contains user's message.
+     */
     private String message;
+    /**
+     * The Date - date when the comment was made .
+     */
     private LocalDate date;
+    /**
+     * The Comment status.
+     */
     private CommentStatus commentStatus;
 
     public long getCommentId() {
@@ -59,6 +83,16 @@ public class Comment extends Entity {
         this.commentStatus = commentStatus;
     }
 
+    /**
+     * Compares this comment to the specified object.
+     * The result is {@code true} if and only if the argument is not {@code null} and is a
+     * {@code Comment} object that represents the same fields as this
+     * object.
+     *
+     * @param object the object to compare
+     * @return {@code true} if the given object represents a {@code Comment}
+     * equivalent to this comment, {@code false} otherwise
+     */
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -88,6 +122,11 @@ public class Comment extends Entity {
         return commentStatus == comment.commentStatus;
     }
 
+    /**
+     * Returns a hash code for this comment.
+     *
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
         int result = 31;
@@ -100,6 +139,11 @@ public class Comment extends Entity {
         return result;
     }
 
+    /**
+     * Returns comment representation as a string
+     *
+     * @return the string which contains values of comment's fields
+     */
     @Override
     public String toString() {
         return "Comment{" +
@@ -112,7 +156,23 @@ public class Comment extends Entity {
                 '}';
     }
 
+    /**
+     * The enum Comment status sets possible status for the comment.
+     *
+     * @author Sergei Chmut.
+     */
     public enum CommentStatus {
-        NEW, ACTIVE, BLOCKED
+        /**
+         * New comment status when comment created.
+         */
+        NEW,
+        /**
+         * Active comment status for comments that have been moderated.
+         */
+        ACTIVE,
+        /**
+         * Blocked comment status for comments that moderator has blocked.
+         */
+        BLOCKED
     }
 }

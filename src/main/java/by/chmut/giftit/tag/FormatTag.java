@@ -5,16 +5,36 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+/**
+ * The Format tag class converts the set price
+ * to the monetary format for Belarus rubles.
+ *
+ * @author Sergei Chmut.
+ */
 public class FormatTag extends TagSupport {
 
+    /**
+     * The constant HUNDRED.
+     */
     private static final BigDecimal HUNDRED = new BigDecimal(100);
 
+    /**
+     * The specified Price.
+     */
     private BigDecimal price;
 
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
+    /**
+     * The method accepts the price in BigDecimal
+     * and parses the value into rubles and pennies.
+     * The result prints to the tag.
+     *
+     * @return the int equals skip body
+     * @throws JspException if the tag could not be handled
+     */
     @Override
     public int doStartTag() throws JspException {
         try {

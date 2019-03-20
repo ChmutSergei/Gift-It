@@ -3,15 +3,45 @@ package by.chmut.giftit.entity;
 import java.io.File;
 import java.math.BigDecimal;
 
+/**
+ * The Item class ensures the preservation
+ * and transmission of items in the system.
+ *
+ * @author Sergei Chmut.
+ */
 public class Item extends Entity {
 
+    /**
+     * The Item id.
+     */
     private long itemId;
+    /**
+     * The Item name.
+     */
     private String itemName;
+    /**
+     * The Type.
+     */
     private String type;
+    /**
+     * The Description.
+     */
     private String description;
+    /**
+     * The Active - status item : active/not active.
+     */
     private boolean active;
+    /**
+     * The Price.
+     */
     private BigDecimal price;
+    /**
+     * The Count.
+     */
     private BigDecimal count;
+    /**
+     * The Image of item.
+     */
     private File image;
 
     public long getItemId() {
@@ -78,6 +108,16 @@ public class Item extends Entity {
         this.image = image;
     }
 
+    /**
+     * Compares this item to the specified object.
+     * The result is {@code true} if and only if the argument is not {@code null} and is a
+     * {@code Item} object that represents the same fields as this
+     * object.
+     *
+     * @param object the object to compare
+     * @return {@code true} if the given object represents a {@code Item}
+     * equivalent to this item, {@code false} otherwise
+     */
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -134,6 +174,11 @@ public class Item extends Entity {
         return true;
     }
 
+    /**
+     * Returns a hash code for this item.
+     *
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
         int result = 31;
@@ -148,6 +193,11 @@ public class Item extends Entity {
         return result;
     }
 
+    /**
+     * Returns item representation as a string
+     *
+     * @return the string which contains values of item's fields
+     */
     @Override
     public String toString() {
         return "Item{" +

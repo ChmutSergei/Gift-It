@@ -3,19 +3,61 @@ package by.chmut.giftit.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * The User class provides encapsulation of User data in the system.
+ *
+ * @author Sergei Chmut.
+ */
 public class User extends Entity {
 
+    /**
+     * The User id.
+     */
     private long userId;
+    /**
+     * The Username.
+     */
     private String username;
+    /**
+     * The Password.
+     */
     private String password;
+    /**
+     * The First name.
+     */
     private String firstName;
+    /**
+     * The Last name.
+     */
     private String lastName;
+    /**
+     * The Email.
+     */
     private String email;
+    /**
+     * The Phone.
+     */
     private String phone;
+    /**
+     * The Address.
+     */
     private String address;
+    /**
+     * The Account contains the amount of money earned
+     * by the Designer and possible to withdraw.
+     */
     private BigDecimal account;
+    /**
+     * The Init date is the date when User was created.
+     */
     private LocalDate initDate;
+    /**
+     * The Blocked until - date until which the user will be blocked.
+     */
     private LocalDate blockedUntil;
+    /**
+     * The User Role.
+     */
     private Role role;
 
     public long getUserId() {
@@ -114,6 +156,16 @@ public class User extends Entity {
         this.role = role;
     }
 
+    /**
+     * Compares this user to the specified object.
+     * The result is {@code true} if and only if the argument is not {@code null} and is a
+     * {@code User} object that represents the same fields as this
+     * object.
+     *
+     * @param object the object to compare
+     * @return {@code true} if the given object represents a {@code User}
+     * equivalent to this user, {@code false} otherwise
+     */
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -197,6 +249,11 @@ public class User extends Entity {
         return role == user.role;
     }
 
+    /**
+     * Returns a hash code for this user.
+     *
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
         int result = 31;
@@ -215,6 +272,11 @@ public class User extends Entity {
         return result;
     }
 
+    /**
+     * Returns user representation as a string
+     *
+     * @return the string which contains values of user's fields
+     */
     @Override
     public String toString() {
         return "User{" +
@@ -233,7 +295,31 @@ public class User extends Entity {
                 '}';
     }
 
+    /**
+     * The enum Role sets possible roles for the user.
+     *
+     * @author Sergei Chmut.
+     */
     public enum Role {
-        ADMIN, MODERATOR, DESIGNER, USER, GUEST
+        /**
+         * Admin role.
+         */
+        ADMIN,
+        /**
+         * Moderator role.
+         */
+        MODERATOR,
+        /**
+         * Designer role.
+         */
+        DESIGNER,
+        /**
+         * User role.
+         */
+        USER,
+        /**
+         * Guest role.
+         */
+        GUEST
     }
 }

@@ -8,9 +8,21 @@ import java.time.LocalDate;
 
 import static by.chmut.giftit.constant.AttributeName.*;
 
+/**
+ * The Http session listener class provides the addition
+ * of the necessary attributes to the session when it is created.
+ *
+ * @author Sergei Chmut.
+ */
 @WebListener
 public class HttpSessionListenerImpl implements HttpSessionListener {
 
+    /**
+     * The method adds start attributes to the session -
+     * the default locale, parameters for the pagination, and others.
+     *
+     * @param httpSessionEvent the creating http session event
+     */
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
         HttpSession session = httpSessionEvent.getSession();
@@ -21,6 +33,12 @@ public class HttpSessionListenerImpl implements HttpSessionListener {
         session.setAttribute(DATE_NOW_PARAMETER_NAME, LocalDate.now());
     }
 
+    /**
+     * The method performs actions upon session destruction,
+     * no actions are specified
+     *
+     * @param httpSessionEvent the destroying http session event
+     */
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
     }
