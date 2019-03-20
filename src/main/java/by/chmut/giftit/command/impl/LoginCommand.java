@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,14 +34,19 @@ public class LoginCommand implements Command {
     /**
      * The User service to take advantage of business logic capabilities.
      */
-    private UserService service = ServiceFactory.getInstance().getUserService();
+    private UserService userService = ServiceFactory.getInstance().getUserService();
     /**
      * The Cart service to take advantage of business logic capabilities.
      */
     private CartService cartService = ServiceFactory.getInstance().getCartService();
 
     /**
-     * Execute router.
+     * The method accepts user data from the request,
+     * checks the existence of the user, as well as its authentication.
+     * If successful, the user is logged in,
+     * otherwise if occur errors return redirect Router with Error page path.
+     * If user authentication failed set message for view and
+     * return redirect Router with Login page path.
      *
      * @param request the request object that is passed to the servlet
      * @return the router object that contains page path for forward or redirect
@@ -56,7 +60,7 @@ public class LoginCommand implements Command {
         Optional<User> user = Optional.empty();
         boolean userValid = false;
         try {
-            user = service.find(username);
+            user = userService.find(username);
             if (user.isPresent()) {
                 userValid = UserValidator.validatePassword(user.get(), password);
             }
@@ -67,8 +71,12 @@ public class LoginCommand implements Command {
         }
         if (userValid) {
             request.getSession().setAttribute(USER_PARAMETER_NAME, user.get());
-            BigDecimal count = calculateCountItemsInCart(user.get().getUserId());
-            request.getSession().setAttribute(COUNT_IN_CART_PARAMETER_NAME, count);
+            try {
+                BigDecimal count = calculateCountItemsInCart(user.get().getUserId());
+                request.getSession().setAttribute(COUNT_IN_CART_PARAMETER_NAME, count);
+            } catch (ServiceException exception) {
+                logger.error("Error with set count items in the user's cart", exception);
+            }
         } else {
             request.getSession().setAttribute(MESSAGE_PARAMETER_NAME, MESSAGE_LOGIN_FAILED_KEY);
             router.setRedirectPath(SIGN_IN_PATH);
@@ -80,15 +88,11 @@ public class LoginCommand implements Command {
      * Calculate count items in the cart.
      *
      * @param userId the user id
-     * @return the big decimal
+     * @return the count items in the cart
+     * @throws ServiceException if the attempt to calculate count items could not be handled
      */
-    private BigDecimal calculateCountItemsInCart(long userId) {
-        List<Cart> carts = Collections.emptyList();
-        try {
-            carts = cartService.findCartByUserId(userId);
-        } catch (ServiceException exception) {
-            logger.error("Error with set count items in the users cart");
-        }
+    private BigDecimal calculateCountItemsInCart(long userId) throws ServiceException {
+        List<Cart> carts = cartService.findCartByUserId(userId);
         BigDecimal count = BigDecimal.ZERO;
         for (Cart cart : carts) {
             count = count.add(cart.getCount());

@@ -16,12 +16,33 @@ import static by.chmut.giftit.command.CommandType.MODERATOR;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PAGE;
 
+/**
+ * The Moderate command class provides moderation of comments.
+ *
+ * @author Sergei Chmut.
+ */
 public class ModerateCommand implements Command {
 
+    /**
+     * The logger for logging possible errors.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The Comment service to take advantage of business logic capabilities.
+     */
     private CommentService commentService = ServiceFactory.getInstance().getCommentService();
 
+    /**
+     * The method receives the parameters for moderation from the request
+     * and sends them to the service level to perform moderation.
+     * In case of an error or not performing the operation,
+     * the method will record an error with the message
+     * and return the Router with Error page path.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the router object that contains page path for forward or redirect
+     */
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();

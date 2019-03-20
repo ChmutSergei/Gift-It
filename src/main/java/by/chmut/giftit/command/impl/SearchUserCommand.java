@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,18 +18,42 @@ import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 import static by.chmut.giftit.constant.PathPage.USER_PROCESSING_PAGE;
 
+/**
+ * The Search user command class provides the output of user search results
+ * according to the specified parameters
+ * or the output of already updated user.
+ *
+ * @author Sergei Chmut.
+ */
 public class SearchUserCommand implements Command {
 
+    /**
+     * The logger for logging possible errors.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The User service to take advantage of business logic capabilities.
+     */
     private UserService service = ServiceFactory.getInstance().getUserService();
 
+    /**
+     * Method in the case of displaying search results - gets the parameters from the request
+     * and sends them to the service level. Results are saved for the view.
+     * If you need to display updated data about users,
+     * request them from the service and transfer it to the view.
+     * If errors occur, Router with Error page path will be returned
+     * and a corresponding message will be sent to the view.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the router object that contains page path for forward or redirect
+     */
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setPagePath(USER_PROCESSING_PAGE);
         if (request.getSession().getAttribute(SHOW_RESULT_PARAMETER_NAME) == null) {
-            Map<String, String> parametersSearch = setParameters(request);
+            Map<String, String> parametersSearch = getParameters(request);
             try {
                 List<User> users = service.searchUserByParams(parametersSearch);
                 if (users.isEmpty()) {
@@ -52,7 +75,13 @@ public class SearchUserCommand implements Command {
         return router;
     }
 
-    private Map<String, String> setParameters(HttpServletRequest request) {
+    /**
+     * Method provides to get parameters from request.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the map of the search parameters
+     */
+    private Map<String, String> getParameters(HttpServletRequest request) {
         Map<String, String> parametersSearch = new HashMap<>();
         parametersSearch.put(USER_SEARCH_TYPE_PARAMETER_NAME, request.getParameter(USER_SEARCH_TYPE_PARAMETER_NAME));
         parametersSearch.put(USER_ID_PARAMETER_NAME, request.getParameter(USER_ID_PARAMETER_NAME));

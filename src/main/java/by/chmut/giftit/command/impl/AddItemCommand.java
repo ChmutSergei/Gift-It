@@ -52,7 +52,7 @@ public class AddItemCommand implements Command {
             return router;
         }
         router.setRedirectPath(CREATE_ITEM.name().toLowerCase());
-        Map<String, Object> itemParameters = setParametersFromRequest(request);
+        Map<String, Object> itemParameters = getParametersFromRequest(request);
         try {
             service.create(itemParameters);
         } catch (ServiceException exception) {
@@ -64,19 +64,19 @@ public class AddItemCommand implements Command {
     }
 
     /**
-     * Sets parameters from request.
+     * Method provides to get parameters from request.
      *
-     * @param req the req
-     * @return the parameters from request
+     * @param request the request object that is passed to the servlet
+     * @return the map of the search parameters
      */
-    private Map<String, Object> setParametersFromRequest(HttpServletRequest req) {
+    private Map<String, Object> getParametersFromRequest(HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
-        result.put(ITEM_NAME_PARAMETER_NAME, req.getParameter(ITEM_NAME_PARAMETER_NAME));
-        result.put(TYPE_PARAMETER_NAME, req.getParameterValues(TYPE_PARAMETER_NAME));
-        result.put(ACTIVE_PARAMETER_NAME, req.getParameterValues(ACTIVE_PARAMETER_NAME));
-        result.put(DESCRIPTION_PARAMETER_NAME, req.getParameter(DESCRIPTION_PARAMETER_NAME));
-        result.put(PRICE_PARAMETER_NAME, req.getParameter(PRICE_PARAMETER_NAME));
-        result.put(ITEM_IMAGE_PARAMETER_NAME, req.getSession().getAttribute(UPLOAD_FILE_ATTRIBUTE_NAME));
+        result.put(ITEM_NAME_PARAMETER_NAME, request.getParameter(ITEM_NAME_PARAMETER_NAME));
+        result.put(TYPE_PARAMETER_NAME, request.getParameterValues(TYPE_PARAMETER_NAME));
+        result.put(ACTIVE_PARAMETER_NAME, request.getParameterValues(ACTIVE_PARAMETER_NAME));
+        result.put(DESCRIPTION_PARAMETER_NAME, request.getParameter(DESCRIPTION_PARAMETER_NAME));
+        result.put(PRICE_PARAMETER_NAME, request.getParameter(PRICE_PARAMETER_NAME));
+        result.put(ITEM_IMAGE_PARAMETER_NAME, request.getSession().getAttribute(UPLOAD_FILE_ATTRIBUTE_NAME));
         return result;
     }
 }

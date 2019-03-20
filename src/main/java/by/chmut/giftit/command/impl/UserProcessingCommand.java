@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -17,12 +16,33 @@ import static by.chmut.giftit.command.CommandType.SEARCH_USER;
 import static by.chmut.giftit.constant.AttributeName.*;
 import static by.chmut.giftit.constant.PathPage.ERROR_PATH;
 
+/**
+ * The User processing command class provides processing
+ * of administrative commands over users.
+ *
+ * @author Sergei Chmut.
+ */
 public class UserProcessingCommand implements Command {
 
+    /**
+     * The logger for logging possible errors.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The User service to take advantage of business logic capabilities.
+     */
     private UserService service = ServiceFactory.getInstance().getUserService();
 
+    /**
+     * The method receives user data for the required task and parameters from the request
+     * and sends it to the service level to perform administrative procedures.
+     * If errors occur, Router with Error page path will be returned
+     * and a corresponding message will be sent to the view.
+     *
+     * @param request the request object that is passed to the servlet
+     * @return the router object that contains page path for redirect
+     */
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();

@@ -30,7 +30,7 @@ public enum CommandType {
     MODERATOR( new ModeratorCommand()),
     MODERATE( new ModerateCommand()),
     PAYMENT( new PaymentCommand()),
-    CHECK_PAYMENT( new MakePaymentCommand()),
+    MAKE_PAYMENT( new MakePaymentCommand()),
     REGISTRATION(new RegistrationCommand());
 
     private Command command;

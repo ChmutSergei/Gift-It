@@ -26,7 +26,7 @@
                 <div class="creditCardForm">
                     <div class="payment">
                         <form class="form-horizontal"
-                              action="${pageContext.request.contextPath}/controller?command=check_payment"
+                              action="${pageContext.request.contextPath}/controller?command=make_payment"
                               method="post">
                             <![CDATA[
                           <legend>

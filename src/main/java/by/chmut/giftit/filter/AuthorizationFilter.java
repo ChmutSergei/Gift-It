@@ -21,16 +21,16 @@ public class AuthorizationFilter implements Filter {
             MAIN, ERROR, SIGN_IN, SIGN_UP, LOGIN, PREVIEW_ITEM, ABOUT, REGISTRATION));
 
     private final Set<CommandType> availableCommandForUser = new HashSet<>(Arrays.asList(
-            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT));
+            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, MAKE_PAYMENT, ABOUT));
 
     private final Set<CommandType> availableCommandForDesigner = new HashSet<>(Arrays.asList(
-            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, CREATE_ITEM, ADD_ITEM));
+            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, MAKE_PAYMENT, ABOUT, CREATE_ITEM, ADD_ITEM));
 
     private final Set<CommandType> availableCommandForModerator = new HashSet<>(Arrays.asList(
-            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, CommandType.MODERATOR, MODERATE));
+            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, MAKE_PAYMENT, ABOUT, CommandType.MODERATOR, MODERATE));
 
     private final Set<CommandType> availableCommandForAdmin = new HashSet<>(Arrays.asList(
-            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, CHECK_PAYMENT, ABOUT, ADMINISTRATION,
+            MAIN, ERROR, LOGOUT, ACCOUNT, PREVIEW_ITEM, CART, RESET_CART, PAYMENT, MAKE_PAYMENT, ABOUT, ADMINISTRATION,
             SEARCH_USER, USER_PROCESSING, GIVE_ANSWER));
 
     private final Map<User.Role, Set<CommandType>> accessControlMap = new HashMap<>();
