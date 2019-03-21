@@ -1,21 +1,49 @@
 package by.chmut.giftit.dao;
 
+/**
+ * The DaoException class provides the creation
+ * of exceptions occurring at the application level Dao.
+ *
+ * @author Sergei Chmut.
+ */
 public class DaoException extends Exception {
 
+    /**
+     * The constant serialVersionUID.
+     */
     private static final long serialVersionUID = -3760861607605184650L;
 
+    /**
+     * Instantiates a new DaoException.
+     */
     public DaoException() {
     }
 
+    /**
+     * Instantiates a new DaoException.
+     *
+     * @param message exception message
+     */
     public DaoException(String message) {
         super(message);
     }
 
-    public DaoException(Exception e) {
-        super(e);
+    /**
+     * Instantiates a new DaoException.
+     *
+     * @param exception another exception
+     */
+    public DaoException(Exception exception) {
+        super(exception);
     }
 
-    public DaoException(String message, Exception e) {
-        super(message, e);
+    /**
+     * Instantiates a new DaoException.
+     *
+     * @param message exception message
+     * @param exception       another exception
+     */
+    public DaoException(String message, Exception exception) {
+        super(message, exception);
     }
 }

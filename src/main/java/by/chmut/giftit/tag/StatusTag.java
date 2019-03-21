@@ -31,11 +31,13 @@ public class StatusTag extends TagSupport {
      */
     @Override
     public int doStartTag() throws JspException {
-        try {
-            pageContext.getOut().write("<hr/>" + "<p id=status>" + user.getRole() +
-                    " : " + user.getUsername() + "</p>" + "<hr/>");
-        } catch (IOException exception) {
-            throw new JspException(exception.getMessage());
+        if (user != null) {
+            try {
+                pageContext.getOut().write("<hr/>" + "<p id=status>" + user.getRole() +
+                        " : " + user.getUsername() + "</p>" + "<hr/>");
+            } catch (IOException exception) {
+                throw new JspException(exception.getMessage());
+            }
         }
         return SKIP_BODY;
     }

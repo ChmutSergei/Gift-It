@@ -2,6 +2,11 @@ package by.chmut.giftit.dao;
 
 import by.chmut.giftit.dao.impl.*;
 
+/**
+ * The Dao factory class represents access to shared facilities Dao.
+ *
+ * @author Sergei Chmut.
+ */
 public class DaoFactory {
 
     private static final DaoFactory INSTANCE = new DaoFactory();

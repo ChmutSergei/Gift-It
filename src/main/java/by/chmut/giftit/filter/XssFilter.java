@@ -15,10 +15,9 @@ public class XssFilter implements Filter {
      * Init.
      *
      * @param filterConfig the filter config
-     * @throws ServletException the servlet exception
      */
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
     }
 
     /**
