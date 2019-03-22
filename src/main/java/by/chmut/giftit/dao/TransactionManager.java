@@ -6,10 +6,24 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+/**
+ * The Transaction manager class.
+ *
+ * @author Sergei Chmut.
+ */
 public class TransactionManager {
 
+    /**
+     * The Connection.
+     */
     private Connection connection;
 
+    /**
+     * Begin transaction.
+     *
+     * @param daos the daos
+     * @throws DaoException the dao exception
+     */
     public void beginTransaction(Dao... daos) throws DaoException {
         if (daos.length == 0) {
             throw new DaoException("Not found dao instance for begin transaction");
@@ -25,6 +39,11 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * End transaction.
+     *
+     * @throws DaoException the dao exception
+     */
     public void endTransaction() throws DaoException {
         try {
             if (connection != null) {
@@ -45,6 +64,11 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Rollback.
+     *
+     * @throws DaoException the dao exception
+     */
     public void rollback() throws DaoException {
         try {
             if (connection != null) {
