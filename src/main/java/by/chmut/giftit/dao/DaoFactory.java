@@ -3,7 +3,7 @@ package by.chmut.giftit.dao;
 import by.chmut.giftit.dao.impl.*;
 
 /**
- * The Dao factory class represents access to shared facilities Dao.
+ * The Dao factory class represents access to shared interfaces Dao.
  *
  * @author Sergei Chmut.
  */

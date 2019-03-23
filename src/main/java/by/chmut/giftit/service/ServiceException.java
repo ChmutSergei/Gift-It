@@ -1,21 +1,44 @@
 package by.chmut.giftit.service;
 
+/**
+ * The Service exception class provides the creation
+ * of exceptions occurring at the application level Service.
+ *
+ * @author Sergei Chmut.
+ */
 public class ServiceException extends Exception {
 
-    private static final long serialVersionUID = -1247982146979135909L;
-
+    /**
+     * Instantiates a new Service exception.
+     */
     public ServiceException() {
     }
 
+    /**
+     * Instantiates a new Service exception.
+     *
+     * @param message exception message
+     */
     public ServiceException(String message) {
         super(message);
     }
 
-    public ServiceException(Exception e) {
-        super(e);
+    /**
+     * Instantiates a new Service exception.
+     *
+     * @param exception the another exception
+     */
+    public ServiceException(Exception exception) {
+        super(exception);
     }
 
-    public ServiceException(String message, Exception e) {
-        super(message, e);
+    /**
+     * Instantiates a new Service exception.
+     *
+     * @param message   exception message
+     * @param exception another exception
+     */
+    public ServiceException(String message, Exception exception) {
+        super(message, exception);
     }
 }

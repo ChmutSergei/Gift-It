@@ -75,7 +75,7 @@ public interface Dao<K, T extends Entity> {
     T create(T entity) throws DaoException;
 
     /**
-     * Update entity in database..
+     * Update entity in database.
      *
      * @param entity the entity
      * @return Entity that was updated

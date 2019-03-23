@@ -41,7 +41,7 @@ public interface CommentDao extends Dao<Long, Comment> {
     List<Comment> findByUserId(long userId) throws DaoException;
 
     /**
-     * Find to moderate list.
+     * Find list of new comments to moderate.
      *
      * @return the list of comments
      * @throws DaoException if find comments can't be handled

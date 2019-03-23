@@ -14,17 +14,49 @@ import org.apache.logging.log4j.Logger;
 import java.time.LocalDate;
 import java.util.Optional;
 
+/**
+ * The Ajax service class.
+ *
+ * @author Sergei Chmut.
+ */
 public class AjaxServiceImpl implements AjaxService {
 
+    /**
+     * The constant logger.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The User service.
+     */
     private UserService userService = new UserServiceImpl();
+    /**
+     * The User dao.
+     */
     private UserDao userDao = DaoFactory.getInstance().getUserDao();
+    /**
+     * The Comment dao.
+     */
     private CommentDao commentDao = DaoFactory.getInstance().getCommentDao();
+    /**
+     * The Question dao.
+     */
     private QuestionDao questionDao = DaoFactory.getInstance().getQuestionDao();
+    /**
+     * The Item dao.
+     */
     private ItemDao itemDao = DaoFactory.getInstance().getItemDao();
+    /**
+     * The Manager.
+     */
     private TransactionManager manager = new TransactionManager();
 
+    /**
+     * Update user data boolean.
+     *
+     * @param user the user
+     * @return the boolean
+     */
     @Override
     public boolean updateUserData(User user) {
         boolean result = true;
@@ -44,6 +76,12 @@ public class AjaxServiceImpl implements AjaxService {
         return result;
     }
 
+    /**
+     * Delete comment boolean.
+     *
+     * @param commentId the comment id
+     * @return the boolean
+     */
     @Override
     public boolean deleteComment(long commentId) {
         boolean result;
@@ -63,6 +101,14 @@ public class AjaxServiceImpl implements AjaxService {
         return result;
     }
 
+    /**
+     * Add comment boolean.
+     *
+     * @param itemId         the item id
+     * @param userId         the user id
+     * @param commentMessage the comment message
+     * @return the boolean
+     */
     @Override
     public boolean addComment(long itemId, long userId, String commentMessage) {
         boolean result = true;
@@ -91,6 +137,13 @@ public class AjaxServiceImpl implements AjaxService {
         return result;
     }
 
+    /**
+     * Change item status boolean.
+     *
+     * @param itemId   the item id
+     * @param filePath the file path
+     * @return the boolean
+     */
     @Override
     public boolean changeItemStatus(long itemId, String filePath) {
         boolean result = true;
@@ -117,6 +170,13 @@ public class AjaxServiceImpl implements AjaxService {
         return result;
     }
 
+    /**
+     * Accept question boolean.
+     *
+     * @param userId  the user id
+     * @param message the message
+     * @return the boolean
+     */
     @Override
     public boolean acceptQuestion(long userId, String message) {
         boolean result = true;
@@ -140,6 +200,12 @@ public class AjaxServiceImpl implements AjaxService {
         return result;
     }
 
+    /**
+     * Check username on exist boolean.
+     *
+     * @param username the username
+     * @return the boolean
+     */
     @Override
     public boolean checkUsernameOnExist(String username) {
         boolean result = true;
@@ -155,6 +221,12 @@ public class AjaxServiceImpl implements AjaxService {
         return result;
     }
 
+    /**
+     * Accept comment boolean.
+     *
+     * @param commentId the comment id
+     * @return the boolean
+     */
     @Override
     public boolean acceptComment(long commentId) {
         boolean result = true;

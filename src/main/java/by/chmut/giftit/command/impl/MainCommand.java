@@ -57,7 +57,7 @@ public class MainCommand implements Command {
         List<Item> results = Collections.emptyList();
         if (itemIdList != null) {
             try {
-                results = service.findByIdWithLimit(itemIdList, limit, offset, pathForTempFiles);
+                results = service.findResultsSearchWithLimit(itemIdList, limit, offset, pathForTempFiles);
             } catch (ServiceException exception) {
                 logger.error("Error when find Item on filter", exception);
                 request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);

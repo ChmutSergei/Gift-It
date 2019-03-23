@@ -17,17 +17,37 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import static by.chmut.giftit.constant.AttributeName.*;
 
+/**
+ * The User service class.
+ *
+ * @author Sergei Chmut.
+ */
 public class UserServiceImpl implements UserService {
 
+    /**
+     * The constant logger.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The User dao.
+     */
     private UserDao userDao = DaoFactory.getInstance().getUserDao();
+    /**
+     * The Manager.
+     */
     private TransactionManager manager = new TransactionManager();
 
+    /**
+     * Search user by params list.
+     *
+     * @param parametersSearch the parameters search
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
     public List<User> searchUserByParams(Map<String, String> parametersSearch) throws ServiceException {
         List<User> users;
@@ -50,6 +70,16 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
+    /**
+     * Execute user processing command boolean.
+     *
+     * @param typeCommand  the type command
+     * @param userId       the user id
+     * @param blockedUntil the blocked until
+     * @param newRole      the new role
+     * @return the boolean
+     * @throws ServiceException the service exception
+     */
     @Override
     public boolean executeUserProcessingCommand(String typeCommand, long userId,
                                                 LocalDate blockedUntil, String newRole) throws ServiceException {
@@ -91,8 +121,15 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    /**
+     * Find users after update list.
+     *
+     * @param users the users
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
-    public List<User> findUsersAfterUpdate(List<User> users) {
+    public List<User> findUsersAfterUpdate(List<User> users) throws ServiceException {
         List<User> actualUsers = new ArrayList<>();
         try {
             manager.beginTransaction(userDao);
@@ -102,11 +139,23 @@ public class UserServiceImpl implements UserService {
             }
             manager.endTransaction();
         } catch (DaoException exception) {
-            exception.printStackTrace();
+            try {
+                manager.rollback();
+            } catch (DaoException rollbackException) {
+                logger.error(rollbackException);
+            }
+            throw new ServiceException(exception);
         }
         return actualUsers;
     }
 
+    /**
+     * Find by comment map.
+     *
+     * @param comments the comments
+     * @return the map
+     * @throws ServiceException the service exception
+     */
     @Override
     public Map<Long, User> findByComment(List<Comment> comments) throws ServiceException {
         Map<Long, User> users = new HashMap<>();
@@ -129,6 +178,15 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
+    /**
+     * Search users list.
+     *
+     * @param searchType       the search type
+     * @param parametersSearch the parameters search
+     * @return the list
+     * @throws DaoException     the dao exception
+     * @throws ServiceException the service exception
+     */
     private List<User> searchUsers(String searchType, Map<String, String> parametersSearch) throws DaoException, ServiceException {
         List<User> result;
         switch (searchType) {
@@ -154,6 +212,13 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    /**
+     * Find optional.
+     *
+     * @param userId the user id
+     * @return the optional
+     * @throws ServiceException the service exception
+     */
     @Override
     public Optional<User> find(long userId) throws ServiceException {
         Optional<User> user;
@@ -172,6 +237,13 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * Find optional.
+     *
+     * @param username the username
+     * @return the optional
+     * @throws ServiceException the service exception
+     */
     @Override
     public Optional<User> find(String username) throws ServiceException {
         Optional<User> user;
@@ -190,6 +262,13 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * Create user.
+     *
+     * @param userParameters the user parameters
+     * @return the user
+     * @throws ServiceException the service exception
+     */
     @Override
     public User create(Map<String, String> userParameters) throws ServiceException {
         for (Map.Entry entry : userParameters.entrySet()) {
@@ -219,6 +298,12 @@ public class UserServiceImpl implements UserService {
         return newUser;
     }
 
+    /**
+     * Sets parameter.
+     *
+     * @param userParameters the user parameters
+     * @return the parameter
+     */
     private User setParameter(Map<String, String> userParameters) {
         User user = new User();
         String passHashed = BCrypt.hashpw(userParameters.get(PASSWORD_PARAMETER_NAME), BCrypt.gensalt());

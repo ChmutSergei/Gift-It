@@ -7,22 +7,23 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
- * The Transaction manager class.
+ * The Transaction manager class provides
+ * transaction support in the application.
  *
  * @author Sergei Chmut.
  */
 public class TransactionManager {
 
     /**
-     * The Connection.
+     * The Connection for transaction.
      */
     private Connection connection;
 
     /**
      * Begin transaction.
      *
-     * @param daos the daos
-     * @throws DaoException the dao exception
+     * @param daos the objects of dao that are involved in the transaction
+     * @throws DaoException if transaction can't be begin
      */
     public void beginTransaction(Dao... daos) throws DaoException {
         if (daos.length == 0) {
@@ -42,7 +43,7 @@ public class TransactionManager {
     /**
      * End transaction.
      *
-     * @throws DaoException the dao exception
+     * @throws DaoException if transaction can't be finished
      */
     public void endTransaction() throws DaoException {
         try {
@@ -65,9 +66,9 @@ public class TransactionManager {
     }
 
     /**
-     * Rollback.
+     * Rollback transaction.
      *
-     * @throws DaoException the dao exception
+     * @throws DaoException if rollback can't be handled
      */
     public void rollback() throws DaoException {
         try {

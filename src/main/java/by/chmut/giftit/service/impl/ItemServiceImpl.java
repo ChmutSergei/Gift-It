@@ -9,26 +9,53 @@ import by.chmut.giftit.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.sql.DataSource;
 import java.io.File;
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.*;
 
 import static by.chmut.giftit.constant.AttributeName.*;
 
+/**
+ * The Item service class.
+ *
+ * @author Sergei Chmut.
+ */
 public class ItemServiceImpl implements ItemService {
 
+    /**
+     * The constant logger.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The Item dao.
+     */
     private ItemDao itemDao = DaoFactory.getInstance().getItemDao();
+    /**
+     * The Bitmap dao.
+     */
     private BitmapDao bitmapDao = DaoFactory.getInstance().getBitmapDao();
+    /**
+     * The Comment dao.
+     */
     private CommentDao commentDao = DaoFactory.getInstance().getCommentDao();
+    /**
+     * The Manager.
+     */
     private TransactionManager manager = new TransactionManager();
 
+    /**
+     * Find results search with limit list.
+     *
+     * @param itemId           the item id
+     * @param limit            the limit
+     * @param offset           the offset
+     * @param pathForTempFiles the path for temp files
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
-    public List<Item> findByIdWithLimit(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException {
+    public List<Item> findResultsSearchWithLimit(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException {
         if (itemId.isEmpty()) {
             return Collections.emptyList();
         }
@@ -56,6 +83,15 @@ public class ItemServiceImpl implements ItemService {
         return result;
     }
 
+    /**
+     * Find all with limit list.
+     *
+     * @param pathForTempFiles the path for temp files
+     * @param limit            the limit
+     * @param offset           the offset
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
     public List<Item> findAllWithLimit(String pathForTempFiles, int limit, int offset) throws ServiceException {
         List<Item> result;
@@ -74,6 +110,14 @@ public class ItemServiceImpl implements ItemService {
         return result;
     }
 
+    /**
+     * Find paid items list.
+     *
+     * @param userId   the user id
+     * @param filePath the file path
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
     public List<Item> findPaidItems(long userId, String filePath) throws ServiceException {
         List<Item> items;
@@ -92,6 +136,14 @@ public class ItemServiceImpl implements ItemService {
         return items;
     }
 
+    /**
+     * Find optional.
+     *
+     * @param id          the id
+     * @param pathForFile the path for file
+     * @return the optional
+     * @throws ServiceException the service exception
+     */
     @Override
     public Optional<Item> find(Long id, String pathForFile) throws ServiceException {
         Optional<Item> item;
@@ -110,6 +162,13 @@ public class ItemServiceImpl implements ItemService {
         return item;
     }
 
+    /**
+     * Create item.
+     *
+     * @param itemParameters the item parameters
+     * @return the item
+     * @throws ServiceException the service exception
+     */
     @Override
     public Item create(Map<String, Object> itemParameters) throws ServiceException {
         Item item = setParameters(itemParameters);
@@ -133,6 +192,12 @@ public class ItemServiceImpl implements ItemService {
         return item;
     }
 
+    /**
+     * Sets parameters.
+     *
+     * @param itemParameters the item parameters
+     * @return the parameters
+     */
     private Item setParameters(Map<String, Object> itemParameters) {
         Item item = new Item();
         item.setItemName((String) itemParameters.get(ITEM_NAME_PARAMETER_NAME));
@@ -145,6 +210,12 @@ public class ItemServiceImpl implements ItemService {
         return item;
     }
 
+    /**
+     * Update item filter.
+     *
+     * @param bitmaps the bitmaps
+     * @param item    the item
+     */
     private void updateItemFilter(List<Bitmap> bitmaps, Item item) {
         List<String> possibleCriteriaPrice = selectOnPrice(item.getPrice());
         for (Bitmap bitmap : bitmaps) {
@@ -158,6 +229,12 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
+    /**
+     * Select on price list.
+     *
+     * @param price the price
+     * @return the list
+     */
     private List<String> selectOnPrice(BigDecimal price) {
         price = price != null ? price : BigDecimal.ZERO;
         List<String> criteriaPrice = new ArrayList<>();
@@ -173,6 +250,13 @@ public class ItemServiceImpl implements ItemService {
         return criteriaPrice;
     }
 
+    /**
+     * Find count comments for item map.
+     *
+     * @param items the items
+     * @return the map
+     * @throws ServiceException the service exception
+     */
     @Override
     public Map<Long, Integer> findCountCommentsForItem(List<Item> items) throws ServiceException {
         Map<Long, Integer> result = new HashMap<>();
@@ -194,6 +278,14 @@ public class ItemServiceImpl implements ItemService {
         return result;
     }
 
+    /**
+     * Find comment on item list.
+     *
+     * @param itemId the item id
+     * @param status the status
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
     public List<Comment> findCommentOnItem(long itemId, Comment.CommentStatus status) throws ServiceException {
         List<Comment> comment;
@@ -212,6 +304,13 @@ public class ItemServiceImpl implements ItemService {
         return comment;
     }
 
+    /**
+     * Find by comment map.
+     *
+     * @param comments the comments
+     * @return the map
+     * @throws ServiceException the service exception
+     */
     @Override
     public Map<Long, Item> findByComment(List<Comment> comments) throws ServiceException {
         Map<Long, Item> items = new HashMap<>();
@@ -233,6 +332,12 @@ public class ItemServiceImpl implements ItemService {
         return items;
     }
 
+    /**
+     * Count all item int.
+     *
+     * @return the int
+     * @throws ServiceException the service exception
+     */
     @Override
     public int countAllItem() throws ServiceException {
         int result;

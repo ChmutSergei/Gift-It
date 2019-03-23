@@ -13,13 +13,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static by.chmut.giftit.constant.AttributeName.ALL_PARAMETER_NAME;
-
+/**
+ * The Bitmap dao class provides that bitmap is loaded from the database
+ * and changes are saved when adding a new item.
+ * A number of CRUD Dao interface methods are prohibited..
+ *
+ * @author Sergei Chmut.
+ */
 public class BitmapDaoImpl implements BitmapDao {
 
+    /**
+     * The constant SQL query SELECT_BITMAP.
+     */
     private static final String SELECT_BITMAP = "SELECT criteria_key, data FROM Bitmaps";
+    /**
+     * The constant SQL query UPDATE_BITMAP.
+     */
     private static final String UPDATE_BITMAP = "UPDATE Bitmaps SET data=? WHERE criteria_key=?";
 
+    /**
+     * The Connection instance for working with database.
+     */
     private Connection connection;
 
     public Connection getConnection() {
@@ -30,6 +44,12 @@ public class BitmapDaoImpl implements BitmapDao {
         this.connection = connection;
     }
 
+    /**
+     * Find all bitmap in database.
+     *
+     * @return the list of bitmap
+     * @throws DaoException if find all can't be handled
+     */
     @Override
     public List<Bitmap> findAll() throws DaoException {
         List<Bitmap> result = new ArrayList<>();
@@ -51,6 +71,13 @@ public class BitmapDaoImpl implements BitmapDao {
         return result;
     }
 
+    /**
+     * Update bitmap with new data.
+     *
+     * @param bitmap new bitmap
+     * @return stored bitmap
+     * @throws DaoException if update can't be handled
+     */
     @Override
     public Bitmap update(Bitmap bitmap) throws DaoException {
         PreparedStatement statement = null;
@@ -69,6 +96,13 @@ public class BitmapDaoImpl implements BitmapDao {
     }
 
 
+    /**
+     * Make bitmap from result set.
+     *
+     * @param resultSet the ResultSet
+     * @return the bitmap
+     * @throws SQLException if ResultSet can't be handled
+     */
     private Bitmap makeFromResultSet(ResultSet resultSet) throws SQLException {
         Bitmap bitmap = new Bitmap();
         bitmap.setName(resultSet.getString(1));
@@ -78,21 +112,49 @@ public class BitmapDaoImpl implements BitmapDao {
         return bitmap;
     }
 
+    /**
+     * Find entity optional unsupported operation.
+     *
+     * @param id the id
+     * @return the optional
+     * @throws DaoException if you try to use this method
+     */
     @Override
     public Optional<Bitmap> findEntity(Integer id) throws DaoException {
         throw new DaoException("Unsupported operation exception!");
     }
 
+    /**
+     * Delete by id unsupported operation.
+     *
+     * @param id the id
+     * @return the boolean
+     * @throws DaoException if you try to use this method
+     */
     @Override
     public boolean delete(Integer id) throws DaoException {
         throw new DaoException("Unsupported operation exception!");
     }
 
+    /**
+     * Delete unsupported operation.
+     *
+     * @param entity the entity
+     * @return the boolean
+     * @throws DaoException if you try to use this method
+     */
     @Override
     public boolean delete(Bitmap entity) throws DaoException {
         throw new DaoException("Unsupported operation exception!");
     }
 
+    /**
+     * Create bitmap unsupported operation.
+     *
+     * @param entity the entity
+     * @return the bitmap
+     * @throws DaoException if you try to use this method
+     */
     @Override
     public Bitmap create(Bitmap entity) throws DaoException {
         throw new DaoException("Unsupported operation exception!");

@@ -14,14 +14,38 @@ import java.util.Optional;
 
 import static by.chmut.giftit.constant.AttributeName.*;
 
+/**
+ * The Comment service class.
+ *
+ * @author Sergei Chmut.
+ */
 public class CommentServiceImpl implements CommentService {
 
+    /**
+     * The constant logger.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The Comment dao.
+     */
     private CommentDao commentDao = DaoFactory.getInstance().getCommentDao();
+    /**
+     * The User dao.
+     */
     private UserDao userDao = DaoFactory.getInstance().getUserDao();
+    /**
+     * The Manager.
+     */
     private TransactionManager manager = new TransactionManager();
 
+    /**
+     * Find by user id list.
+     *
+     * @param userId the user id
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
     public List<Comment> findByUserId(long userId) throws ServiceException {
         List<Comment> comments;
@@ -40,6 +64,12 @@ public class CommentServiceImpl implements CommentService {
         return comments;
     }
 
+    /**
+     * Find comment to moderate list.
+     *
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
     public List<Comment> findCommentToModerate() throws ServiceException {
         List<Comment> comments;
@@ -58,6 +88,15 @@ public class CommentServiceImpl implements CommentService {
         return comments;
     }
 
+    /**
+     * Moderate boolean.
+     *
+     * @param moderatorCommand the moderator command
+     * @param commentId        the comment id
+     * @param users            the users
+     * @return the boolean
+     * @throws ServiceException the service exception
+     */
     @Override
     public boolean moderate(String moderatorCommand, String commentId, Map<Long, User> users) throws ServiceException {
         boolean result = true;
@@ -88,6 +127,13 @@ public class CommentServiceImpl implements CommentService {
         return result;
     }
 
+    /**
+     * Execute moderator command int.
+     *
+     * @param moderatorCommand the moderator command
+     * @return the int
+     * @throws ServiceException the service exception
+     */
     private int executeModeratorCommand(String moderatorCommand) throws ServiceException {
         int result;
         switch (moderatorCommand) {

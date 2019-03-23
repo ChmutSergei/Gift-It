@@ -69,7 +69,7 @@ public class CartCommand implements Command {
         user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
         try {
             cartList = service.findCartByUserId(user.getUserId());
-            items = service.getItemsForCart(cartList, request.getServletContext().getRealPath(DEFAULT_ITEM_PATH));
+            items = service.findItemsForCart(cartList, request.getServletContext().getRealPath(DEFAULT_ITEM_PATH));
             checkItemsOnActive();
         } catch (ServiceException exception) {
             logger.error("Error when try to fill the cart from database", exception);

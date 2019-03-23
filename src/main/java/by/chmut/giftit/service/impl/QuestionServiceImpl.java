@@ -14,13 +14,34 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The Question service class.
+ *
+ * @author Sergei Chmut.
+ */
 public class QuestionServiceImpl implements QuestionService {
 
+    /**
+     * The constant logger.
+     */
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * The Question dao.
+     */
     private QuestionDao questionDao = DaoFactory.getInstance().getQuestionDao();
+    /**
+     * The Manager.
+     */
     private TransactionManager manager = new TransactionManager();
 
+    /**
+     * Find by user id list.
+     *
+     * @param userId the user id
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
     public List<Question> findByUserId(long userId) throws ServiceException {
         List<Question> questions;
@@ -39,6 +60,12 @@ public class QuestionServiceImpl implements QuestionService {
         return questions;
     }
 
+    /**
+     * Find actual question list.
+     *
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
     public List<Question> findActualQuestion() throws ServiceException {
         List<Question> questions;
@@ -57,6 +84,14 @@ public class QuestionServiceImpl implements QuestionService {
         return questions;
     }
 
+    /**
+     * Sets answer.
+     *
+     * @param questionId the question id
+     * @param answer     the answer
+     * @return the answer
+     * @throws ServiceException the service exception
+     */
     @Override
     public Question setAnswer(long questionId, String answer) throws ServiceException {
         Question result;
@@ -79,6 +114,12 @@ public class QuestionServiceImpl implements QuestionService {
         return result;
     }
 
+    /**
+     * Find all question list.
+     *
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     @Override
     public List<Question> findAllQuestion() throws ServiceException {
         List<Question> questions;

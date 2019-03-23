@@ -10,41 +10,79 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The Question dao class provides
+ * manipulation of Question entity with database.
+ *
+ * @author Sergei Chmut.
+ */
 public class QuestionDaoImpl implements QuestionDao {
 
+    /**
+     * The constant SQL query SELECT_ALL_QUESTIONS.
+     */
     private static final String SELECT_ALL_QUESTIONS =
             "SELECT id, user_id, request, response, request_date, response_date " +
                     "FROM Questions";
+    /**
+     * The constant SQL query SELECT_UNANSWERED_QUESTIONS.
+     */
     private static final String SELECT_UNANSWERED_QUESTIONS =
             "SELECT id, user_id, request, response, request_date, response_date " +
                     "FROM Questions " +
                     "WHERE response IS NULL";
+    /**
+     * The constant SQL query SELECT_QUESTION_BY_ID.
+     */
     private static final String SELECT_QUESTION_BY_ID =
             "SELECT id, user_id, request, response, request_date, response_date " +
                     "FROM Questions " +
                     "WHERE id = ?";
+    /**
+     * The constant SQL query SELECT_QUESTION_BY_USER_ID.
+     */
     private static final String SELECT_QUESTION_BY_USER_ID =
             "SELECT id, user_id, request, response, request_date, response_date " +
                     "FROM Questions " +
                     "WHERE user_id = ?";
+    /**
+     * The constant SQL query DELETE_QUESTION.
+     */
     private static final String DELETE_QUESTION =
             "DELETE FROM Questions " +
                     "WHERE id=?";
+    /**
+     * The constant SQL query CREATE_QUESTION.
+     */
     private static final String CREATE_QUESTION =
             "INSERT INTO Questions(user_id, request, response, request_date, response_date) " +
                     "VALUES(?,?,?,?,?)";
+    /**
+     * The constant SQL query UPDATE_QUESTION.
+     */
     private static final String UPDATE_QUESTION =
             "UPDATE Questions SET user_id=?, request=?, response=?, request_date=?, response_date=? " +
                     "WHERE id=?";
 
+    /**
+     * The Connection instance for working with database.
+     */
     private Connection connection;
+
     public Connection getConnection() {
         return connection;
     }
+
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Find all question from the database.
+     *
+     * @return the list of question
+     * @throws DaoException if find all can't be handled
+     */
     @Override
     public List<Question> findAll() throws DaoException {
         List<Question> questions = new ArrayList<>();
@@ -66,6 +104,13 @@ public class QuestionDaoImpl implements QuestionDao {
         return questions;
     }
 
+    /**
+     * Find question by id.
+     *
+     * @param id question id
+     * @return the optional question
+     * @throws DaoException if find question can't be handled
+     */
     @Override
     public Optional<Question> findEntity(Long id) throws DaoException {
         Question question = null;
@@ -87,6 +132,13 @@ public class QuestionDaoImpl implements QuestionDao {
         return Optional.ofNullable(question);
     }
 
+    /**
+     * Method make question from result set.
+     *
+     * @param resultSet the result set
+     * @return the question
+     * @throws SQLException if question from resultSet can't be handled
+     */
     private Question makeFromResultSet(ResultSet resultSet) throws SQLException {
         Question question = new Question();
         question.setQuestionId(resultSet.getLong(1));
@@ -101,6 +153,13 @@ public class QuestionDaoImpl implements QuestionDao {
         return question;
     }
 
+    /**
+     * Delete question by id.
+     *
+     * @param id question id
+     * @return true if delete done otherwise false
+     * @throws DaoException if delete can't be handled
+     */
     @Override
     public boolean delete(Long id) throws DaoException {
         PreparedStatement statement = null;
@@ -117,11 +176,25 @@ public class QuestionDaoImpl implements QuestionDao {
         return result > 0;
     }
 
+    /**
+     * Delete question.
+     *
+     * @param question the question
+     * @return true if delete done otherwise false
+     * @throws DaoException if delete can't be handled
+     */
     @Override
     public boolean delete(Question question) throws DaoException {
         return delete(question.getQuestionId());
     }
 
+    /**
+     * Add question to database.
+     *
+     * @param question the question
+     * @return question that was created
+     * @throws DaoException if create question can't be handled
+     */
     @Override
     public Question create(Question question) throws DaoException {
         PreparedStatement statement = null;
@@ -152,6 +225,13 @@ public class QuestionDaoImpl implements QuestionDao {
         return question;
     }
 
+    /**
+     * Update question in database.
+     *
+     * @param question the question
+     * @return question that was updated
+     * @throws DaoException if update question can't be handled
+     */
     @Override
     public Question update(Question question) throws DaoException {
         PreparedStatement statement = null;
@@ -175,6 +255,13 @@ public class QuestionDaoImpl implements QuestionDao {
         return question;
     }
 
+    /**
+     * Find all questions with such user id.
+     *
+     * @param userId the user id
+     * @return the list of question
+     * @throws DaoException if find question by user id can't be handled
+     */
     @Override
     public List<Question> findByUserId(long userId) throws DaoException {
         List<Question> questions = new ArrayList<>();
@@ -197,6 +284,12 @@ public class QuestionDaoImpl implements QuestionDao {
         return questions;
     }
 
+    /**
+     * Find all unanswered questions.
+     *
+     * @return the list of question
+     * @throws DaoException if find unanswered question can't be handled
+     */
     @Override
     public List<Question> findUnanswered() throws DaoException {
         List<Question> questions = new ArrayList<>();

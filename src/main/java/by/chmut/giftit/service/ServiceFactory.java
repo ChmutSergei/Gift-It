@@ -2,6 +2,12 @@ package by.chmut.giftit.service;
 
 import by.chmut.giftit.service.impl.*;
 
+/**
+ * The Service factory class represents
+ * access to common business logic interfaces.
+ *
+ * @author Sergei Chmut.
+ */
 public class ServiceFactory {
 
     private static final ServiceFactory INSTANCE = new ServiceFactory();

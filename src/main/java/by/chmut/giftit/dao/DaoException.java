@@ -9,11 +9,6 @@ package by.chmut.giftit.dao;
 public class DaoException extends Exception {
 
     /**
-     * The constant serialVersionUID.
-     */
-    private static final long serialVersionUID = -3760861607605184650L;
-
-    /**
      * Instantiates a new DaoException.
      */
     public DaoException() {
@@ -40,8 +35,8 @@ public class DaoException extends Exception {
     /**
      * Instantiates a new DaoException.
      *
-     * @param message exception message
-     * @param exception       another exception
+     * @param message   exception message
+     * @param exception another exception
      */
     public DaoException(String message, Exception exception) {
         super(message, exception);
