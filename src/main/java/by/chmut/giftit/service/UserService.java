@@ -44,7 +44,7 @@ public interface UserService {
     User create(Map<String, String> parameters) throws ServiceException;
 
     /**
-     * Search users by params list.
+     * Search users by parameters.
      *
      * @param parametersSearch the parameters for search
      * @return the list of users

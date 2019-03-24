@@ -16,50 +16,52 @@ import java.util.*;
 import static by.chmut.giftit.constant.AttributeName.*;
 
 /**
- * The Item service class.
+ * The Item service class implements business logic methods
+ * for item entity.
  *
  * @author Sergei Chmut.
  */
 public class ItemServiceImpl implements ItemService {
 
     /**
-     * The constant logger.
+     * The logger for logging possible errors.
      */
     private static final Logger logger = LogManager.getLogger();
 
     /**
-     * The Item dao.
+     * The Item dao provides access to the database for Item entity.
      */
     private ItemDao itemDao = DaoFactory.getInstance().getItemDao();
     /**
-     * The Bitmap dao.
+     * The Bitmap dao provides access to the database for Bitmap entity.
      */
     private BitmapDao bitmapDao = DaoFactory.getInstance().getBitmapDao();
     /**
-     * The Comment dao.
+     * The Comment dao provides access to the database for Comment entity.
      */
     private CommentDao commentDao = DaoFactory.getInstance().getCommentDao();
     /**
-     * The Manager.
+     * The transaction manager provides preparation for conducting and confirming transactions.
      */
     private TransactionManager manager = new TransactionManager();
 
     /**
-     * Find results search with limit list.
+     * Find results user's search by the list of item id with limit count on the page.
+     * The method returns the most recent data (last added items).
      *
      * @param itemId           the item id
-     * @param limit            the limit
-     * @param offset           the offset
-     * @param pathForTempFiles the path for temp files
-     * @return the list
-     * @throws ServiceException the service exception
+     * @param limit            the limit of items
+     * @param offset           the offset in results of search
+     * @param pathForTempFiles the path for temp image files
+     * @return the list of items
+     * @throws ServiceException if find results with limit can't be handled
      */
     @Override
     public List<Item> findResultsSearchWithLimit(List<Integer> itemId, int limit, int offset, String pathForTempFiles) throws ServiceException {
         if (itemId.isEmpty()) {
             return Collections.emptyList();
         }
-        itemId.sort((id1, id2) -> id2 - id1);
+        itemId.sort((id1, id2) -> id2 - id1); //TODO добавить feature in view
         int maxItemId = offset + limit;
         if (maxItemId > itemId.size()) {
             maxItemId = itemId.size();
@@ -84,13 +86,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Find all with limit list.
+     * Find all items with limit count on the page.
      *
-     * @param pathForTempFiles the path for temp files
-     * @param limit            the limit
-     * @param offset           the offset
-     * @return the list
-     * @throws ServiceException the service exception
+     * @param pathForTempFiles the path for temp image files
+     * @param limit            the limit of items
+     * @param offset           the offset in results of search
+     * @return the list of items
+     * @throws ServiceException if find all items can't be handled
      */
     @Override
     public List<Item> findAllWithLimit(String pathForTempFiles, int limit, int offset) throws ServiceException {
@@ -111,12 +113,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Find paid items list.
+     * Find list of paid items.
      *
      * @param userId   the user id
-     * @param filePath the file path
-     * @return the list
-     * @throws ServiceException the service exception
+     * @param filePath the file path for image files
+     * @return the list of items
+     * @throws ServiceException if find paid items can't be handled
      */
     @Override
     public List<Item> findPaidItems(long userId, String filePath) throws ServiceException {
@@ -137,12 +139,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Find optional.
+     * Find item by id.
      *
-     * @param id          the id
-     * @param pathForFile the path for file
+     * @param id          the item id
+     * @param pathForFile the path for image file
      * @return the optional
-     * @throws ServiceException the service exception
+     * @throws ServiceException if find by id can't be handled
      */
     @Override
     public Optional<Item> find(Long id, String pathForFile) throws ServiceException {
@@ -163,15 +165,18 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Create item.
+     * The method creates a new item and updates the bitmap
+     * according to the characteristics of the object,
+     * to add it to the correct search.
+     * Save new item and new bitmap in database.
      *
      * @param itemParameters the item parameters
      * @return the item
-     * @throws ServiceException the service exception
+     * @throws ServiceException if item can't be created
      */
     @Override
     public Item create(Map<String, Object> itemParameters) throws ServiceException {
-        Item item = setParameters(itemParameters);
+        Item item = createWithParameters(itemParameters);
         try {
             manager.beginTransaction(itemDao, bitmapDao);
             List<Bitmap> bitmaps = bitmapDao.findAll();
@@ -193,12 +198,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Sets parameters.
+     * Create new Item object.
      *
      * @param itemParameters the item parameters
      * @return the parameters
      */
-    private Item setParameters(Map<String, Object> itemParameters) {
+    private Item createWithParameters(Map<String, Object> itemParameters) {
         Item item = new Item();
         item.setItemName((String) itemParameters.get(ITEM_NAME_PARAMETER_NAME));
         item.setType(((String[]) itemParameters.get(TYPE_PARAMETER_NAME))[0]);
@@ -213,8 +218,8 @@ public class ItemServiceImpl implements ItemService {
     /**
      * Update item filter.
      *
-     * @param bitmaps the bitmaps
-     * @param item    the item
+     * @param bitmaps the all bitmaps
+     * @param item    the new item
      */
     private void updateItemFilter(List<Bitmap> bitmaps, Item item) {
         List<String> possibleCriteriaPrice = selectOnPrice(item.getPrice());
@@ -233,7 +238,7 @@ public class ItemServiceImpl implements ItemService {
      * Select on price list.
      *
      * @param price the price
-     * @return the list
+     * @return the list of price criteria
      */
     private List<String> selectOnPrice(BigDecimal price) {
         price = price != null ? price : BigDecimal.ZERO;
@@ -251,11 +256,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Find count comments for item map.
+     * Find count comments for each item.
      *
-     * @param items the items
-     * @return the map
-     * @throws ServiceException the service exception
+     * @param items the list of items
+     * @return the map of pair - itemId:count
+     * @throws ServiceException if find count of comments for item can't be handled
      */
     @Override
     public Map<Long, Integer> findCountCommentsForItem(List<Item> items) throws ServiceException {
@@ -279,12 +284,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Find comment on item list.
+     * Find comments for item with the given status.
      *
-     * @param itemId the item id
-     * @param status the status
-     * @return the list
-     * @throws ServiceException the service exception
+     * @param itemId     the item id
+     * @param status the comment status for search
+     * @return the list of comments
+     * @throws ServiceException if find comments for item can't be handled
      */
     @Override
     public List<Comment> findCommentOnItem(long itemId, Comment.CommentStatus status) throws ServiceException {
@@ -305,11 +310,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Find by comment map.
+     * Find items for those comments.
      *
-     * @param comments the comments
-     * @return the map
-     * @throws ServiceException the service exception
+     * @param comments the list of comments
+     * @return the map of items
+     * @throws ServiceException if find items by comment can't be handled
      */
     @Override
     public Map<Long, Item> findByComment(List<Comment> comments) throws ServiceException {
@@ -333,10 +338,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Count all item int.
+     * Count all items.
      *
-     * @return the int
-     * @throws ServiceException the service exception
+     * @return the count
+     * @throws ServiceException if count all items can't be handled
      */
     @Override
     public int countAllItem() throws ServiceException {

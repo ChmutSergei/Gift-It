@@ -38,11 +38,11 @@ public interface CartService {
      * Find items for given carts.
      *
      * @param cartList the list of carts
-     * @param realPath the real path
+     * @param pathForFile the path for file
      * @return the items for cart
      * @throws ServiceException if find item for cart can't be handled
      */
-    Map<Long,Item> findItemsForCart(List<Cart> cartList, String realPath) throws ServiceException;
+    Map<Long,Item> findItemsForCart(List<Cart> cartList, String pathForFile) throws ServiceException;
 
     /**
      * Create new cart and save.

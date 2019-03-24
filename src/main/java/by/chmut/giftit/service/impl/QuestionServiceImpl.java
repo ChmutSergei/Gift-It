@@ -15,32 +15,33 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The Question service class.
+ * The Question service class implements business logic methods
+ * for question entity.
  *
  * @author Sergei Chmut.
  */
 public class QuestionServiceImpl implements QuestionService {
 
     /**
-     * The constant logger.
+     * The logger for logging possible errors.
      */
     private static final Logger logger = LogManager.getLogger();
 
     /**
-     * The Question dao.
+     * The Question dao provides access to the database for Question entity.
      */
     private QuestionDao questionDao = DaoFactory.getInstance().getQuestionDao();
     /**
-     * The Manager.
+     * The transaction manager provides preparation for conducting and confirming transactions.
      */
     private TransactionManager manager = new TransactionManager();
 
     /**
-     * Find by user id list.
+     * Find all the questions asked by this user.
      *
      * @param userId the user id
-     * @return the list
-     * @throws ServiceException the service exception
+     * @return the list of question
+     * @throws ServiceException if find questions by user id can't be handled
      */
     @Override
     public List<Question> findByUserId(long userId) throws ServiceException {
@@ -61,10 +62,10 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     /**
-     * Find actual question list.
+     * Find all new questions without answer.
      *
-     * @return the list
-     * @throws ServiceException the service exception
+     * @return the list of question
+     * @throws ServiceException if an exception occurs while find actual question
      */
     @Override
     public List<Question> findActualQuestion() throws ServiceException {
@@ -85,12 +86,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     /**
-     * Sets answer.
+     * Sets answer on the question.
      *
      * @param questionId the question id
      * @param answer     the answer
-     * @return the answer
-     * @throws ServiceException the service exception
+     * @return the updated question
+     * @throws ServiceException if sets answer can't be handled
      */
     @Override
     public Question setAnswer(long questionId, String answer) throws ServiceException {
@@ -115,10 +116,10 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     /**
-     * Find all question list.
+     * Find all the questions asked.
      *
-     * @return the list
-     * @throws ServiceException the service exception
+     * @return the list of question
+     * @throws ServiceException if find all questions can't be handled
      */
     @Override
     public List<Question> findAllQuestion() throws ServiceException {

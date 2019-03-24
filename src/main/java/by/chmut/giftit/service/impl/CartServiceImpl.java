@@ -15,36 +15,37 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * The Cart service class.
+ * The Cart service class implements business logic methods
+ * for user entity.
  *
  * @author Sergei Chmut.
  */
 public class CartServiceImpl implements CartService {
 
     /**
-     * The constant logger.
+     * The logger for logging possible errors.
      */
     private static final Logger logger = LogManager.getLogger();
 
     /**
-     * The Cart dao.
+     * The Cart dao provides access to the database for Cart entity.
      */
     private CartDao cartDao = DaoFactory.getInstance().getCartDao();
     /**
-     * The Item dao.
+     * The Item dao provides access to the database for Item entity.
      */
     private ItemDao itemDao = DaoFactory.getInstance().getItemDao();
     /**
-     * The Manager.
+     * The transaction manager provides preparation for conducting and confirming transactions.
      */
     private TransactionManager manager = new TransactionManager();
 
     /**
-     * Find cart by user id list.
+     * Find list of carts by user id.
      *
      * @param userId the user id
-     * @return the list
-     * @throws ServiceException the service exception
+     * @return the list of carts
+     * @throws ServiceException if find cart by user id can't be handled
      */
     @Override
     public List<Cart> findCartByUserId(long userId) throws ServiceException {
@@ -65,11 +66,11 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * Find cart optional.
+     * Find cart by id.
      *
      * @param cartId the cart id
-     * @return the optional
-     * @throws ServiceException the service exception
+     * @return the optional cart
+     * @throws ServiceException if find cart by id can't be handled
      */
     @Override
     public Optional<Cart> findCart(long cartId) throws ServiceException {
@@ -90,12 +91,15 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * Find items for cart map.
+     * Find items for given carts.
+     * The method, iterated over the list of transmitted carts,
+     * receives for each cart of its items and returns
+     * a map where each cart corresponds to a item.
      *
-     * @param cartList    the cart list
+     * @param cartList the list of carts
      * @param pathForFile the path for file
-     * @return the map
-     * @throws ServiceException the service exception
+     * @return the items for cart
+     * @throws ServiceException if find item for cart can't be handled
      */
     @Override
     public Map<Long, Item> findItemsForCart(List<Cart> cartList, String pathForFile) throws ServiceException {
@@ -119,17 +123,17 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * Create cart.
+     * Create new cart and save.
      *
      * @param itemId the item id
      * @param userId the user id
-     * @param count  the count
-     * @return the cart
-     * @throws ServiceException the service exception
+     * @param count  the count of items
+     * @return the created cart
+     * @throws ServiceException if cart can't be created
      */
     @Override
     public Cart create(long itemId, long userId, BigDecimal count) throws ServiceException {
-        Cart cart = setParameters(itemId, userId, count);
+        Cart cart = createWithParameters(itemId, userId, count);
         try {
             manager.beginTransaction(cartDao);
             cartDao.create(cart);
@@ -146,11 +150,11 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * Delete boolean.
+     * Delete cart by id.
      *
      * @param cartId the cart id
-     * @return the boolean
-     * @throws ServiceException the service exception
+     * @return true if success otherwise false
+     * @throws ServiceException if delete cart can't be handled
      */
     @Override
     public boolean delete(long cartId) throws ServiceException {
@@ -171,11 +175,11 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * Delete all boolean.
+     * Delete all cart for given user.
      *
      * @param userId the user id
-     * @return the boolean
-     * @throws ServiceException the service exception
+     * @return true if done otherwise false
+     * @throws ServiceException if an exception occurs while deleting all cart on user id
      */
     @Override
     public boolean deleteAll(long userId) throws ServiceException {
@@ -191,14 +195,14 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * Sets parameters.
+     * Create new Cart object
      *
      * @param itemId the item id
      * @param userId the user id
-     * @param count  the count
-     * @return the parameters
+     * @param count  the count of item in this cart
+     * @return the new Cart
      */
-    private Cart setParameters(long itemId, long userId, BigDecimal count) {
+    private Cart createWithParameters(long itemId, long userId, BigDecimal count) {
         Cart cart = new Cart();
         cart.setItemId(itemId);
         cart.setUserId(userId);

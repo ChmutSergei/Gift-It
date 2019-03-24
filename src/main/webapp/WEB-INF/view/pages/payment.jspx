@@ -10,6 +10,10 @@
                 <h2><strong><fmt:message bundle="${i18n}" key="payment.success"/></strong>></h2>
             </c:when>
             <c:otherwise>
+                <![CDATA[
+                    <script src="${pageContext.request.contextPath}/assests/js/jquery.payform.min.js" charset="utf-8"></script>
+                    <script src="${pageContext.request.contextPath}/assests/js/script.js"></script>
+                    ]]>
                 <div class="row">
                     <div class="col-xs-7 col-xs-offset-3">
                         <h2><fmt:message bundle="${i18n}" key="payment.start"/></h2>

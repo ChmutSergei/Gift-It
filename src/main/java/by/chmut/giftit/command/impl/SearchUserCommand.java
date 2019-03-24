@@ -68,7 +68,13 @@ public class SearchUserCommand implements Command {
             }
         } else {
             List<User> users = (List<User>) request.getSession().getAttribute(RESULT_OF_SEARCH_USERS_PARAMETER_NAME);
-            users = service.findUsersAfterUpdate(users);
+            try {
+                users = service.findUsersAfterUpdate(users);
+            } catch (ServiceException exception) {
+                logger.error("Error when try to search Users after update", exception);
+                request.getSession().setAttribute(EXCEPTION_PARAMETER_NAME, exception);
+                router.setRedirectPath(ERROR_PATH);
+            }
             request.getSession().setAttribute(RESULT_OF_SEARCH_USERS_PARAMETER_NAME, users);
             request.getSession().removeAttribute(SHOW_RESULT_PARAMETER_NAME);
         }

@@ -21,32 +21,35 @@ import java.util.*;
 import static by.chmut.giftit.constant.AttributeName.*;
 
 /**
- * The User service class.
+ * The User service class implements business logic methods
+ * for user entity.
  *
  * @author Sergei Chmut.
  */
 public class UserServiceImpl implements UserService {
 
     /**
-     * The constant logger.
+     * The logger for logging possible errors.
      */
     private static final Logger logger = LogManager.getLogger();
 
     /**
-     * The User dao.
+     * The User dao provides access to the database for User entity.
      */
     private UserDao userDao = DaoFactory.getInstance().getUserDao();
     /**
-     * The Manager.
+     * The transaction manager provides preparation for conducting and confirming transactions.
      */
     private TransactionManager manager = new TransactionManager();
 
     /**
-     * Search user by params list.
+     * Search users by parameters. The method takes the parameters as a map,
+     * receives a parameter for the search (checks for null) and sends it
+     * to the method searchUsers to perform the corresponding database query.
      *
-     * @param parametersSearch the parameters search
-     * @return the list
-     * @throws ServiceException the service exception
+     * @param parametersSearch the parameters for search
+     * @return the list of users
+     * @throws ServiceException if an exception occurs while searching for a user
      */
     @Override
     public List<User> searchUserByParams(Map<String, String> parametersSearch) throws ServiceException {
@@ -71,14 +74,18 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Execute user processing command boolean.
+     * Processing user with different admin commands.
+     * The method determines the transmitted command admin.
+     * If you want to delete a user, a command is executed,
+     * otherwise a user is searched from the database,
+     * if found, a new state is set and updated in the database.
      *
-     * @param typeCommand  the type command
+     * @param typeCommand  the type command fo processing user
      * @param userId       the user id
-     * @param blockedUntil the blocked until
+     * @param blockedUntil user lock up date
      * @param newRole      the new role
-     * @return the boolean
-     * @throws ServiceException the service exception
+     * @return true if command done otherwise false
+     * @throws ServiceException if an exception occurs while processing user
      */
     @Override
     public boolean executeUserProcessingCommand(String typeCommand, long userId,
@@ -122,11 +129,13 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Find users after update list.
+     * Find users after update.
+     * The method receives updated data for each of the users transferred
+     * in the form of a list and returns them to the new list.
      *
-     * @param users the users
-     * @return the list
-     * @throws ServiceException the service exception
+     * @param users the list of users who are updated
+     * @return the list of users
+     * @throws ServiceException if find user after update can't be handled
      */
     @Override
     public List<User> findUsersAfterUpdate(List<User> users) throws ServiceException {
@@ -150,11 +159,14 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Find by comment map.
+     * Find all users who left those comments.
+     * The method, iterated over the list of transmitted comments,
+     * receives for each comment of its author and returns
+     * a map where each comment corresponds to a user.
      *
      * @param comments the comments
-     * @return the map
-     * @throws ServiceException the service exception
+     * @return the map of users who left this comment
+     * @throws ServiceException if find users by comments can't be handled
      */
     @Override
     public Map<Long, User> findByComment(List<Comment> comments) throws ServiceException {
@@ -179,13 +191,16 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Search users list.
+     * The method determines on what basis to
+     * search for the user and gets the value from
+     * the passed parameters. Calls the desired method
+     * on User Dao and returns a list of search results.
      *
      * @param searchType       the search type
-     * @param parametersSearch the parameters search
-     * @return the list
-     * @throws DaoException     the dao exception
-     * @throws ServiceException the service exception
+     * @param parametersSearch the map with parameters for search
+     * @return the list of the users
+     * @throws DaoException     if search users can't be handled
+     * @throws ServiceException throw in an impossible state
      */
     private List<User> searchUsers(String searchType, Map<String, String> parametersSearch) throws DaoException, ServiceException {
         List<User> result;
@@ -213,11 +228,11 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Find optional.
+     * Find user by id.
      *
      * @param userId the user id
-     * @return the optional
-     * @throws ServiceException the service exception
+     * @return the optional user
+     * @throws ServiceException if find user by user id can't be handled
      */
     @Override
     public Optional<User> find(long userId) throws ServiceException {
@@ -238,11 +253,11 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Find optional.
+     * Find user by username.
      *
      * @param username the username
-     * @return the optional
-     * @throws ServiceException the service exception
+     * @return the optional user
+     * @throws ServiceException if find user by username can't be handled
      */
     @Override
     public Optional<User> find(String username) throws ServiceException {
@@ -263,11 +278,15 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Create user.
+     * Create new user and save.
+     * The method creates a new user in the system.
+     * The so-called double check of the transferred
+     * data from the View level to correctness is preliminarily performed,
+     * if all checks are passed, a new user is created and saved to the database
      *
-     * @param userParameters the user parameters
-     * @return the user
-     * @throws ServiceException the service exception
+     * @param userParameters the user's parameters
+     * @return the new user
+     * @throws ServiceException if the user can't be created
      */
     @Override
     public User create(Map<String, String> userParameters) throws ServiceException {
@@ -282,7 +301,7 @@ public class UserServiceImpl implements UserService {
         if (!UserValidator.isValidParamsWithPatterns(userParameters)) {
             throw new ServiceException("Error when add user - incorrect data");
         }
-        User newUser = setParameter(userParameters);
+        User newUser = createWithParameters(userParameters);
         try {
             manager.beginTransaction(userDao);
             newUser = userDao.create(newUser);
@@ -299,12 +318,12 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Sets parameter.
+     * Create new User object.
      *
      * @param userParameters the user parameters
-     * @return the parameter
+     * @return the new User
      */
-    private User setParameter(Map<String, String> userParameters) {
+    private User createWithParameters(Map<String, String> userParameters) {
         User user = new User();
         String passHashed = BCrypt.hashpw(userParameters.get(PASSWORD_PARAMETER_NAME), BCrypt.gensalt());
         user.setUsername(userParameters.get(USERNAME_PARAMETER_NAME));

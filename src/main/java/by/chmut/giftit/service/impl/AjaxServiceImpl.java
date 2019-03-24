@@ -15,14 +15,15 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 /**
- * The Ajax service class.
+ * The Ajax service class implements business logic methods
+ * for ajax command.
  *
  * @author Sergei Chmut.
  */
 public class AjaxServiceImpl implements AjaxService {
 
     /**
-     * The constant logger.
+     * The logger for logging possible errors.
      */
     private static final Logger logger = LogManager.getLogger();
 
@@ -31,31 +32,31 @@ public class AjaxServiceImpl implements AjaxService {
      */
     private UserService userService = new UserServiceImpl();
     /**
-     * The User dao.
+     * The User dao provides access to the database for User entity.
      */
     private UserDao userDao = DaoFactory.getInstance().getUserDao();
     /**
-     * The Comment dao.
+     * The Comment dao provides access to the database for Comment entity.
      */
     private CommentDao commentDao = DaoFactory.getInstance().getCommentDao();
     /**
-     * The Question dao.
+     * The Question dao provides access to the database for Question entity.
      */
     private QuestionDao questionDao = DaoFactory.getInstance().getQuestionDao();
     /**
-     * The Item dao.
+     * The Item dao provides access to the database for Item entity.
      */
     private ItemDao itemDao = DaoFactory.getInstance().getItemDao();
     /**
-     * The Manager.
+     * The transaction manager provides preparation for conducting and confirming transactions.
      */
     private TransactionManager manager = new TransactionManager();
 
     /**
-     * Update user data boolean.
+     * Update user data.
      *
      * @param user the user
-     * @return the boolean
+     * @return true if success otherwise false
      */
     @Override
     public boolean updateUserData(User user) {
@@ -77,10 +78,10 @@ public class AjaxServiceImpl implements AjaxService {
     }
 
     /**
-     * Delete comment boolean.
+     * Delete comment by id.
      *
      * @param commentId the comment id
-     * @return the boolean
+     * @return true if success otherwise false
      */
     @Override
     public boolean deleteComment(long commentId) {
@@ -102,12 +103,12 @@ public class AjaxServiceImpl implements AjaxService {
     }
 
     /**
-     * Add comment boolean.
+     * Add new comment.
      *
      * @param itemId         the item id
      * @param userId         the user id
      * @param commentMessage the comment message
-     * @return the boolean
+     * @return true if success otherwise false
      */
     @Override
     public boolean addComment(long itemId, long userId, String commentMessage) {
@@ -138,11 +139,11 @@ public class AjaxServiceImpl implements AjaxService {
     }
 
     /**
-     * Change item status boolean.
+     * Change item status.
      *
      * @param itemId   the item id
      * @param filePath the file path
-     * @return the boolean
+     * @return true if success otherwise false
      */
     @Override
     public boolean changeItemStatus(long itemId, String filePath) {
@@ -171,11 +172,11 @@ public class AjaxServiceImpl implements AjaxService {
     }
 
     /**
-     * Accept question boolean.
+     * Accept user's question.
      *
      * @param userId  the user id
      * @param message the message
-     * @return the boolean
+     * @return true if success otherwise false
      */
     @Override
     public boolean acceptQuestion(long userId, String message) {
@@ -201,10 +202,10 @@ public class AjaxServiceImpl implements AjaxService {
     }
 
     /**
-     * Check username on exist boolean.
+     * Check username on exist.
      *
      * @param username the username
-     * @return the boolean
+     * @return true if success otherwise false
      */
     @Override
     public boolean checkUsernameOnExist(String username) {
@@ -222,10 +223,10 @@ public class AjaxServiceImpl implements AjaxService {
     }
 
     /**
-     * Accept comment boolean.
+     * Accept comment by id.
      *
      * @param commentId the comment id
-     * @return the boolean
+     * @return true if success otherwise false
      */
     @Override
     public boolean acceptComment(long commentId) {

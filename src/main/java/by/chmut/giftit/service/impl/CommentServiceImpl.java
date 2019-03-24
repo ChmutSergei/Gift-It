@@ -15,36 +15,37 @@ import java.util.Optional;
 import static by.chmut.giftit.constant.AttributeName.*;
 
 /**
- * The Comment service class.
+ * The Comment service class implements business logic methods
+ * for comment entity.
  *
  * @author Sergei Chmut.
  */
 public class CommentServiceImpl implements CommentService {
 
     /**
-     * The constant logger.
+     * The logger for logging possible errors.
      */
     private static final Logger logger = LogManager.getLogger();
 
     /**
-     * The Comment dao.
+     * The Comment dao provides access to the database for Comment entity.
      */
     private CommentDao commentDao = DaoFactory.getInstance().getCommentDao();
     /**
-     * The User dao.
+     * The User dao provides access to the database for User entity.
      */
     private UserDao userDao = DaoFactory.getInstance().getUserDao();
     /**
-     * The Manager.
+     * The transaction manager provides preparation for conducting and confirming transactions.
      */
     private TransactionManager manager = new TransactionManager();
 
     /**
-     * Find by user id list.
+     * Find comments by user id.
      *
      * @param userId the user id
-     * @return the list
-     * @throws ServiceException the service exception
+     * @return the list of comments
+     * @throws ServiceException if find by user id can't be handled
      */
     @Override
     public List<Comment> findByUserId(long userId) throws ServiceException {
@@ -65,10 +66,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
-     * Find comment to moderate list.
+     * Find new comments for moderating.
      *
-     * @return the list
-     * @throws ServiceException the service exception
+     * @return the list of comments
+     * @throws ServiceException if find comment to moderate can't be handled
      */
     @Override
     public List<Comment> findCommentToModerate() throws ServiceException {
@@ -89,13 +90,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
-     * Moderate boolean.
+     * Moderating comment on moderator command.
+     * The method defines an administrative command -
+     * delete a comment or delete and block a user (2 options by date).
+     * If there is a lock, performs a call to
+     * the database with the date saved blocked until.
+     * Returns true if successful.
      *
      * @param moderatorCommand the moderator command
      * @param commentId        the comment id
      * @param users            the users
-     * @return the boolean
-     * @throws ServiceException the service exception
+     * @return true if command done otherwise false
+     * @throws ServiceException if moderate can't be handled
      */
     @Override
     public boolean moderate(String moderatorCommand, String commentId, Map<Long, User> users) throws ServiceException {
@@ -128,10 +134,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
-     * Execute moderator command int.
+     * Execute moderator command.
      *
      * @param moderatorCommand the moderator command
-     * @return the int
+     * @return the count day for blocking (if zero - blocked not required)
      * @throws ServiceException the service exception
      */
     private int executeModeratorCommand(String moderatorCommand) throws ServiceException {
