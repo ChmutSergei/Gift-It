@@ -1,0 +1,15 @@
+by.chmut.giftit.command
+by.chmut.giftit.command.impl
+by.chmut.giftit.constant
+by.chmut.giftit.controller
+by.chmut.giftit.dao
+by.chmut.giftit.dao.impl
+by.chmut.giftit.entity
+by.chmut.giftit.filter
+by.chmut.giftit.listener
+by.chmut.giftit.pool
+by.chmut.giftit.service
+by.chmut.giftit.service.impl
+by.chmut.giftit.tag
+by.chmut.giftit.transfer
+by.chmut.giftit.validator
