@@ -9,6 +9,9 @@
  The interface is internationalized and supports the choice of languages: Russian and English.
  
  The data is stored in the database. Access technology JDBC with pattern DAO.
+ 
+ A complete java doc has been created for this application, available on [https://chmutsergei.github.io/Gift-It/](https://chmutsergei.github.io/Gift-It/)
+ 
  # Task description
 
 This service allows you to order a gift for yourself or your loved ones. 
