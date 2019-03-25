@@ -28,6 +28,7 @@ public class ItemDaoImpl implements ItemDao {
     private static final String SELECT_ALL_ITEMS =
             "SELECT id, name, type, description, active, cost, image " +
                     "FROM Items " +
+                    "WHERE active = true " +
                     "ORDER BY id DESC LIMIT ? OFFSET ?";
     /**
      * The constant SQL query SELECT_ITEM_BY_ID.

@@ -28,6 +28,11 @@ function sendItem() {
         }
     })
 }
+
+function redirect() {
+    location.href = contextUrl + '/controller?command=preview_item';
+    setTimeout(redirect, 5000);
+}
 function sendComment() {
     var form = $('#form')[0];
     var comment = document.getElementById("dcomment").value;
@@ -41,6 +46,7 @@ function sendComment() {
             if (data == 'true') {
                 document.getElementById("success").style.display = "block";
                 document.getElementById("input").style.display = "none";
+                redirect();
             }
         }).fail(function (data) {
             if (console && console.log) {
@@ -51,6 +57,8 @@ function sendComment() {
         form.reportValidity();
     }
 }
+
+
 function addComment() {
     if (exist) {
         if (blocked) {

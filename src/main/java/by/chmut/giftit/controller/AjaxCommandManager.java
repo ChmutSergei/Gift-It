@@ -96,17 +96,19 @@ class AjaxCommandManager {
         String newPhone = request.getParameter(PHONE_PARAMETER_NAME);
         String newAddress = request.getParameter(ADDRESS_PARAMETER_NAME);
         User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
-        user.setPhone(newPhone);
-        user.setAddress(newAddress);
-        boolean result = ajaxService.updateUserData(user);
-        UserData data = new UserData();
-        data.address = newAddress;
-        if (result) {
-            data.phone = newPhone;
-        } else {
-            data.phone = "ERROR";
+        if (user != null) {
+            user.setPhone(newPhone);
+            user.setAddress(newAddress);
+            boolean result = ajaxService.updateUserData(user);
+            UserData data = new UserData();
+            data.address = newAddress;
+            if (result) {
+                data.phone = newPhone;
+            } else {
+                data.phone = "ERROR";
+            }
+            response.getWriter().write(new Gson().toJson(data));
         }
-        response.getWriter().write(new Gson().toJson(data));
     }
 
     void checkUsernameOnExist(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -116,9 +118,12 @@ class AjaxCommandManager {
     }
 
     void deleteComment(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        long commentId = Long.parseLong(request.getParameter(COMMENT_ID_PARAMETER_NAME));
-        boolean result = ajaxService.deleteComment(commentId);
-        response.getWriter().write((new Gson()).toJson(result));
+        User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
+        if (user != null) {
+            long commentId = Long.parseLong(request.getParameter(COMMENT_ID_PARAMETER_NAME));
+            boolean result = ajaxService.deleteComment(commentId);
+            response.getWriter().write((new Gson()).toJson(result));
+        }
     }
 
     void addComment(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -132,10 +137,13 @@ class AjaxCommandManager {
     }
 
     void changeItemStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String stringId = request.getParameter(ITEM_ID_PARAMETER_NAME);
-        long itemId = Long.parseLong(stringId);
-        boolean result = ajaxService.changeItemStatus(itemId, request.getServletContext().getRealPath(DEFAULT_ITEM_PATH));
-        response.getWriter().write((new Gson()).toJson(result));
+        User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
+        if (User.Role.ADMIN.equals(user.getRole())) {
+            String stringId = request.getParameter(ITEM_ID_PARAMETER_NAME);
+            long itemId = Long.parseLong(stringId);
+            boolean result = ajaxService.changeItemStatus(itemId, request.getServletContext().getRealPath(DEFAULT_ITEM_PATH));
+            response.getWriter().write((new Gson()).toJson(result));
+        }
     }
 
     void acceptQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -148,10 +156,13 @@ class AjaxCommandManager {
     }
 
     void acceptComment(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String stringId = request.getParameter(COMMENT_ID_PARAMETER_NAME);
-        long commentId = Long.parseLong(stringId);
-        boolean result = ajaxService.acceptComment(commentId);
-        response.getWriter().write((new Gson()).toJson(result));
+        User user = (User) request.getSession().getAttribute(USER_PARAMETER_NAME);
+        if (User.Role.MODERATOR.equals(user.getRole())) {
+            String stringId = request.getParameter(COMMENT_ID_PARAMETER_NAME);
+            long commentId = Long.parseLong(stringId);
+            boolean result = ajaxService.acceptComment(commentId);
+            response.getWriter().write((new Gson()).toJson(result));
+        }
     }
 
     private static class UserData {

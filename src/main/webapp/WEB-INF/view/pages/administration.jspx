@@ -6,7 +6,7 @@
     <fmt:setBundle basename="i18n.messages" var="i18n"/>
     <c:set var="locale" value="${sessionScope.locale}"/>
     <script>var locale = '${locale}';</script>
-    <div class="container" style="height: 700px">
+    <div class="container" style="height: 1500px">
         <div class="row content">
             <div class="col-sm-3 sidenav">
                 <h4><fmt:message key="account.sidenav" bundle="${i18n}"/></h4>

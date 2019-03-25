@@ -8,12 +8,6 @@
         <div class="row">
             <c:choose>
                 <c:when test="${not empty sessionScope.comments}">
-                    <c:set var="message"><fmt:message key="moderate.empty" bundle="${i18n}"/></c:set>
-                    <div id="message" class="alert alert-info center-block">
-                        <strong>${message}</strong>
-                    </div>
-                </c:when>
-                <c:otherwise>
                     <div class="col-xs-10 comments col-xs-offset-1">
                         <form id="form2" class="form-horizontal"
                               action="${pageContext.request.contextPath}/controller?command=moderate" method="post">
@@ -81,6 +75,12 @@
                             </div>
 
                         </form>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <c:set var="message"><fmt:message key="moderate.empty" bundle="${i18n}"/></c:set>
+                    <div id="message" class="alert alert-info center-block">
+                        <strong>${message}</strong>
                     </div>
                 </c:otherwise>
             </c:choose>

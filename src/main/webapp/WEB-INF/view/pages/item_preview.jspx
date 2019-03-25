@@ -115,7 +115,7 @@
                             <input type="text" class="form-control" pattern="^.{3,250}$"
                                    id="dcomment" placeholder="${mesComment}" title="${messagecomment}"/>
                             <br/>
-                            <button id="send" onclick="sendComment()">
+                            <button onclick="sendComment()">
                                 <fmt:message key="item.preview.send" bundle="${i18n}"/></button>
                         </div>
                     </form>
@@ -132,7 +132,7 @@
     </div>
 
     <![CDATA[
-    <script src="${pageContext.request.contextPath}/assests/js/item_preview.js?ver=9"></script>
+    <script src="${pageContext.request.contextPath}/assests/js/item_preview.js?ver=13"></script>
     ]]>
 
 </jsp:root>

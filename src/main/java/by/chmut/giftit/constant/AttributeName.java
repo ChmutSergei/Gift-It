@@ -57,7 +57,7 @@ public class AttributeName {
     public static final String DISABLE_CHECKBOX = "OFF";
     public static final String COUNT_COMMENTS_PARAMETER_NAME = "countComments";
     public static final String LOCALE_PARAMETER_NAME = "locale";
-    public static final String DEFAULT_PARAMETER_LOCALE = "en";
+    public static final String DEFAULT_PARAMETER_LOCALE = "ru";
     public static final String ITEM_PARAMETER_NAME = "item";
     public static final String COMMENTS_PARAMETER_NAME = "comments";
     public static final String ITEM_ID_PARAMETER_NAME = "itemId";
