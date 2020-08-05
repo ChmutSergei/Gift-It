@@ -12,6 +12,10 @@
  
  A complete java doc has been created for this application, available on [https://chmutsergei.github.io/Gift-It/](https://chmutsergei.github.io/Gift-It/)
  
+ # Start easily with Docker in 2 steps:
+   1. Install **[Docker](https://www.docker.com/products/docker-desktop)** 
+   2. Deploy Application. See more [Deployment with Docker](https://github.com/ChmutSergei/Gift-It#Deployment-with-Docker) 
+ 
  # Task description
 
 This service allows you to order a gift for yourself or your loved ones. 
@@ -122,6 +126,45 @@ For DESIGNER role use USERNAME "des" PASSWORD "1"
 For MODERATOR role use USERNAME "moder" PASSWORD "1"
 
 And also Users : USERNAME "user1" PASSWORD "1", USERNAME "user2" PASSWORD "1", USERNAME "user3" PASSWORD "1"
+
+
+### Deployment with Docker
+ #### 1. Install **[Docker](https://www.docker.com/products/docker-desktop)** 
+   Docker Desktop is a tool for MacOS and Windows machines for the building and sharing of containerized applications and microservices. 
+ 
+   Or install docker for **[Linux](https://docs.docker.com/engine/install/ubuntu/)**, for example, Ubuntu:
+     
+```
+  $ sudo apt-get update
+  $ sudo apt-get install docker  
+``` 
+
+
+ #### 2. Use **docker-compose.yml** from the **docker** folder and deploy the application in a few minutes (first time) or in a few seconds (when you get docker's images).
+     
+   It is very simple, just copies **docker-compose.yml** in your Virtual Machine or PC. (You may create this file with several text lines)
+     
+   Run deployment with command:
+ ```
+ docker-compose up -d
+ ```
+   After docker's output: 
+   ```
+  Creating chmut_db_1 ...
+  Creating chmut_db_1 ... done
+  Creating chmut_web_1 ...
+  Creating chmut_web_1 ... done
+```
+    
+  Check SystemHotel application at [http://localhost/giftit]  or  [http://YourVirtualMachineIp/giftit]
+
+If you want to see List of docker containers use `docker-compose ps`.
+
+For logs `docker-compose logs -f`
+
+**Clean**
+When you want to stop and delete Application use `docker-compose down` - Docker stop and remove containers, networks, images, and volumes
+
 
 
  ### Installing
